@@ -1,0 +1,2024 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AgenticSOC — Risk Intelligence Terminal</title>
+<style>
+:root {
+  --bg: #0f0f0f;
+  --surface: #141414;
+  --surface2: #1a1a1a;
+  --surface3: #222222;
+  --border: #2a2a2a;
+  --border2: #333333;
+  --text: #e8e8e8;
+  --sub: #888888;
+  --muted: #555555;
+  --orange: #f59e0b;
+  --orange2: #fbbf24;
+  --orangebg: rgba(245,158,11,0.1);
+  --blue: #3b82f6;
+  --blue2: #60a5fa;
+  --bluebg: rgba(59,130,246,0.1);
+  --red: #ef4444;
+  --redbg: rgba(239,68,68,0.1);
+  --green: #22c55e;
+  --greenbg: rgba(34,197,94,0.1);
+  --cyan: #06b6d4;
+  --purple: #a855f7;
+  --mono: 'SF Mono','Cascadia Code','Fira Mono','Consolas',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:12px;line-height:1.4;overflow:hidden;height:100vh;display:flex;flex-direction:column}
+a{color:inherit;text-decoration:none}
+/* ── TOP BAR ── */
+#topbar{height:36px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:0;flex-shrink:0;z-index:100}
+.tb-logo{width:200px;flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 12px;border-right:1px solid var(--border)}
+.tb-logo-icon{width:22px;height:22px;background:var(--orange);border-radius:4px;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;font-size:12px}
+.tb-logo-name{font-size:13px;font-weight:700;letter-spacing:0.05em;color:var(--text)}
+.tb-logo-sub{font-size:9px;color:var(--sub);letter-spacing:0.1em;text-transform:uppercase}
+.tb-ticker{flex:1;overflow:hidden;border-right:1px solid var(--border)}
+.ticker-track{display:flex;gap:0;white-space:nowrap;animation:ticker 40s linear infinite}
+.ticker-item{display:inline-flex;align-items:center;gap:6px;padding:0 20px;border-right:1px solid var(--border);height:36px;font-family:var(--mono);font-size:11px}
+.ticker-label{color:var(--sub);font-size:10px;text-transform:uppercase;letter-spacing:0.05em}
+.ticker-val{font-weight:700}
+.ticker-up{color:var(--red)}
+.ticker-neutral{color:var(--orange)}
+.ticker-ok{color:var(--green)}
+.ticker-warn{color:var(--orange)}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tb-status{width:200px;flex-shrink:0;display:flex;align-items:center;gap:8px;padding:0 12px;border-left:1px solid var(--border)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--red);animation:pulse 1.5s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.status-text{font-size:11px;color:var(--red);font-weight:600;letter-spacing:0.04em}
+.tb-time{font-family:var(--mono);font-size:11px;color:var(--sub);padding:0 12px;border-left:1px solid var(--border)}
+/* ── LAYOUT ── */
+#shell{display:flex;flex:1;overflow:hidden}
+/* ── SIDEBAR ── */
+#sidebar{width:200px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow-y:auto}
+.nav-group{padding:12px 0 4px}
+.nav-group-label{font-size:9px;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--muted);padding:0 14px 6px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:7px 14px;cursor:pointer;border-left:2px solid transparent;transition:all 0.15s}
+.nav-item:hover{background:var(--surface2);color:var(--text)}
+.nav-item.active{background:var(--orangebg);border-left-color:var(--orange);color:var(--orange)}
+.nav-item .ni-icon{width:15px;height:15px;flex-shrink:0;opacity:0.7}
+.nav-item.active .ni-icon{opacity:1}
+.nav-item .ni-label{font-size:11.5px;font-weight:500;flex:1}
+.nav-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;background:var(--red);color:#fff;font-family:var(--mono)}
+.nav-badge.warn{background:var(--orange);color:#000}
+.nav-divider{height:1px;background:var(--border);margin:8px 14px}
+.sidebar-bottom{margin-top:auto;padding-bottom:8px}
+/* ── MAIN ── */
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{display:none;flex:1;overflow-y:auto;padding:16px;flex-direction:column;gap:12px}
+.page.active{display:flex}
+/* ── SHARED COMPONENTS ── */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.panel-header{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--border);background:var(--surface2)}
+.panel-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text)}
+.panel-sub{font-size:10px;color:var(--sub);margin-left:auto}
+.panel-body{padding:12px}
+.row{display:flex;gap:12px}
+.col{flex:1;min-width:0}
+/* ── ALERT BANNER ── */
+.alert-banner{background:var(--redbg);border:1px solid var(--red);border-radius:4px;padding:8px 12px;display:flex;align-items:center;gap:10px}
+.alert-banner .ab-icon{color:var(--red)}
+.alert-banner .ab-title{font-size:12px;font-weight:700;color:var(--red)}
+.alert-banner .ab-body{font-size:11px;color:var(--text);margin-top:1px}
+.alert-banner .ab-meta{font-family:var(--mono);font-size:10px;color:var(--sub);margin-left:auto;text-align:right}
+/* ── KPI GAUGE GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:12px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.kpi-title{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--sub)}
+.kpi-value{font-family:var(--mono);font-size:28px;font-weight:700}
+.kpi-value.danger{color:var(--red)}
+.kpi-value.warn{color:var(--orange)}
+.kpi-value.ok{color:var(--green)}
+.kpi-label{font-size:10px;color:var(--sub)}
+/* ── BLOOMBERG TABLE ── */
+.bb-table{width:100%;border-collapse:collapse}
+.bb-table thead th{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--sub);padding:6px 10px;border-bottom:1px solid var(--border2);text-align:right;white-space:nowrap}
+.bb-table thead th:first-child{text-align:left}
+.bb-table tbody tr{border-bottom:1px solid var(--border)}
+.bb-table tbody tr:nth-child(even){background:var(--surface2)}
+.bb-table tbody tr:hover{background:var(--surface3)}
+.bb-table tbody td{padding:6px 10px;font-family:var(--mono);font-size:11px;text-align:right;white-space:nowrap}
+.bb-table tbody td:first-child{text-align:left;font-family:-apple-system,sans-serif;font-size:11px}
+.bb-table .td-asset{font-weight:600;color:var(--text)}
+.bb-table .td-type{color:var(--sub);font-size:10px;font-family:-apple-system,sans-serif}
+.risk-high{color:var(--red);font-weight:700}
+.risk-med{color:var(--orange);font-weight:700}
+.risk-low{color:var(--green);font-weight:700}
+.risk-mid{color:var(--blue);font-weight:700}
+.delta-up{color:var(--red)}
+.delta-dn{color:var(--green)}
+.status-pill{font-size:9px;font-weight:700;padding:2px 6px;border-radius:2px;text-transform:uppercase;letter-spacing:0.06em;font-family:-apple-system,sans-serif}
+.pill-red{background:var(--redbg);color:var(--red);border:1px solid var(--red)}
+.pill-orange{background:var(--orangebg);color:var(--orange);border:1px solid var(--orange)}
+.pill-green{background:var(--greenbg);color:var(--green);border:1px solid var(--green)}
+.pill-blue{background:var(--bluebg);color:var(--blue);border:1px solid var(--blue)}
+/* confidence pips */
+.conf-pips{display:flex;gap:2px}
+.pip{width:6px;height:6px;border-radius:1px;background:var(--border2)}
+.pip.on{background:var(--blue)}
+/* ── ASSET DETAIL PANELS ── */
+.asset-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.asset-panel{background:var(--surface);border:1px solid var(--border);border-radius:4px;overflow:hidden}
+.ap-header{background:var(--surface2);padding:10px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+.ap-name{font-size:13px;font-weight:700}
+.ap-type{font-size:10px;color:var(--sub)}
+.ap-risk{font-family:var(--mono);font-size:26px;font-weight:700;margin-left:auto}
+.ap-body{padding:12px;display:flex;flex-direction:column;gap:10px}
+.comp-row{display:flex;flex-direction:column;gap:3px}
+.comp-label{font-size:10px;color:var(--sub);display:flex;justify-content:space-between}
+.comp-bar-bg{height:5px;background:var(--border2);border-radius:2px;overflow:hidden}
+.comp-bar-fill{height:5px;border-radius:2px;transition:width 0.3s}
+/* ── STAT BOXES ── */
+.stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat-box{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:10px 12px}
+.stat-label{font-size:10px;color:var(--sub);text-transform:uppercase;letter-spacing:0.1em}
+.stat-val{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--orange);margin-top:4px}
+.stat-desc{font-size:10px;color:var(--muted);margin-top:2px}
+/* ── FORMULA BLOCK ── */
+.formula-block{background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:12px;font-family:var(--mono);font-size:11px;color:var(--cyan);line-height:1.8}
+.formula-comment{color:var(--muted)}
+/* ── BAYESIAN CARDS ── */
+.bayes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.bayes-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px}
+.bayes-card-label{font-size:10px;text-transform:uppercase;letter-spacing:0.1em;color:var(--sub)}
+.bayes-card-val{font-family:var(--mono);font-size:30px;font-weight:700;margin:6px 0 2px}
+.bayes-card-desc{font-size:11px;color:var(--sub)}
+/* ── EVIDENCE LIST ── */
+.evidence-list{display:flex;flex-direction:column;gap:4px}
+.ev-item{display:flex;align-items:center;gap:10px;padding:6px 10px;background:var(--surface2);border-radius:3px;border:1px solid var(--border)}
+.ev-signal{font-size:11px;font-weight:500;flex:1}
+.ev-lr{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--orange)}
+.ev-dir{font-size:10px;color:var(--sub)}
+/* ── MISSION ROWS ── */
+.mission-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)}
+.mission-row:last-child{border-bottom:none}
+.mr-label{width:140px;font-size:11px;font-weight:500;flex-shrink:0}
+.mr-bar-bg{flex:1;height:8px;background:var(--border2);border-radius:2px;overflow:visible;position:relative}
+.mr-bar-fill{height:8px;border-radius:2px}
+.mr-threshold{position:absolute;top:-3px;width:2px;height:14px;background:var(--orange)}
+.mr-val{font-family:var(--mono);font-size:12px;font-weight:700;width:40px;text-align:right;flex-shrink:0}
+/* ── APPROVAL CARDS ── */
+.approval-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.approval-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.ac-priority{font-size:9px;font-weight:700;text-transform:uppercase;padding:2px 6px;border-radius:2px}
+.ac-title{font-size:13px;font-weight:700;color:var(--text)}
+.ac-asset{font-size:11px;color:var(--sub)}
+.ac-meta{display:flex;flex-direction:column;gap:4px}
+.ac-meta-row{display:flex;justify-content:space-between;font-size:11px}
+.ac-meta-label{color:var(--sub)}
+.ac-meta-val{font-family:var(--mono);font-weight:600}
+.ac-formula{font-family:var(--mono);font-size:10px;background:var(--surface2);border:1px solid var(--border);border-radius:3px;padding:8px;color:var(--cyan);line-height:1.6}
+.ac-buttons{display:flex;gap:8px;margin-top:4px}
+.btn-approve{flex:1;padding:7px;background:var(--greenbg);border:1px solid var(--green);color:var(--green);border-radius:3px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em}
+.btn-approve:hover{background:var(--green);color:#000}
+.btn-reject{flex:1;padding:7px;background:var(--redbg);border:1px solid var(--red);color:var(--red);border-radius:3px;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:0.05em}
+.btn-reject:hover{background:var(--red);color:#fff}
+/* ── SCENARIO ── */
+.phase-track{display:flex;align-items:center;gap:0;padding:8px 0}
+.phase-node{display:flex;flex-direction:column;align-items:center;gap:4px;position:relative}
+.phase-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;border:2px solid var(--border)}
+.phase-dot.done{background:var(--redbg);border-color:var(--red);color:var(--red)}
+.phase-dot.active{background:var(--orange);border-color:var(--orange);color:#000}
+.phase-dot.pending{background:var(--surface2);border-color:var(--border2);color:var(--muted)}
+.phase-label{font-size:9px;color:var(--sub);white-space:nowrap}
+.phase-connector{flex:1;height:2px;background:var(--border);margin-bottom:18px}
+.phase-connector.done{background:var(--red)}
+/* ── LEDGER TABLE ── */
+.ledger-action-allow{color:var(--green)}
+.ledger-action-block{color:var(--red)}
+.ledger-action-isolate{color:var(--orange)}
+/* ── ABOUT PAGE ── */
+.about-hero{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:12px}
+.about-title{font-size:22px;font-weight:700;color:var(--orange)}
+.about-sub{font-size:13px;color:var(--sub);line-height:1.7}
+.arch-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.arch-layer{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:10px;display:flex;flex-direction:column;gap:4px}
+.arch-layer-name{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em}
+.arch-layer-items{font-size:10px;color:var(--sub);line-height:1.6}
+.math-section{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.math-title{font-size:12px;font-weight:700;color:var(--cyan);text-transform:uppercase;letter-spacing:0.08em}
+.math-body{font-size:11px;color:var(--sub);line-height:1.7}
+.tech-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.tech-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:10px}
+.tech-name{font-size:12px;font-weight:700;color:var(--blue)}
+.tech-desc{font-size:10px;color:var(--sub);margin-top:2px}
+.code-block{background:#0a0a0a;border:1px solid var(--border);border-radius:4px;padding:12px;font-family:var(--mono);font-size:11px;color:var(--green);line-height:1.8;overflow-x:auto}
+.code-comment{color:var(--muted)}
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--sub)}
+/* sparkline inline */
+.sparkline{display:inline-block;vertical-align:middle}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div id="topbar">
+  <div class="tb-logo">
+    <div class="tb-logo-icon">S</div>
+    <div>
+      <div class="tb-logo-name">AgenticSOC</div>
+      <div class="tb-logo-sub">Risk Intelligence Terminal</div>
+    </div>
+  </div>
+  <div class="tb-ticker">
+    <div class="ticker-track" id="ticker-track">
+      <div class="ticker-item"><span class="ticker-label">FUSED RISK</span><span class="ticker-val ticker-up">0.91</span></div>
+      <div class="ticker-item"><span class="ticker-label">dc-01.corp</span><span class="ticker-val ticker-up">0.91 ▲</span></div>
+      <div class="ticker-item"><span class="ticker-label">vpn-gw-prod</span><span class="ticker-val ticker-warn">0.78 ▲</span></div>
+      <div class="ticker-item"><span class="ticker-label">siem-01</span><span class="ticker-val ticker-neutral">0.54 →</span></div>
+      <div class="ticker-item"><span class="ticker-label">db-primary</span><span class="ticker-val ticker-ok">0.23 ▼</span></div>
+      <div class="ticker-item"><span class="ticker-label">TAIL EVT</span><span class="ticker-val ticker-up">0.97</span></div>
+      <div class="ticker-item"><span class="ticker-label">MISSION OPS</span><span class="ticker-val ticker-warn">62%</span></div>
+      <div class="ticker-item"><span class="ticker-label">POSTERIOR</span><span class="ticker-val ticker-up">0.763</span></div>
+      <div class="ticker-item"><span class="ticker-label">LR PRODUCT</span><span class="ticker-val ticker-up">82.4×</span></div>
+      <div class="ticker-item"><span class="ticker-label">ACTIVE ALERTS</span><span class="ticker-val ticker-up">7</span></div>
+      <div class="ticker-item"><span class="ticker-label">SCENARIO</span><span class="ticker-val ticker-up">LATERAL MOVEMENT</span></div>
+      <div class="ticker-item"><span class="ticker-label">GPD ξ</span><span class="ticker-val ticker-neutral">0.41</span></div>
+      <div class="ticker-item"><span class="ticker-label">EXCEEDANCES</span><span class="ticker-val ticker-warn">23/312</span></div>
+      <div class="ticker-item"><span class="ticker-label">APPROVALS</span><span class="ticker-val ticker-warn">3 PENDING</span></div>
+      <!-- duplicate for seamless loop -->
+      <div class="ticker-item"><span class="ticker-label">FUSED RISK</span><span class="ticker-val ticker-up">0.91</span></div>
+      <div class="ticker-item"><span class="ticker-label">dc-01.corp</span><span class="ticker-val ticker-up">0.91 ▲</span></div>
+      <div class="ticker-item"><span class="ticker-label">vpn-gw-prod</span><span class="ticker-val ticker-warn">0.78 ▲</span></div>
+      <div class="ticker-item"><span class="ticker-label">siem-01</span><span class="ticker-val ticker-neutral">0.54 →</span></div>
+      <div class="ticker-item"><span class="ticker-label">db-primary</span><span class="ticker-val ticker-ok">0.23 ▼</span></div>
+      <div class="ticker-item"><span class="ticker-label">TAIL EVT</span><span class="ticker-val ticker-up">0.97</span></div>
+      <div class="ticker-item"><span class="ticker-label">MISSION OPS</span><span class="ticker-val ticker-warn">62%</span></div>
+      <div class="ticker-item"><span class="ticker-label">POSTERIOR</span><span class="ticker-val ticker-up">0.763</span></div>
+      <div class="ticker-item"><span class="ticker-label">LR PRODUCT</span><span class="ticker-val ticker-up">82.4×</span></div>
+      <div class="ticker-item"><span class="ticker-label">ACTIVE ALERTS</span><span class="ticker-val ticker-up">7</span></div>
+      <div class="ticker-item"><span class="ticker-label">SCENARIO</span><span class="ticker-val ticker-up">LATERAL MOVEMENT</span></div>
+      <div class="ticker-item"><span class="ticker-label">GPD ξ</span><span class="ticker-val ticker-neutral">0.41</span></div>
+      <div class="ticker-item"><span class="ticker-label">EXCEEDANCES</span><span class="ticker-val ticker-warn">23/312</span></div>
+      <div class="ticker-item"><span class="ticker-label">APPROVALS</span><span class="ticker-val ticker-warn">3 PENDING</span></div>
+    </div>
+  </div>
+  <div class="tb-status">
+    <div class="status-dot"></div>
+    <div class="status-text">INCIDENT ACTIVE</div>
+  </div>
+  <div class="tb-time" id="clock">2026-03-29 &nbsp;14:22:07 UTC</div>
+</div>
+
+<!-- SHELL -->
+<div id="shell">
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="nav-group">
+    <div class="nav-group-label">Monitor</div>
+    <div class="nav-item active" onclick="switchPage('overview',this)">
+      <i data-lucide="layout-dashboard" class="ni-icon"></i>
+      <span class="ni-label">Overview</span>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Analysis</div>
+    <div class="nav-item" onclick="switchPage('assets',this)">
+      <i data-lucide="server" class="ni-icon"></i>
+      <span class="ni-label">Assets</span>
+      <span class="nav-badge warn">6</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('tailrisk',this)">
+      <i data-lucide="activity" class="ni-icon"></i>
+      <span class="ni-label">Tail Risk / EVT</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('bayesian',this)">
+      <i data-lucide="brain" class="ni-icon"></i>
+      <span class="ni-label">Bayesian Engine</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('fusion',this)">
+      <i data-lucide="sliders-horizontal" class="ni-icon"></i>
+      <span class="ni-label">Decision Fusion</span>
+    </div>
+  </div>
+  <div class="nav-group">
+    <div class="nav-group-label">Operations</div>
+    <div class="nav-item" onclick="switchPage('mission',this)">
+      <i data-lucide="git-fork" class="ni-icon"></i>
+      <span class="ni-label">Mission Graph</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('scenarios',this)">
+      <i data-lucide="git-branch" class="ni-icon"></i>
+      <span class="ni-label">Scenarios</span>
+      <span class="nav-badge">1</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('approvals',this)">
+      <i data-lucide="file-check-2" class="ni-icon"></i>
+      <span class="ni-label">Approvals</span>
+      <span class="nav-badge">3</span>
+    </div>
+  </div>
+  <div class="nav-divider"></div>
+  <div class="sidebar-bottom">
+    <div class="nav-item" onclick="switchPage('ledger',this)">
+      <i data-lucide="database" class="ni-icon"></i>
+      <span class="ni-label">Decision Ledger</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('about',this)">
+      <i data-lucide="info" class="ni-icon"></i>
+      <span class="ni-label">About</span>
+    </div>
+    <div class="nav-item" onclick="switchPage('settings',this)">
+      <i data-lucide="settings" class="ni-icon"></i>
+      <span class="ni-label">Settings</span>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<main id="main">
+
+<!-- ════════════════ PAGE: OVERVIEW ════════════════ -->
+<div class="page active" id="page-overview">
+
+  <!-- Alert banner -->
+  <div class="alert-banner">
+    <i data-lucide="shield-alert" class="ab-icon" style="width:18px;height:18px"></i>
+    <div>
+      <div class="ab-title">CRITICAL — Lateral Movement ACTIVE</div>
+      <div class="ab-body">dc-01.corp: Credential harvesting detected. Pass-the-hash attempt confirmed. Containment action pending CISO approval.</div>
+    </div>
+    <div class="ab-meta">
+      <div>Phase 3 of 7</div>
+      <div>T+00:47:22</div>
+      <div style="color:var(--red);font-weight:700">EVT 0.97</div>
+    </div>
+  </div>
+
+  <!-- KPI Gauges row -->
+  <div class="kpi-grid">
+    <!-- Fused Risk Gauge -->
+    <div class="kpi-card">
+      <div class="kpi-title">Fused Risk Score</div>
+      <svg viewBox="0 0 180 110" width="180" height="110">
+        <defs>
+          <linearGradient id="arc-grad" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" style="stop-color:#22c55e"/>
+            <stop offset="50%" style="stop-color:#f59e0b"/>
+            <stop offset="70%" style="stop-color:#ef4444"/>
+            <stop offset="100%" style="stop-color:#ef4444"/>
+          </linearGradient>
+        </defs>
+        <!-- bg arc -->
+        <path d="M 20 95 A 70 70 0 0 1 160 95" fill="none" stroke="#2a2a2a" stroke-width="12" stroke-linecap="round"/>
+        <!-- green segment 0–0.5 -->
+        <path d="M 20 95 A 70 70 0 0 1 90 25" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <!-- amber segment 0.5–0.7 -->
+        <path d="M 90 25 A 70 70 0 0 1 132 37" fill="none" stroke="#f59e0b" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <!-- red segment 0.7–1.0 -->
+        <path d="M 132 37 A 70 70 0 0 1 160 95" fill="none" stroke="#ef4444" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+        <!-- needle at 0.91 → ~162° from left = angle = 0 + 0.91*180 = 163.8° -->
+        <line x1="90" y1="95" x2="28" y2="58" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="90" cy="95" r="5" fill="#ef4444"/>
+        <text x="90" y="80" text-anchor="middle" font-family="SF Mono,Cascadia Code,monospace" font-size="22" font-weight="700" fill="#ef4444">0.91</text>
+        <text x="90" y="105" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#888">CRITICAL</text>
+        <text x="22" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">0.0</text>
+        <text x="158" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">1.0</text>
+      </svg>
+    </div>
+    <!-- Tail EVT -->
+    <div class="kpi-card">
+      <div class="kpi-title">Tail Risk (EVT)</div>
+      <svg viewBox="0 0 180 110" width="180" height="110">
+        <path d="M 20 95 A 70 70 0 0 1 160 95" fill="none" stroke="#2a2a2a" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 20 95 A 70 70 0 0 1 90 25" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <path d="M 90 25 A 70 70 0 0 1 132 37" fill="none" stroke="#f59e0b" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <path d="M 132 37 A 70 70 0 0 1 160 95" fill="none" stroke="#ef4444" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+        <!-- needle at 0.97 → nearly all the way right -->
+        <line x1="90" y1="95" x2="152" y2="72" stroke="#ef4444" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="90" cy="95" r="5" fill="#ef4444"/>
+        <text x="90" y="80" text-anchor="middle" font-family="SF Mono,Cascadia Code,monospace" font-size="22" font-weight="700" fill="#ef4444">0.97</text>
+        <text x="90" y="105" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#888">EXTREME TAIL</text>
+        <text x="22" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">0.0</text>
+        <text x="158" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">1.0</text>
+      </svg>
+    </div>
+    <!-- Mission Operability -->
+    <div class="kpi-card">
+      <div class="kpi-title">Mission Operability</div>
+      <svg viewBox="0 0 180 110" width="180" height="110">
+        <path d="M 20 95 A 70 70 0 0 1 160 95" fill="none" stroke="#2a2a2a" stroke-width="12" stroke-linecap="round"/>
+        <!-- 62% fill -->
+        <path d="M 20 95 A 70 70 0 0 1 90 25" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <path d="M 90 25 A 70 70 0 0 1 118 29" fill="none" stroke="#f59e0b" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+        <!-- needle at 0.62 -->
+        <line x1="90" y1="95" x2="40" y2="45" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="90" cy="95" r="5" fill="#f59e0b"/>
+        <text x="90" y="80" text-anchor="middle" font-family="SF Mono,Cascadia Code,monospace" font-size="22" font-weight="700" fill="#f59e0b">62%</text>
+        <text x="90" y="105" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#888">DEGRADED</text>
+        <text x="22" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">0%</text>
+        <text x="158" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">100%</text>
+      </svg>
+    </div>
+    <!-- Confidence -->
+    <div class="kpi-card">
+      <div class="kpi-title">Engine Confidence</div>
+      <svg viewBox="0 0 180 110" width="180" height="110">
+        <path d="M 20 95 A 70 70 0 0 1 160 95" fill="none" stroke="#2a2a2a" stroke-width="12" stroke-linecap="round"/>
+        <path d="M 20 95 A 70 70 0 0 1 90 25" fill="none" stroke="#22c55e" stroke-width="12" stroke-linecap="butt" opacity="0.9"/>
+        <path d="M 90 25 A 70 70 0 0 1 103 27" fill="none" stroke="#3b82f6" stroke-width="12" stroke-linecap="round" opacity="0.9"/>
+        <!-- needle at 0.84 -->
+        <line x1="90" y1="95" x2="148" y2="56" stroke="#3b82f6" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="90" cy="95" r="5" fill="#3b82f6"/>
+        <text x="90" y="80" text-anchor="middle" font-family="SF Mono,Cascadia Code,monospace" font-size="22" font-weight="700" fill="#3b82f6">0.84</text>
+        <text x="90" y="105" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#888">HIGH CONFIDENCE</text>
+        <text x="22" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">0.0</text>
+        <text x="158" y="106" text-anchor="middle" font-family="monospace" font-size="8" fill="#555">1.0</text>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Risk Trend Chart + Asset Table side by side -->
+  <div class="row" style="align-items:flex-start">
+    <!-- Risk Trend -->
+    <div class="panel col" style="flex:1.4">
+      <div class="panel-header">
+        <i data-lucide="trending-up" style="width:13px;height:13px;color:var(--orange)"></i>
+        <span class="panel-title">Risk Score Trend — 60-Tick Window</span>
+        <span class="panel-sub">Live · 30s interval · UTC 14:21:07</span>
+      </div>
+      <div style="padding:8px 4px 4px">
+        <svg viewBox="0 0 820 200" width="100%" preserveAspectRatio="none" style="display:block">
+          <!-- bg -->
+          <rect width="820" height="200" fill="#141414"/>
+          <!-- grid lines -->
+          <line x1="60" y1="20" x2="800" y2="20" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="60" y1="56" x2="800" y2="56" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="60" y1="92" x2="800" y2="92" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="60" y1="128" x2="800" y2="128" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="60" y1="164" x2="800" y2="164" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+          <line x1="60" y1="180" x2="800" y2="180" stroke="#333" stroke-width="1"/>
+          <!-- Y axis labels -->
+          <text x="50" y="23" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">1.0</text>
+          <text x="50" y="59" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">0.8</text>
+          <text x="50" y="95" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">0.6</text>
+          <text x="50" y="131" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">0.4</text>
+          <text x="50" y="167" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">0.2</text>
+          <!-- X axis labels -->
+          <text x="60" y="195" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#555">t-60</text>
+          <text x="183" y="195" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#555">t-45</text>
+          <text x="306" y="195" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#555">t-30</text>
+          <text x="429" y="195" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#555">t-15</text>
+          <text x="552" y="195" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#555">t-5</text>
+          <text x="800" y="195" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#888">now</text>
+          <!-- dc-01 red — rising to 0.91 -->
+          <polyline fill="none" stroke="#ef4444" stroke-width="1.8" stroke-linejoin="round"
+            points="60,155 80,148 100,140 120,138 140,132 160,128 180,122 200,118 220,115 240,108 260,103 280,100 300,94 320,90 340,86 360,80 380,74 400,68 420,62 440,55 460,50 480,46 500,42 520,38 540,34 560,30 580,27 600,24 620,22 640,21 660,20 680,21 700,21 720,22 740,22 760,21 780,20 800,20"/>
+          <!-- vpn-gw amber — rising to 0.78 -->
+          <polyline fill="none" stroke="#f59e0b" stroke-width="1.8" stroke-linejoin="round"
+            points="60,168 80,164 100,160 120,156 140,152 160,148 180,144 200,140 220,136 240,132 260,128 280,125 300,121 320,118 340,115 360,112 380,110 400,107 420,104 440,101 460,99 480,96 500,93 520,91 540,88 560,85 580,82 600,79 620,77 640,75 660,73 680,71 700,69 720,67 740,66 760,65 780,64 800,63"/>
+          <!-- siem-01 yellow/green — stable ~0.54 with slight rise -->
+          <polyline fill="none" stroke="#eab308" stroke-width="1.8" stroke-linejoin="round"
+            points="60,105 80,108 100,106 120,110 140,107 160,105 180,108 200,110 220,107 240,105 260,108 280,110 300,107 320,105 340,109 360,107 380,104 400,106 420,108 440,106 460,105 480,108 500,106 520,105 540,103 560,104 580,105 600,103 620,104 640,105 660,104 680,103 700,105 720,104 740,103 760,103 780,102 800,102"/>
+          <!-- db-primary green — low stable ~0.23 -->
+          <polyline fill="none" stroke="#22c55e" stroke-width="1.8" stroke-linejoin="round"
+            points="60,148 80,146 100,148 120,149 140,147 160,148 180,150 200,148 220,147 240,149 260,148 280,146 300,148 320,147 340,149 360,147 380,148 400,150 420,148 440,147 460,149 480,148 500,147 520,148 540,149 560,148 580,147 600,149 620,148 640,147 660,148 680,149 700,148 720,147 740,148 760,149 780,148 800,148"/>
+          <!-- Legend -->
+          <rect x="615" y="10" width="180" height="66" fill="#1a1a1a" rx="3" opacity="0.92"/>
+          <line x1="623" y1="22" x2="643" y2="22" stroke="#ef4444" stroke-width="2"/>
+          <text x="647" y="26" font-family="-apple-system,sans-serif" font-size="9" fill="#e8e8e8">dc-01.corp</text>
+          <text x="785" y="26" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#ef4444">0.91</text>
+          <line x1="623" y1="36" x2="643" y2="36" stroke="#f59e0b" stroke-width="2"/>
+          <text x="647" y="40" font-family="-apple-system,sans-serif" font-size="9" fill="#e8e8e8">vpn-gw-prod</text>
+          <text x="785" y="40" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">0.78</text>
+          <line x1="623" y1="50" x2="643" y2="50" stroke="#eab308" stroke-width="2"/>
+          <text x="647" y="54" font-family="-apple-system,sans-serif" font-size="9" fill="#e8e8e8">siem-01</text>
+          <text x="785" y="54" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#eab308">0.54</text>
+          <line x1="623" y1="64" x2="643" y2="64" stroke="#22c55e" stroke-width="2"/>
+          <text x="647" y="68" font-family="-apple-system,sans-serif" font-size="9" fill="#e8e8e8">db-primary</text>
+          <text x="785" y="68" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#22c55e">0.23</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- Asset Watchlist Table -->
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="list" style="width:13px;height:13px;color:var(--orange)"></i>
+      <span class="panel-title">Asset Watchlist</span>
+      <span class="panel-sub">6 assets monitored · sorted by risk desc · 2026-03-29 14:22:07</span>
+    </div>
+    <div style="padding:0">
+      <table class="bb-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Asset</th>
+            <th style="text-align:left">Type</th>
+            <th>Risk ▼</th>
+            <th>Sparkline</th>
+            <th>EVT</th>
+            <th>Conf</th>
+            <th>Δ24h</th>
+            <th style="text-align:left">Scenario</th>
+            <th style="text-align:left">Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="td-asset">dc-01.corp</span></td>
+            <td style="text-align:left"><span class="td-type">Domain Controller</span></td>
+            <td><span class="risk-high">0.91</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#ef4444" stroke-width="1.5" points="0,18 5,16 10,14 15,13 20,11 25,9 30,7 35,5 40,4 45,3 50,3 55,2 60,2"/>
+              </svg>
+            </td>
+            <td><span class="risk-high">0.97</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span class="delta-up">+0.34 ▲</span></td>
+            <td style="text-align:left"><span style="color:var(--red);font-size:10px">Lateral Movement</span></td>
+            <td style="text-align:left"><span class="status-pill pill-red">CRITICAL</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-asset">vpn-gw-prod</span></td>
+            <td style="text-align:left"><span class="td-type">VPN Gateway</span></td>
+            <td><span class="risk-med">0.78</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#f59e0b" stroke-width="1.5" points="0,17 5,16 10,15 15,14 20,13 25,12 30,11 35,10 40,9 45,8 50,7 55,6 60,5"/>
+              </svg>
+            </td>
+            <td><span class="risk-med">0.71</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span class="delta-up">+0.22 ▲</span></td>
+            <td style="text-align:left"><span style="color:var(--orange);font-size:10px">Recon / C2</span></td>
+            <td style="text-align:left"><span class="status-pill pill-orange">HIGH</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-asset">siem-01</span></td>
+            <td style="text-align:left"><span class="td-type">SIEM Platform</span></td>
+            <td><span class="risk-mid">0.54</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#eab308" stroke-width="1.5" points="0,10 5,11 10,10 15,12 20,10 25,10 30,11 35,10 40,9 45,10 50,10 55,9 60,10"/>
+              </svg>
+            </td>
+            <td><span class="risk-mid">0.49</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span style="color:var(--sub)">+0.03 →</span></td>
+            <td style="text-align:left"><span style="color:var(--blue);font-size:10px">Log Gap Detected</span></td>
+            <td style="text-align:left"><span class="status-pill pill-blue">ELEVATED</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-asset">db-primary</span></td>
+            <td style="text-align:left"><span class="td-type">Database Server</span></td>
+            <td><span class="risk-low">0.23</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#22c55e" stroke-width="1.5" points="0,14 5,13 10,14 15,15 20,14 25,13 30,14 35,14 40,13 45,14 50,15 55,14 60,14"/>
+              </svg>
+            </td>
+            <td><span class="risk-low">0.19</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span class="delta-dn">-0.04 ▼</span></td>
+            <td style="text-align:left"><span style="color:var(--sub);font-size:10px">None</span></td>
+            <td style="text-align:left"><span class="status-pill pill-green">NORMAL</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-asset">mail-relay-01</span></td>
+            <td style="text-align:left"><span class="td-type">Mail Relay</span></td>
+            <td><span class="risk-med">0.67</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#f59e0b" stroke-width="1.5" points="0,14 5,13 10,12 15,11 20,12 25,10 30,9 35,8 40,9 45,8 50,7 55,7 60,6"/>
+              </svg>
+            </td>
+            <td><span class="risk-med">0.61</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span class="delta-up">+0.18 ▲</span></td>
+            <td style="text-align:left"><span style="color:var(--orange);font-size:10px">Phishing Vector</span></td>
+            <td style="text-align:left"><span class="status-pill pill-orange">HIGH</span></td>
+          </tr>
+          <tr>
+            <td><span class="td-asset">ad-sync-svc</span></td>
+            <td style="text-align:left"><span class="td-type">AD Sync Service</span></td>
+            <td><span class="risk-med">0.72</span></td>
+            <td>
+              <svg class="sparkline" viewBox="0 0 60 20" width="60" height="20">
+                <polyline fill="none" stroke="#f59e0b" stroke-width="1.5" points="0,15 5,14 10,14 15,13 20,12 25,11 30,10 35,9 40,8 45,7 50,6 55,6 60,5"/>
+              </svg>
+            </td>
+            <td><span class="risk-med">0.68</span></td>
+            <td>
+              <div class="conf-pips">
+                <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div>
+              </div>
+            </td>
+            <td><span class="delta-up">+0.27 ▲</span></td>
+            <td style="text-align:left"><span style="color:var(--red);font-size:10px">Credential Abuse</span></td>
+            <td style="text-align:left"><span class="status-pill pill-orange">HIGH</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page-overview -->
+
+<!-- ════════════════ PAGE: ASSETS ════════════════ -->
+<div class="page" id="page-assets">
+
+  <div class="panel-header" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:4px">
+    <i data-lucide="server" style="width:13px;height:13px;color:var(--orange)"></i>
+    <span class="panel-title">Asset Risk Detail — Per-Asset Breakdown</span>
+    <span class="panel-sub">6 assets · last update 14:22:07 UTC</span>
+  </div>
+
+  <div class="asset-grid">
+    <!-- dc-01 -->
+    <div class="asset-panel">
+      <div class="ap-header">
+        <div>
+          <div class="ap-name" style="color:var(--red)">dc-01.corp</div>
+          <div class="ap-type">Domain Controller · Windows Server 2022</div>
+        </div>
+        <span class="status-pill pill-red" style="margin-left:8px">CRITICAL</span>
+        <div class="ap-risk danger" style="color:var(--red)">0.91</div>
+      </div>
+      <div class="ap-body">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <div class="comp-row">
+              <div class="comp-label"><span>Scenario Score</span><span style="color:var(--text);font-family:var(--mono)">0.95</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:95%;background:#ef4444"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Topology Risk</span><span style="color:var(--text);font-family:var(--mono)">0.88</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:88%;background:#ef4444"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Tail EVT</span><span style="color:var(--text);font-family:var(--mono)">0.97</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:97%;background:#ef4444"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Impact Score</span><span style="color:var(--text);font-family:var(--mono)">0.92</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:92%;background:#f59e0b"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Recovery Score</span><span style="color:var(--text);font-family:var(--mono)">0.85</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:85%;background:#f59e0b"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Mission Impact</span><span style="color:var(--text);font-family:var(--mono)">0.79</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:79%;background:#f59e0b"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;width:80px">
+            <div style="font-size:10px;color:var(--sub)">Trend</div>
+            <svg viewBox="0 0 80 40" width="80" height="40">
+              <polyline fill="none" stroke="#ef4444" stroke-width="1.5" points="0,35 10,30 20,25 30,20 40,15 50,10 60,6 70,4 80,2"/>
+            </svg>
+            <div style="font-size:10px;color:var(--sub)">Confidence</div>
+            <div class="conf-pips" style="flex-wrap:wrap;gap:3px;width:60px">
+              <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--blue);width:100%;margin-top:2px">0.84</div>
+            </div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px">Scenario</div>
+            <div style="font-size:10px;color:var(--red);font-weight:600;line-height:1.3">Lateral Movement<br>ACTIVE</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- vpn-gw -->
+    <div class="asset-panel">
+      <div class="ap-header">
+        <div>
+          <div class="ap-name" style="color:var(--orange)">vpn-gw-prod</div>
+          <div class="ap-type">VPN Gateway · Palo Alto PA-3420</div>
+        </div>
+        <span class="status-pill pill-orange" style="margin-left:8px">HIGH</span>
+        <div class="ap-risk" style="color:var(--orange)">0.78</div>
+      </div>
+      <div class="ap-body">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <div class="comp-row">
+              <div class="comp-label"><span>Scenario Score</span><span style="color:var(--text);font-family:var(--mono)">0.82</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:82%;background:#ef4444"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Topology Risk</span><span style="color:var(--text);font-family:var(--mono)">0.74</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:74%;background:#f59e0b"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Tail EVT</span><span style="color:var(--text);font-family:var(--mono)">0.71</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:71%;background:#f59e0b"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Impact Score</span><span style="color:var(--text);font-family:var(--mono)">0.80</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:80%;background:#f59e0b"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Recovery Score</span><span style="color:var(--text);font-family:var(--mono)">0.65</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:65%;background:#eab308"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Mission Impact</span><span style="color:var(--text);font-family:var(--mono)">0.71</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:71%;background:#f59e0b"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;width:80px">
+            <div style="font-size:10px;color:var(--sub)">Trend</div>
+            <svg viewBox="0 0 80 40" width="80" height="40">
+              <polyline fill="none" stroke="#f59e0b" stroke-width="1.5" points="0,35 10,32 20,28 30,24 40,20 50,16 60,13 70,10 80,8"/>
+            </svg>
+            <div style="font-size:10px;color:var(--sub)">Confidence</div>
+            <div class="conf-pips" style="flex-wrap:wrap;gap:3px;width:60px">
+              <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--blue);width:100%;margin-top:2px">0.72</div>
+            </div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px">Scenario</div>
+            <div style="font-size:10px;color:var(--orange);font-weight:600;line-height:1.3">Recon / C2<br>Suspected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- siem-01 -->
+    <div class="asset-panel">
+      <div class="ap-header">
+        <div>
+          <div class="ap-name" style="color:var(--blue)">siem-01</div>
+          <div class="ap-type">SIEM Platform · Elastic SIEM 8.x</div>
+        </div>
+        <span class="status-pill pill-blue" style="margin-left:8px">ELEVATED</span>
+        <div class="ap-risk" style="color:var(--blue)">0.54</div>
+      </div>
+      <div class="ap-body">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <div class="comp-row">
+              <div class="comp-label"><span>Scenario Score</span><span style="color:var(--text);font-family:var(--mono)">0.51</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:51%;background:#3b82f6"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Topology Risk</span><span style="color:var(--text);font-family:var(--mono)">0.48</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:48%;background:#3b82f6"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Tail EVT</span><span style="color:var(--text);font-family:var(--mono)">0.49</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:49%;background:#3b82f6"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Impact Score</span><span style="color:var(--text);font-family:var(--mono)">0.60</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:60%;background:#eab308"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Recovery Score</span><span style="color:var(--text);font-family:var(--mono)">0.55</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:55%;background:#3b82f6"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Mission Impact</span><span style="color:var(--text);font-family:var(--mono)">0.52</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:52%;background:#3b82f6"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;width:80px">
+            <div style="font-size:10px;color:var(--sub)">Trend</div>
+            <svg viewBox="0 0 80 40" width="80" height="40">
+              <polyline fill="none" stroke="#eab308" stroke-width="1.5" points="0,20 10,22 20,19 30,21 40,20 50,19 60,20 70,19 80,20"/>
+            </svg>
+            <div style="font-size:10px;color:var(--sub)">Confidence</div>
+            <div class="conf-pips" style="flex-wrap:wrap;gap:3px;width:60px">
+              <div class="pip on"></div><div class="pip on"></div><div class="pip on"></div><div class="pip"></div><div class="pip"></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--blue);width:100%;margin-top:2px">0.56</div>
+            </div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px">Scenario</div>
+            <div style="font-size:10px;color:var(--blue);font-weight:600;line-height:1.3">Log Gap<br>Detected</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- db-primary -->
+    <div class="asset-panel">
+      <div class="ap-header">
+        <div>
+          <div class="ap-name" style="color:var(--green)">db-primary</div>
+          <div class="ap-type">Database Server · PostgreSQL 16 / RHEL</div>
+        </div>
+        <span class="status-pill pill-green" style="margin-left:8px">NORMAL</span>
+        <div class="ap-risk" style="color:var(--green)">0.23</div>
+      </div>
+      <div class="ap-body">
+        <div style="display:flex;gap:12px">
+          <div style="flex:1">
+            <div class="comp-row">
+              <div class="comp-label"><span>Scenario Score</span><span style="color:var(--text);font-family:var(--mono)">0.18</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:18%;background:#22c55e"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Topology Risk</span><span style="color:var(--text);font-family:var(--mono)">0.22</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:22%;background:#22c55e"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Tail EVT</span><span style="color:var(--text);font-family:var(--mono)">0.19</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:19%;background:#22c55e"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Impact Score</span><span style="color:var(--text);font-family:var(--mono)">0.35</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:35%;background:#3b82f6"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Recovery Score</span><span style="color:var(--text);font-family:var(--mono)">0.20</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:20%;background:#22c55e"></div></div>
+            </div>
+            <div class="comp-row" style="margin-top:6px">
+              <div class="comp-label"><span>Mission Impact</span><span style="color:var(--text);font-family:var(--mono)">0.25</span></div>
+              <div class="comp-bar-bg"><div class="comp-bar-fill" style="width:25%;background:#22c55e"></div></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:4px;width:80px">
+            <div style="font-size:10px;color:var(--sub)">Trend</div>
+            <svg viewBox="0 0 80 40" width="80" height="40">
+              <polyline fill="none" stroke="#22c55e" stroke-width="1.5" points="0,26 10,25 20,26 30,27 40,26 50,25 60,27 70,26 80,26"/>
+            </svg>
+            <div style="font-size:10px;color:var(--sub)">Confidence</div>
+            <div class="conf-pips" style="flex-wrap:wrap;gap:3px;width:60px">
+              <div class="pip on"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div><div class="pip"></div>
+              <div style="font-family:var(--mono);font-size:11px;color:var(--blue);width:100%;margin-top:2px">0.31</div>
+            </div>
+            <div style="font-size:10px;color:var(--sub);margin-top:4px">Scenario</div>
+            <div style="font-size:10px;color:var(--sub);font-weight:600;line-height:1.3">None<br>Assigned</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /asset-grid -->
+
+  <!-- Heatmap -->
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="grid-3x3" style="width:13px;height:13px;color:var(--orange)"></i>
+      <span class="panel-title">Risk Heatmap — Asset × Metric</span>
+      <span class="panel-sub">6 assets × 6 metrics</span>
+    </div>
+    <div style="padding:12px">
+      <svg viewBox="0 0 660 160" width="88%" preserveAspectRatio="xMidYMid meet" style="display:block;margin:0 auto">
+        <!-- axis labels -->
+        <text x="110" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Scenario</text>
+        <text x="210" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Topology</text>
+        <text x="310" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Tail EVT</text>
+        <text x="410" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Impact</text>
+        <text x="510" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Recovery</text>
+        <text x="610" y="18" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="8" fill="#888">Mission</text>
+        <!-- row: dc-01  y0=22, h=17, label-y=34 -->
+        <text x="58" y="34" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#e8e8e8">dc-01</text>
+        <rect x="62" y="22" width="96" height="17" rx="2" fill="#ef4444" opacity="0.85"/>
+        <text x="110" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.95</text>
+        <rect x="162" y="22" width="96" height="17" rx="2" fill="#ef4444" opacity="0.75"/>
+        <text x="210" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.88</text>
+        <rect x="262" y="22" width="96" height="17" rx="2" fill="#ef4444" opacity="0.95"/>
+        <text x="310" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.97</text>
+        <rect x="362" y="22" width="96" height="17" rx="2" fill="#ef4444" opacity="0.85"/>
+        <text x="410" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.92</text>
+        <rect x="462" y="22" width="96" height="17" rx="2" fill="#ef4444" opacity="0.70"/>
+        <text x="510" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.85</text>
+        <rect x="562" y="22" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.80"/>
+        <text x="610" y="34" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.79</text>
+        <!-- row: vpn-gw  y0=42 -->
+        <text x="58" y="54" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#e8e8e8">vpn-gw</text>
+        <rect x="62" y="42" width="96" height="17" rx="2" fill="#ef4444" opacity="0.65"/>
+        <text x="110" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.82</text>
+        <rect x="162" y="42" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.80"/>
+        <text x="210" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.74</text>
+        <rect x="262" y="42" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.75"/>
+        <text x="310" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.71</text>
+        <rect x="362" y="42" width="96" height="17" rx="2" fill="#ef4444" opacity="0.60"/>
+        <text x="410" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.80</text>
+        <rect x="462" y="42" width="96" height="17" rx="2" fill="#eab308" opacity="0.80"/>
+        <text x="510" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.65</text>
+        <rect x="562" y="42" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.75"/>
+        <text x="610" y="54" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.71</text>
+        <!-- row: siem-01  y0=62 -->
+        <text x="58" y="74" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#e8e8e8">siem-01</text>
+        <rect x="62" y="62" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.55"/>
+        <text x="110" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.51</text>
+        <rect x="162" y="62" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.50"/>
+        <text x="210" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.48</text>
+        <rect x="262" y="62" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.50"/>
+        <text x="310" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.49</text>
+        <rect x="362" y="62" width="96" height="17" rx="2" fill="#eab308" opacity="0.65"/>
+        <text x="410" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.60</text>
+        <rect x="462" y="62" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.55"/>
+        <text x="510" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.55</text>
+        <rect x="562" y="62" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.52"/>
+        <text x="610" y="74" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#fff">0.52</text>
+        <!-- row: db-primary  y0=82 -->
+        <text x="58" y="94" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#e8e8e8">db-pri</text>
+        <rect x="62" y="82" width="96" height="17" rx="2" fill="#22c55e" opacity="0.30"/>
+        <text x="110" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">0.18</text>
+        <rect x="162" y="82" width="96" height="17" rx="2" fill="#22c55e" opacity="0.35"/>
+        <text x="210" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">0.22</text>
+        <rect x="262" y="82" width="96" height="17" rx="2" fill="#22c55e" opacity="0.28"/>
+        <text x="310" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">0.19</text>
+        <rect x="362" y="82" width="96" height="17" rx="2" fill="#3b82f6" opacity="0.40"/>
+        <text x="410" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#60a5fa">0.35</text>
+        <rect x="462" y="82" width="96" height="17" rx="2" fill="#22c55e" opacity="0.30"/>
+        <text x="510" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">0.20</text>
+        <rect x="562" y="82" width="96" height="17" rx="2" fill="#22c55e" opacity="0.35"/>
+        <text x="610" y="94" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">0.25</text>
+        <!-- row: mail-relay  y0=102 -->
+        <text x="58" y="114" text-anchor="end" font-family="SF Mono,monospace" font-size="8" fill="#e8e8e8">mail-r</text>
+        <rect x="62" y="102" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.70"/>
+        <text x="110" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.70</text>
+        <rect x="162" y="102" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.60"/>
+        <text x="210" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.63</text>
+        <rect x="262" y="102" width="96" height="17" rx="2" fill="#eab308" opacity="0.65"/>
+        <text x="310" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.61</text>
+        <rect x="362" y="102" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.65"/>
+        <text x="410" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.68</text>
+        <rect x="462" y="102" width="96" height="17" rx="2" fill="#eab308" opacity="0.55"/>
+        <text x="510" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.58</text>
+        <rect x="562" y="102" width="96" height="17" rx="2" fill="#f59e0b" opacity="0.60"/>
+        <text x="610" y="114" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#000">0.65</text>
+        <!-- legend -->
+        <rect x="62" y="128" width="10" height="7" rx="1" fill="#22c55e" opacity="0.6"/>
+        <text x="76" y="135" font-family="-apple-system,sans-serif" font-size="7" fill="#555">Low</text>
+        <rect x="112" y="128" width="10" height="7" rx="1" fill="#3b82f6" opacity="0.6"/>
+        <text x="126" y="135" font-family="-apple-system,sans-serif" font-size="7" fill="#555">Medium</text>
+        <rect x="176" y="128" width="10" height="7" rx="1" fill="#f59e0b" opacity="0.8"/>
+        <text x="190" y="135" font-family="-apple-system,sans-serif" font-size="7" fill="#555">High</text>
+        <rect x="224" y="128" width="10" height="7" rx="1" fill="#ef4444" opacity="0.85"/>
+        <text x="238" y="135" font-family="-apple-system,sans-serif" font-size="7" fill="#555">Critical</text>
+      </svg>
+    </div>
+  </div>
+
+</div><!-- /page-assets -->
+
+<!-- ════════════════ PAGE: TAIL RISK / EVT ════════════════ -->
+<div class="page" id="page-tailrisk">
+
+  <div class="row">
+    <div style="flex:1">
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="stat-label">Shape Parameter &#x3BE;</div>
+          <div class="stat-val">0.41</div>
+          <div class="stat-desc">Heavy tail (&#x3BE; &gt; 0)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Scale Parameter &#x3C3;</div>
+          <div class="stat-val">2.31</div>
+          <div class="stat-desc">GPD scale estimate</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Threshold u</div>
+          <div class="stat-val">47.2</div>
+          <div class="stat-desc">95th percentile</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-label">Exceedances</div>
+          <div class="stat-val" style="color:var(--red)">23/312</div>
+          <div class="stat-desc">7.4% exceedance rate</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="activity" style="width:13px;height:13px;color:var(--orange)"></i>
+      <span class="panel-title">Signal Stream &#x2014; Anomaly Score with GPD Threshold</span>
+      <span class="panel-sub">312 observations &#xB7; dc-01.corp</span>
+    </div>
+    <div style="padding:8px 4px 4px">
+      <svg viewBox="0 0 820 160" width="100%" preserveAspectRatio="none" style="display:block">
+        <rect width="820" height="160" fill="#141414"/>
+        <line x1="60" y1="20" x2="810" y2="20" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="60" y1="60" x2="810" y2="60" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="60" y1="100" x2="810" y2="100" stroke="#2a2a2a" stroke-width="1" stroke-dasharray="4,4"/>
+        <line x1="60" y1="140" x2="810" y2="140" stroke="#333" stroke-width="1"/>
+        <line x1="60" y1="52" x2="810" y2="52" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="56" y="23" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">80</text>
+        <text x="56" y="56" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">47</text>
+        <text x="56" y="103" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">20</text>
+        <text x="56" y="143" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">0</text>
+        <text x="812" y="56" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">u=47.2</text>
+        <polyline fill="none" stroke="#3b82f6" stroke-width="1.2" stroke-linejoin="round"
+          points="62,125 74,120 86,128 98,115 110,122 122,118 134,130 146,125 158,119 170,44 182,38 194,130 206,125 218,118 230,122 242,128 254,44 266,37 278,42 290,130 302,125 314,118 326,122 338,34 350,40 362,128 374,30 386,25 398,20 410,125 422,120 434,128 446,33 458,120 470,128 482,118 494,125 506,120 518,128 530,38 542,120 554,115 566,28 578,24 590,120 602,125 614,22 626,18 638,22 650,120 662,115 674,24 686,20 698,128 710,120 722,125 734,128 746,21 758,120 770,125 782,119 794,21 806,18 818,22"/>
+        <circle cx="170" cy="44" r="4" fill="#ef4444"/>
+        <circle cx="182" cy="38" r="4" fill="#ef4444"/>
+        <circle cx="254" cy="44" r="4" fill="#ef4444"/>
+        <circle cx="266" cy="37" r="4" fill="#ef4444"/>
+        <circle cx="278" cy="42" r="4" fill="#ef4444"/>
+        <circle cx="338" cy="34" r="4" fill="#ef4444"/>
+        <circle cx="350" cy="40" r="4" fill="#ef4444"/>
+        <circle cx="374" cy="30" r="4" fill="#ef4444"/>
+        <circle cx="386" cy="25" r="4" fill="#ef4444"/>
+        <circle cx="398" cy="20" r="4" fill="#ef4444"/>
+        <circle cx="446" cy="33" r="4" fill="#ef4444"/>
+        <circle cx="530" cy="38" r="4" fill="#ef4444"/>
+        <circle cx="566" cy="28" r="4" fill="#ef4444"/>
+        <circle cx="578" cy="24" r="4" fill="#ef4444"/>
+        <circle cx="614" cy="22" r="4" fill="#ef4444"/>
+        <circle cx="626" cy="18" r="4" fill="#ef4444"/>
+        <circle cx="638" cy="22" r="4" fill="#ef4444"/>
+        <circle cx="674" cy="24" r="4" fill="#ef4444"/>
+        <circle cx="686" cy="20" r="4" fill="#ef4444"/>
+        <circle cx="746" cy="21" r="4" fill="#ef4444"/>
+        <circle cx="794" cy="21" r="4" fill="#ef4444"/>
+        <circle cx="806" cy="18" r="4" fill="#ef4444"/>
+        <circle cx="818" cy="22" r="4" fill="#ef4444"/>
+        <rect x="64" y="14" width="130" height="30" fill="#1a1a1a" rx="3" opacity="0.90"/>
+        <line x1="70" y1="24" x2="88" y2="24" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="92" y="28" font-family="-apple-system,sans-serif" font-size="9" fill="#888">Anomaly signal</text>
+        <circle cx="76" cy="38" r="4" fill="#ef4444"/>
+        <text x="84" y="42" font-family="-apple-system,sans-serif" font-size="9" fill="#888">Exceedance (23)</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel col">
+      <div class="panel-header">
+        <i data-lucide="calculator" style="width:13px;height:13px;color:var(--cyan)"></i>
+        <span class="panel-title">Exceedance Probability &#x2014; GPD</span>
+      </div>
+      <div class="panel-body">
+        <div class="formula-block">
+          <span style="color:var(--orange)">P</span>(X &gt; x | X &gt; u) = <span style="color:var(--orange)">[1 + &#x3BE;&#xB7;(x&#x2212;u)/&#x3C3;]</span><sup style="font-size:9px">&#x2212;1/&#x3BE;</sup><br>
+          <span class="formula-comment">-- Generalised Pareto Distribution tail probability</span><br>
+          <span style="color:var(--orange)">&#x3BE;</span> = 0.41 &nbsp; <span style="color:var(--orange)">&#x3C3;</span> = 2.31 &nbsp; <span style="color:var(--orange)">u</span> = 47.2<br>
+          <span class="formula-comment">-- At x=72.5: P(X&gt;72.5) &#x2248; 0.031</span><br>
+          <span class="formula-comment">-- At x=90.0: P(X&gt;90.0) &#x2248; 0.007</span>
+        </div>
+      </div>
+    </div>
+    <div class="panel col">
+      <div class="panel-header">
+        <i data-lucide="trending-up" style="width:13px;height:13px;color:var(--orange)"></i>
+        <span class="panel-title">Drift Score Panel</span>
+      </div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:10px">
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px">
+          <div class="stat-box" style="padding:8px">
+            <div class="stat-label">Drift &#x3BC;&#x302;</div>
+            <div class="stat-val" style="font-size:18px;color:var(--red)">+0.031</div>
+            <div class="stat-desc">per tick</div>
+          </div>
+          <div class="stat-box" style="padding:8px">
+            <div class="stat-label">Drift &#x3A3;&#x302;</div>
+            <div class="stat-val" style="font-size:18px;color:var(--orange)">0.087</div>
+            <div class="stat-desc">std dev</div>
+          </div>
+          <div class="stat-box" style="padding:8px">
+            <div class="stat-label">Z-score</div>
+            <div class="stat-val" style="font-size:18px;color:var(--red)">3.41</div>
+            <div class="stat-desc">&#x3C3; above mean</div>
+          </div>
+        </div>
+        <div class="formula-block">
+          <span style="color:var(--orange)">drift_score</span> = (&#x3BC;&#x302;_recent &#x2212; &#x3BC;&#x302;_baseline) / &#x3C3;_baseline<br>
+          <span class="formula-comment">-- Welch t-test p-value: 0.0003</span><br>
+          <span class="formula-comment">-- Reject H&#x2080; (stationarity) at &#x3B1;=0.01</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-tailrisk -->
+
+<!-- ════════════════ PAGE: BAYESIAN ENGINE ════════════════ -->
+<div class="page" id="page-bayesian">
+
+  <div class="bayes-grid">
+    <div class="bayes-card" style="border-color:var(--blue)">
+      <div class="bayes-card-label">Prior P(H)</div>
+      <div class="bayes-card-val" style="color:var(--sub)">0.030</div>
+      <div class="bayes-card-desc">Lateral Movement baseline rate</div>
+    </div>
+    <div class="bayes-card" style="border-color:var(--orange)">
+      <div class="bayes-card-label">LR Product &#x39B;</div>
+      <div class="bayes-card-val" style="color:var(--orange)">82.4&#xD7;</div>
+      <div class="bayes-card-desc">Joint likelihood ratio (6 signals)</div>
+    </div>
+    <div class="bayes-card" style="border-color:var(--red);background:var(--redbg)">
+      <div class="bayes-card-label">Posterior P(H|E)</div>
+      <div class="bayes-card-val" style="color:var(--red)">0.763</div>
+      <div class="bayes-card-desc">Updated probability &#x2014; CRITICAL</div>
+    </div>
+    <div class="bayes-card">
+      <div class="bayes-card-label">Margin vs Next</div>
+      <div class="bayes-card-val" style="color:var(--orange)">+0.41</div>
+      <div class="bayes-card-desc">Lead over 2nd hypothesis</div>
+    </div>
+    <div class="bayes-card">
+      <div class="bayes-card-label">Bayes Factor</div>
+      <div class="bayes-card-val" style="color:var(--cyan)">96.2</div>
+      <div class="bayes-card-desc">Decisive (Jeffreys scale)</div>
+    </div>
+    <div class="bayes-card">
+      <div class="bayes-card-label">Entropy H(P)</div>
+      <div class="bayes-card-val" style="color:var(--purple)">0.82</div>
+      <div class="bayes-card-desc">bits &#x2014; low uncertainty</div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel" style="flex:1.2">
+      <div class="panel-header">
+        <i data-lucide="bar-chart-horizontal" style="width:13px;height:13px;color:var(--orange)"></i>
+        <span class="panel-title">Competing Hypotheses &#x2014; Posterior Probabilities</span>
+        <span class="panel-sub">Normalised &#xB7; 7 hypotheses</span>
+      </div>
+      <div style="padding:12px">
+        <svg viewBox="0 0 500 210" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">
+          <text x="132" y="22" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Lateral Movement</text>
+          <rect x="136" y="12" width="305" height="16" rx="2" fill="#ef4444" opacity="0.85"/>
+          <text x="444" y="23" font-family="SF Mono,monospace" font-size="10" fill="#ef4444" font-weight="700">0.763</text>
+          <text x="132" y="47" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Credential Abuse</text>
+          <rect x="136" y="37" width="140" height="16" rx="2" fill="#f59e0b" opacity="0.85"/>
+          <text x="279" y="48" font-family="SF Mono,monospace" font-size="10" fill="#f59e0b">0.351</text>
+          <text x="132" y="72" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Exfiltration Prep</text>
+          <rect x="136" y="62" width="113" height="16" rx="2" fill="#f59e0b" opacity="0.70"/>
+          <text x="252" y="73" font-family="SF Mono,monospace" font-size="10" fill="#f59e0b">0.284</text>
+          <text x="132" y="97" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Insider Threat</text>
+          <rect x="136" y="87" width="79" height="16" rx="2" fill="#eab308" opacity="0.70"/>
+          <text x="218" y="98" font-family="SF Mono,monospace" font-size="10" fill="#eab308">0.198</text>
+          <text x="132" y="122" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Ransomware Staging</text>
+          <rect x="136" y="112" width="57" height="16" rx="2" fill="#3b82f6" opacity="0.70"/>
+          <text x="196" y="123" font-family="SF Mono,monospace" font-size="10" fill="#3b82f6">0.142</text>
+          <text x="132" y="147" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#888">Supply Chain</text>
+          <rect x="136" y="137" width="36" height="16" rx="2" fill="#555" opacity="0.80"/>
+          <text x="175" y="148" font-family="SF Mono,monospace" font-size="10" fill="#888">0.089</text>
+          <text x="132" y="172" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">Benign Anomaly</text>
+          <rect x="136" y="162" width="12" height="16" rx="2" fill="#333" opacity="0.80"/>
+          <text x="152" y="173" font-family="SF Mono,monospace" font-size="10" fill="#555">0.031</text>
+        </svg>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1">
+      <div class="panel-header">
+        <i data-lucide="zap" style="width:13px;height:13px;color:var(--orange)"></i>
+        <span class="panel-title">Evidence Signals &#x2014; Likelihood Ratios</span>
+      </div>
+      <div class="panel-body">
+        <div class="evidence-list">
+          <div class="ev-item">
+            <i data-lucide="alert-triangle" style="width:12px;height:12px;color:var(--red)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">Pass-the-Hash attempt (dc-01)</div>
+              <div class="ev-dir">Mimikatz signature &#xB7; lsass.exe dump</div>
+            </div>
+            <div class="ev-lr">LR = 18.4&#xD7;</div>
+          </div>
+          <div class="ev-item">
+            <i data-lucide="alert-triangle" style="width:12px;height:12px;color:var(--red)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">Lateral SMB to 14 hosts in 4 min</div>
+              <div class="ev-dir">Worm-speed lateral movement</div>
+            </div>
+            <div class="ev-lr">LR = 12.1&#xD7;</div>
+          </div>
+          <div class="ev-item">
+            <i data-lucide="alert-circle" style="width:12px;height:12px;color:var(--orange)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">VPN anomalous geo-login (RU/CN)</div>
+              <div class="ev-dir">vpn-gw-prod &#xB7; 03:41 UTC off-hours</div>
+            </div>
+            <div class="ev-lr">LR = 9.3&#xD7;</div>
+          </div>
+          <div class="ev-item">
+            <i data-lucide="alert-circle" style="width:12px;height:12px;color:var(--orange)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">SIEM log gap 47 min (siem-01)</div>
+              <div class="ev-dir">Coverage blind spot detected</div>
+            </div>
+            <div class="ev-lr">LR = 6.8&#xD7;</div>
+          </div>
+          <div class="ev-item">
+            <i data-lucide="info" style="width:12px;height:12px;color:var(--blue)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">DC replication anomaly detected</div>
+              <div class="ev-dir">DCSync pattern &#xB7; &#x394; +312 objects</div>
+            </div>
+            <div class="ev-lr">LR = 5.2&#xD7;</div>
+          </div>
+          <div class="ev-item">
+            <i data-lucide="info" style="width:12px;height:12px;color:var(--blue)"></i>
+            <div style="flex:1">
+              <div class="ev-signal">Scheduled task created (SYSTEM)</div>
+              <div class="ev-dir">Persistence mechanism T1053.005</div>
+            </div>
+            <div class="ev-lr">LR = 4.7&#xD7;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="function-square" style="width:13px;height:13px;color:var(--cyan)"></i>
+      <span class="panel-title">Bayes Update Formula</span>
+    </div>
+    <div class="panel-body">
+      <div class="formula-block">
+        <span style="color:var(--orange)">P(H|E)</span> = <span style="color:var(--cyan)">P(E|H)</span> &#xB7; <span style="color:var(--green)">P(H)</span> / <span style="color:var(--purple)">P(E)</span><br>
+        <span class="formula-comment">-- posterior = likelihood &#xD7; prior / evidence</span><br><br>
+        <span style="color:var(--orange)">P(H|E)</span> = &#x39B; &#xB7; P(H) / [&#x39B; &#xB7; P(H) + (1 &#x2212; P(H))]<br>
+        <span class="formula-comment">-- Log-odds: log O(H|E) = log O(H) + &#x3A3; log LR_i</span><br><br>
+        <span style="color:var(--green)">P(H)</span> = 0.030 &nbsp; <span style="color:var(--cyan)">&#x39B;</span> = 18.4 &#xD7; 12.1 &#xD7; 9.3 &#xD7; 6.8 &#xD7; 5.2 &#xD7; 4.7 = <span style="color:var(--orange)">82.4</span><br>
+        <span style="color:var(--orange)">P(H|E)</span> = (82.4 &#xD7; 0.030) / (82.4 &#xD7; 0.030 + 0.970) = <span style="color:var(--red);font-weight:700">0.763</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-bayesian -->
+
+<!-- ════════════════ PAGE: DECISION FUSION ════════════════ -->
+<div class="page" id="page-fusion">
+
+  <div class="row">
+    <div class="panel" style="flex:1.4">
+      <div class="panel-header">
+        <i data-lucide="sliders-horizontal" style="width:13px;height:13px;color:var(--orange)"></i>
+        <span class="panel-title">Fusion Component Weights &amp; Scores &#x2014; dc-01.corp</span>
+        <span class="panel-sub">Fused score: 0.91 &#xB7; 8 components</span>
+      </div>
+      <div style="padding:12px">
+        <svg viewBox="0 0 560 250" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">
+          <text x="143" y="14" text-anchor="end" font-family="SF Mono,monospace" font-size="9" fill="#555">Component</text>
+          <text x="295" y="14" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#555">Weighted Score Bar</text>
+          <text x="430" y="14" text-anchor="start" font-family="SF Mono,monospace" font-size="9" fill="#555">Score   Wt   Contrib</text>
+          <text x="141" y="36" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">scenario</text>
+          <rect x="145" y="26" width="247" height="14" rx="2" fill="#ef4444" opacity="0.80"/>
+          <text x="395" y="37" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.95  x0.20  =0.190</text>
+          <text x="141" y="62" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">topology</text>
+          <rect x="145" y="52" width="229" height="14" rx="2" fill="#ef4444" opacity="0.65"/>
+          <text x="395" y="63" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.88  x0.15  =0.132</text>
+          <text x="141" y="88" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">tail_evt</text>
+          <rect x="145" y="78" width="252" height="14" rx="2" fill="#ef4444" opacity="0.85"/>
+          <text x="395" y="89" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.97  x0.15  =0.146</text>
+          <text x="141" y="114" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">impact</text>
+          <rect x="145" y="104" width="239" height="14" rx="2" fill="#f59e0b" opacity="0.80"/>
+          <text x="395" y="115" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.92  x0.10  =0.092</text>
+          <text x="141" y="140" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">recovery</text>
+          <rect x="145" y="130" width="221" height="14" rx="2" fill="#f59e0b" opacity="0.70"/>
+          <text x="395" y="141" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.85  x0.10  =0.085</text>
+          <text x="141" y="166" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">mission</text>
+          <rect x="145" y="156" width="205" height="14" rx="2" fill="#f59e0b" opacity="0.60"/>
+          <text x="395" y="167" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.79  x0.10  =0.079</text>
+          <text x="141" y="192" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">scen_phase</text>
+          <rect x="145" y="182" width="216" height="14" rx="2" fill="#f59e0b" opacity="0.65"/>
+          <text x="395" y="193" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.83  x0.10  =0.083</text>
+          <text x="141" y="218" text-anchor="end" font-family="SF Mono,monospace" font-size="10" fill="#e8e8e8">temporal</text>
+          <rect x="145" y="208" width="244" height="14" rx="2" fill="#ef4444" opacity="0.75"/>
+          <text x="395" y="219" font-family="SF Mono,monospace" font-size="9" fill="#e8e8e8">0.94  x0.10  =0.094</text>
+          <line x1="145" y1="228" x2="540" y2="228" stroke="#333" stroke-width="1"/>
+          <text x="395" y="244" font-family="SF Mono,monospace" font-size="10" fill="#f59e0b" font-weight="700">FUSED =</text>
+          <text x="476" y="244" font-family="SF Mono,monospace" font-size="13" fill="#ef4444" font-weight="700">0.901</text>
+        </svg>
+      </div>
+    </div>
+
+    <div style="flex:1;display:flex;flex-direction:column;gap:12px">
+      <div class="panel">
+        <div class="panel-header">
+          <i data-lucide="gauge" style="width:13px;height:13px;color:var(--orange)"></i>
+          <span class="panel-title">Fused Risk Gauge</span>
+        </div>
+        <div style="padding:8px;display:flex;justify-content:center">
+          <svg viewBox="0 0 180 110" width="180" height="110">
+            <path d="M 20 95 A 70 70 0 0 1 160 95" fill="none" stroke="#2a2a2a" stroke-width="14" stroke-linecap="round"/>
+            <path d="M 20 95 A 70 70 0 0 1 90 25" fill="none" stroke="#22c55e" stroke-width="14" stroke-linecap="butt"/>
+            <path d="M 90 25 A 70 70 0 0 1 132 37" fill="none" stroke="#f59e0b" stroke-width="14" stroke-linecap="butt"/>
+            <path d="M 132 37 A 70 70 0 0 1 160 95" fill="none" stroke="#ef4444" stroke-width="14" stroke-linecap="round"/>
+            <line x1="90" y1="95" x2="28" y2="58" stroke="#ef4444" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="90" cy="95" r="5" fill="#ef4444"/>
+            <text x="90" y="80" text-anchor="middle" font-family="SF Mono,monospace" font-size="24" font-weight="700" fill="#ef4444">0.91</text>
+            <text x="90" y="105" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="9" fill="#888">CRITICAL RISK</text>
+          </svg>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header">
+          <i data-lucide="sigma" style="width:13px;height:13px;color:var(--cyan)"></i>
+          <span class="panel-title">Weighted Fusion Formula</span>
+        </div>
+        <div class="panel-body">
+          <div class="formula-block">
+            <span style="color:var(--orange)">R_fused</span> = &#x3A3; <span style="color:var(--cyan)">w_i</span> &#xB7; <span style="color:var(--green)">s_i</span><br>
+            <span class="formula-comment">-- weights sum to 1.0</span><br>
+            = 0.20&#xB7;s_scen + 0.15&#xB7;s_topo + 0.15&#xB7;s_evt<br>
+            + 0.10&#xB7;s_impact + 0.10&#xB7;s_recov<br>
+            + 0.10&#xB7;s_mission + 0.10&#xB7;s_phase<br>
+            + 0.10&#xB7;s_temporal<br>
+            <span style="color:var(--orange)">R(dc-01)</span> = <span style="color:var(--red);font-weight:700">0.901</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-fusion -->
+
+<!-- ════════════════ PAGE: MISSION GRAPH ════════════════ -->
+<div class="page" id="page-mission">
+
+  <div class="alert-banner" style="background:var(--orangebg);border-color:var(--orange)">
+    <i data-lucide="git-fork" style="width:18px;height:18px;color:var(--orange)"></i>
+    <div>
+      <div class="ab-title" style="color:var(--orange)">Mission Operability DEGRADED &#x2014; 62%</div>
+      <div class="ab-body">3 capabilities below threshold. Identity Auth critically impaired (31%). Lateral movement has compromised 2 dependency paths.</div>
+    </div>
+    <div class="ab-meta"><div style="color:var(--orange)">Threshold: 70%</div><div>Breach: &#x2212;8pp</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="git-fork" style="width:13px;height:13px;color:var(--orange)"></i>
+      <span class="panel-title">Mission Capability Operability</span>
+      <span class="panel-sub">Threshold at 70% &#xB7; red = breach</span>
+    </div>
+    <div class="panel-body" style="display:flex;flex-direction:column;gap:0">
+      <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border)">
+        <div style="width:160px;font-size:11px;font-weight:700;color:var(--orange)">Overall Mission</div>
+        <div style="flex:1;height:10px;background:var(--border2);border-radius:2px;position:relative">
+          <div style="width:62%;height:10px;background:var(--orange);border-radius:2px"></div>
+          <div style="position:absolute;top:-4px;left:70%;width:2px;height:18px;background:var(--sub)"></div>
+        </div>
+        <div style="font-family:var(--mono);font-size:13px;font-weight:700;width:44px;text-align:right;color:var(--orange)">62%</div>
+      </div>
+      <div class="mission-row">
+        <div class="mr-label" style="color:var(--red)">Identity Auth</div>
+        <div class="mr-bar-bg"><div class="mr-bar-fill" style="width:31%;background:#ef4444"></div><div class="mr-threshold" style="left:70%"></div></div>
+        <div class="mr-val" style="color:var(--red)">31%</div>
+      </div>
+      <div class="mission-row">
+        <div class="mr-label" style="color:var(--orange)">Network Seg</div>
+        <div class="mr-bar-bg"><div class="mr-bar-fill" style="width:58%;background:#f59e0b"></div><div class="mr-threshold" style="left:70%"></div></div>
+        <div class="mr-val" style="color:var(--orange)">58%</div>
+      </div>
+      <div class="mission-row">
+        <div class="mr-label" style="color:var(--orange)">Patch Currency</div>
+        <div class="mr-bar-bg"><div class="mr-bar-fill" style="width:44%;background:#f59e0b"></div><div class="mr-threshold" style="left:70%"></div></div>
+        <div class="mr-val" style="color:var(--orange)">44%</div>
+      </div>
+      <div class="mission-row">
+        <div class="mr-label">Endpoint Ctrl</div>
+        <div class="mr-bar-bg"><div class="mr-bar-fill" style="width:72%;background:#22c55e"></div><div class="mr-threshold" style="left:70%"></div></div>
+        <div class="mr-val" style="color:var(--green)">72%</div>
+      </div>
+      <div class="mission-row">
+        <div class="mr-label">Logging &amp; Visibility</div>
+        <div class="mr-bar-bg"><div class="mr-bar-fill" style="width:87%;background:#22c55e"></div><div class="mr-threshold" style="left:70%"></div></div>
+        <div class="mr-val" style="color:var(--green)">87%</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel col">
+      <div class="panel-header">
+        <i data-lucide="git-branch" style="width:13px;height:13px;color:var(--cyan)"></i>
+        <span class="panel-title">Dependency Graph</span>
+      </div>
+      <div class="panel-body">
+        <svg viewBox="0 0 380 155" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">
+          <rect x="150" y="10" width="80" height="24" rx="3" fill="#1a1a1a" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="190" y="26" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">MISSION</text>
+          <line x1="190" y1="34" x2="80" y2="65" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="190" y1="34" x2="190" y2="65" stroke="#2a2a2a" stroke-width="1"/>
+          <line x1="190" y1="34" x2="300" y2="65" stroke="#2a2a2a" stroke-width="1"/>
+          <rect x="30" y="65" width="100" height="24" rx="3" fill="#1a1a1a" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="80" y="76" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#ef4444">Identity Auth</text>
+          <text x="80" y="86" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#ef4444">31%</text>
+          <rect x="140" y="65" width="100" height="24" rx="3" fill="#1a1a1a" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="190" y="76" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#f59e0b">Network Seg</text>
+          <text x="190" y="86" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">58%</text>
+          <rect x="250" y="65" width="100" height="24" rx="3" fill="#1a1a1a" stroke="#22c55e" stroke-width="1.5"/>
+          <text x="300" y="76" text-anchor="middle" font-family="SF Mono,monospace" font-size="8" fill="#22c55e">Endpoint Ctrl</text>
+          <text x="300" y="86" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#22c55e">72%</text>
+          <line x1="80" y1="89" x2="55" y2="118" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,2"/>
+          <line x1="80" y1="89" x2="130" y2="118" stroke="#ef4444" stroke-width="1" stroke-dasharray="4,2"/>
+          <rect x="15" y="118" width="80" height="22" rx="3" fill="#1a1a1a" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="55" y="133" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#ef4444">dc-01.corp</text>
+          <rect x="100" y="118" width="80" height="22" rx="3" fill="#1a1a1a" stroke="#ef4444" stroke-width="1.5"/>
+          <text x="140" y="133" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#ef4444">ad-sync-svc</text>
+          <line x1="190" y1="89" x2="190" y2="118" stroke="#f59e0b" stroke-width="1" stroke-dasharray="4,2"/>
+          <rect x="148" y="118" width="84" height="22" rx="3" fill="#1a1a1a" stroke="#f59e0b" stroke-width="1"/>
+          <text x="190" y="133" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#f59e0b">vpn-gw-prod</text>
+        </svg>
+      </div>
+    </div>
+    <div class="panel col">
+      <div class="panel-header">
+        <i data-lucide="shield" style="width:13px;height:13px;color:var(--cyan)"></i>
+        <span class="panel-title">Mission Impact Assessment</span>
+      </div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+        <div class="formula-block">
+          <span style="color:var(--orange)">O(C)</span> = min{O(a) : a &#x2208; deps(C)}<br>
+          <span class="formula-comment">-- Min-aggregation: critical path</span><br>
+          <span style="color:var(--orange)">O(Identity)</span> = min(O(dc-01), O(ad-sync))<br>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = min(0.31, 0.43) = <span style="color:var(--red)">0.31</span>
+        </div>
+        <table class="bb-table" style="font-size:11px">
+          <thead><tr><th style="text-align:left">Capability</th><th>Operability</th><th>Threshold</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left">Identity Auth</td><td style="color:var(--red)">31%</td><td>70%</td><td style="text-align:center"><span class="status-pill pill-red">BREACH</span></td></tr>
+            <tr><td style="text-align:left">Network Seg</td><td style="color:var(--orange)">58%</td><td>70%</td><td style="text-align:center"><span class="status-pill pill-orange">BREACH</span></td></tr>
+            <tr><td style="text-align:left">Patch Currency</td><td style="color:var(--orange)">44%</td><td>70%</td><td style="text-align:center"><span class="status-pill pill-orange">BREACH</span></td></tr>
+            <tr><td style="text-align:left">Endpoint Ctrl</td><td style="color:var(--green)">72%</td><td>70%</td><td style="text-align:center"><span class="status-pill pill-green">OK</span></td></tr>
+            <tr><td style="text-align:left">Logging</td><td style="color:var(--green)">87%</td><td>70%</td><td style="text-align:center"><span class="status-pill pill-green">OK</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-mission -->
+
+<!-- ════════════════ PAGE: SCENARIOS ════════════════ -->
+<div class="page" id="page-scenarios">
+
+  <div class="alert-banner">
+    <i data-lucide="git-branch" style="width:18px;height:18px;color:var(--red)"></i>
+    <div>
+      <div class="ab-title">ACTIVE SCENARIO: Lateral Movement &#x2014; Phase 3 / 7</div>
+      <div class="ab-body">Pass-the-hash confirmed. DCSync observed. Credential cache dumped on 4 hosts. Awaiting: Privilege Escalation &#x2192; Persistence.</div>
+    </div>
+    <div class="ab-meta"><div>T+00:47:22</div><div style="color:var(--red)">CRITICAL</div></div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header">
+      <i data-lucide="milestone" style="width:13px;height:13px;color:var(--orange)"></i>
+      <span class="panel-title">Attack Phase Timeline &#x2014; MITRE ATT&amp;CK Aligned</span>
+    </div>
+    <div style="padding:16px 24px 8px;display:flex;align-items:center;gap:0">
+      <div class="phase-node">
+        <div class="phase-dot done">&#x2713;</div>
+        <div class="phase-label">Recon</div>
+      </div>
+      <div class="phase-connector done"></div>
+      <div class="phase-node">
+        <div class="phase-dot done">&#x2713;</div>
+        <div class="phase-label">Initial Access</div>
+      </div>
+      <div class="phase-connector done"></div>
+      <div class="phase-node">
+        <div class="phase-dot active">3</div>
+        <div class="phase-label" style="color:var(--orange);font-weight:700">Lateral Mvmt</div>
+      </div>
+      <div class="phase-connector"></div>
+      <div class="phase-node">
+        <div class="phase-dot pending">4</div>
+        <div class="phase-label">Priv Escalation</div>
+      </div>
+      <div class="phase-connector"></div>
+      <div class="phase-node">
+        <div class="phase-dot pending">5</div>
+        <div class="phase-label">Persistence</div>
+      </div>
+      <div class="phase-connector"></div>
+      <div class="phase-node">
+        <div class="phase-dot pending">6</div>
+        <div class="phase-label">Collection</div>
+      </div>
+      <div class="phase-connector"></div>
+      <div class="phase-node">
+        <div class="phase-dot pending">7</div>
+        <div class="phase-label">Exfiltration</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="panel col">
+      <div class="panel-header"><i data-lucide="bar-chart-2" style="width:13px;height:13px;color:var(--orange)"></i><span class="panel-title">Cascade Statistics</span></div>
+      <div class="panel-body">
+        <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:8px">
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Hosts Affected</div><div class="stat-val" style="font-size:20px;color:var(--red)">14</div><div class="stat-desc">in last 4 minutes</div></div>
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Credentials Dumped</div><div class="stat-val" style="font-size:20px;color:var(--red)">4</div><div class="stat-desc">NTLM hashes</div></div>
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Pivot Attempts</div><div class="stat-val" style="font-size:20px;color:var(--orange)">38</div><div class="stat-desc">SMB 445 attempts</div></div>
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Propagation Rate</div><div class="stat-val" style="font-size:20px;color:var(--orange)">3.5/m</div><div class="stat-desc">hosts per minute</div></div>
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Blast Radius</div><div class="stat-val" style="font-size:20px;color:var(--red)">HIGH</div><div class="stat-desc">DC-level access</div></div>
+          <div class="stat-box" style="padding:8px"><div class="stat-label">Time to Contain</div><div class="stat-val" style="font-size:20px;color:var(--orange)">~18m</div><div class="stat-desc">w/ isolation action</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="panel col" style="flex:1.3">
+      <div class="panel-header"><i data-lucide="list-checks" style="width:13px;height:13px;color:var(--orange)"></i><span class="panel-title">Evidence Chain &#x2014; T+00:00 to T+00:47</span></div>
+      <div style="padding:8px">
+        <table class="bb-table">
+          <thead><tr><th style="text-align:left">Time</th><th style="text-align:left">Event</th><th style="text-align:left">Asset</th><th style="text-align:left">MITRE</th><th>Sev</th></tr></thead>
+          <tbody>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:00</td><td style="text-align:left">Geo-anomaly VPN login (RU)</td><td style="text-align:left">vpn-gw</td><td style="text-align:left;color:var(--sub)">T1078</td><td><span class="status-pill pill-orange">MED</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:12</td><td style="text-align:left">lsass.exe memory dump</td><td style="text-align:left">dc-01</td><td style="text-align:left;color:var(--sub)">T1003.001</td><td><span class="status-pill pill-red">CRIT</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:17</td><td style="text-align:left">Pass-the-Hash (4 targets)</td><td style="text-align:left">dc-01</td><td style="text-align:left;color:var(--sub)">T1550.002</td><td><span class="status-pill pill-red">CRIT</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:22</td><td style="text-align:left">DCSync +312 AD objects</td><td style="text-align:left">dc-01</td><td style="text-align:left;color:var(--sub)">T1003.006</td><td><span class="status-pill pill-red">CRIT</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:31</td><td style="text-align:left">Scheduled task (SYSTEM)</td><td style="text-align:left">ad-sync</td><td style="text-align:left;color:var(--sub)">T1053.005</td><td><span class="status-pill pill-red">HIGH</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:39</td><td style="text-align:left">SIEM log gap 47min</td><td style="text-align:left">siem-01</td><td style="text-align:left;color:var(--sub)">T1562.006</td><td><span class="status-pill pill-orange">HIGH</span></td></tr>
+            <tr><td style="text-align:left;color:var(--sub)">T+00:47</td><td style="text-align:left">SMB lateral to 14 hosts</td><td style="text-align:left">multiple</td><td style="text-align:left;color:var(--sub)">T1021.002</td><td><span class="status-pill pill-red">CRIT</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-scenarios -->
+
+<!-- ════════════════ PAGE: APPROVALS ════════════════ -->
+<div class="page" id="page-approvals">
+
+  <div class="panel-header" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:4px">
+    <i data-lucide="file-check-2" style="width:13px;height:13px;color:var(--orange)"></i>
+    <span class="panel-title">Pending Agentic Actions &#x2014; CISO Approval Required</span>
+    <span class="panel-sub">3 actions queued &#xB7; Auto-expire 15 min</span>
+  </div>
+
+  <div class="approval-grid">
+    <div class="approval-card" style="border-color:var(--red)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="ac-priority" style="background:var(--redbg);color:var(--red);border:1px solid var(--red)">P1 CRITICAL</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--sub);margin-left:auto">REQ-2024-0847</span>
+      </div>
+      <div class="ac-title">Isolate dc-01.corp from network</div>
+      <div class="ac-asset">Target: dc-01.corp &#xB7; Domain Controller &#xB7; Windows Server 2022</div>
+      <div class="ac-meta">
+        <div class="ac-meta-row"><span class="ac-meta-label">Action</span><span class="ac-meta-val" style="color:var(--orange)">network-isolate</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk if no action</span><span class="ac-meta-val" style="color:var(--red)">0.97 (Extreme)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk after action</span><span class="ac-meta-val" style="color:var(--green)">0.21 (Low)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Mission impact</span><span class="ac-meta-val" style="color:var(--orange)">&#x2212;28pp operability</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Requested by</span><span class="ac-meta-val" style="color:var(--cyan)">AgenticSOC Engine</span></div>
+      </div>
+      <div class="ac-formula">
+        <span style="color:var(--orange)">NB</span> = P(breach)&#xB7;I_breach &#x2212; C_action<br>
+        = 0.97&#xD7;9.2 &#x2212; 1.4 = <span style="color:var(--green);font-weight:700">+7.52</span> <span style="color:var(--sub)">&#x2192; APPROVE</span>
+      </div>
+      <div class="ac-buttons"><button class="btn-approve">APPROVE</button><button class="btn-reject">REJECT</button></div>
+    </div>
+    <div class="approval-card" style="border-color:var(--orange)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="ac-priority" style="background:var(--orangebg);color:var(--orange);border:1px solid var(--orange)">P2 HIGH</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--sub);margin-left:auto">REQ-2024-0848</span>
+      </div>
+      <div class="ac-title">Force MFA re-enroll all admin accounts</div>
+      <div class="ac-asset">Target: 47 admin accounts &#xB7; Active Directory</div>
+      <div class="ac-meta">
+        <div class="ac-meta-row"><span class="ac-meta-label">Action</span><span class="ac-meta-val" style="color:var(--orange)">mfa-revoke-enroll</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk if no action</span><span class="ac-meta-val" style="color:var(--red)">0.91 (Critical)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk after action</span><span class="ac-meta-val" style="color:var(--blue)">0.54 (Elevated)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Mission impact</span><span class="ac-meta-val" style="color:var(--orange)">&#x2212;12pp operability</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Requested by</span><span class="ac-meta-val" style="color:var(--cyan)">AgenticSOC Engine</span></div>
+      </div>
+      <div class="ac-formula">
+        <span style="color:var(--orange)">NB</span> = P(breach)&#xB7;I_breach &#x2212; C_action<br>
+        = 0.91&#xD7;6.8 &#x2212; 2.1 = <span style="color:var(--green);font-weight:700">+4.09</span> <span style="color:var(--sub)">&#x2192; APPROVE</span>
+      </div>
+      <div class="ac-buttons"><button class="btn-approve">APPROVE</button><button class="btn-reject">REJECT</button></div>
+    </div>
+    <div class="approval-card" style="border-color:var(--blue)">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span class="ac-priority" style="background:var(--bluebg);color:var(--blue);border:1px solid var(--blue)">P3 ELEVATED</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--sub);margin-left:auto">REQ-2024-0849</span>
+      </div>
+      <div class="ac-title">Block vpn-gw-prod &#x2014; geo IP ranges CN/RU</div>
+      <div class="ac-asset">Target: vpn-gw-prod &#xB7; PAN-OS firewall policy update</div>
+      <div class="ac-meta">
+        <div class="ac-meta-row"><span class="ac-meta-label">Action</span><span class="ac-meta-val" style="color:var(--orange)">firewall-geo-block</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk if no action</span><span class="ac-meta-val" style="color:var(--orange)">0.78 (High)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Risk after action</span><span class="ac-meta-val" style="color:var(--green)">0.34 (Low-Med)</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Mission impact</span><span class="ac-meta-val" style="color:var(--green)">&#x2212;3pp operability</span></div>
+        <div class="ac-meta-row"><span class="ac-meta-label">Requested by</span><span class="ac-meta-val" style="color:var(--cyan)">AgenticSOC Engine</span></div>
+      </div>
+      <div class="ac-formula">
+        <span style="color:var(--orange)">NB</span> = P(breach)&#xB7;I_breach &#x2212; C_action<br>
+        = 0.78&#xD7;5.1 &#x2212; 0.3 = <span style="color:var(--green);font-weight:700">+3.68</span> <span style="color:var(--sub)">&#x2192; APPROVE</span>
+      </div>
+      <div class="ac-buttons"><button class="btn-approve">APPROVE</button><button class="btn-reject">REJECT</button></div>
+    </div>
+  </div>
+
+</div><!-- /page-approvals -->
+
+<!-- ════════════════ PAGE: DECISION LEDGER ════════════════ -->
+<div class="page" id="page-ledger">
+
+  <div class="panel-header" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:4px">
+    <i data-lucide="database" style="width:13px;height:13px;color:var(--orange)"></i>
+    <span class="panel-title">Decision Ledger &#x2014; Immutable Audit Log</span>
+    <span class="panel-sub">Last 50 entries &#xB7; cryptographically signed &#xB7; append-only</span>
+  </div>
+
+  <div class="panel">
+    <div style="padding:0">
+      <table class="bb-table">
+        <thead>
+          <tr>
+            <th style="text-align:left">Timestamp (UTC)</th>
+            <th style="text-align:left">Asset</th>
+            <th style="text-align:left">Action</th>
+            <th>Risk Before</th>
+            <th>Risk After</th>
+            <th style="text-align:left">Operator</th>
+            <th style="text-align:left">Scenario</th>
+            <th style="text-align:left">Hash</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">14:21:44</td>
+            <td style="text-align:left">dc-01.corp</td>
+            <td style="text-align:left"><span class="ledger-action-block">BLOCK-PENDING</span></td>
+            <td style="color:var(--red)">0.91</td><td style="color:var(--sub)">&#x2014;</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Lateral Movement</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">a3f2c1...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">14:18:22</td>
+            <td style="text-align:left">vpn-gw-prod</td>
+            <td style="text-align:left"><span class="ledger-action-isolate">GEO-BLOCK-PENDING</span></td>
+            <td style="color:var(--orange)">0.78</td><td style="color:var(--sub)">&#x2014;</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Recon / C2</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">b8e91d...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">14:15:07</td>
+            <td style="text-align:left">ad-sync-svc</td>
+            <td style="text-align:left"><span class="ledger-action-isolate">ISOLATE</span></td>
+            <td style="color:var(--orange)">0.72</td><td style="color:var(--green)">0.38</td>
+            <td style="text-align:left">S.Chen (CISO)</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Credential Abuse</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">c2a44f...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">14:09:31</td>
+            <td style="text-align:left">mail-relay-01</td>
+            <td style="text-align:left"><span class="ledger-action-block">BLOCK</span></td>
+            <td style="color:var(--orange)">0.67</td><td style="color:var(--blue)">0.41</td>
+            <td style="text-align:left">R.Patel (SOC)</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Phishing Vector</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">d19bc2...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">13:54:18</td>
+            <td style="text-align:left">siem-01</td>
+            <td style="text-align:left"><span class="ledger-action-allow">ALLOW-MONITOR</span></td>
+            <td style="color:var(--blue)">0.54</td><td style="color:var(--blue)">0.54</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Log Gap</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">e44a1b...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">13:41:02</td>
+            <td style="text-align:left">db-primary</td>
+            <td style="text-align:left"><span class="ledger-action-allow">ALLOW</span></td>
+            <td style="color:var(--green)">0.23</td><td style="color:var(--green)">0.23</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">None</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">f77d9e...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">13:28:55</td>
+            <td style="text-align:left">dc-01.corp</td>
+            <td style="text-align:left"><span class="ledger-action-allow">ALLOW-MONITOR</span></td>
+            <td style="color:var(--orange)">0.57</td><td style="color:var(--orange)">0.57</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">Early Recon</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">a1c3f8...</td>
+          </tr>
+          <tr>
+            <td style="text-align:left;color:var(--sub)">12:47:30</td>
+            <td style="text-align:left">vpn-gw-prod</td>
+            <td style="text-align:left"><span class="ledger-action-allow">ALLOW</span></td>
+            <td style="color:var(--green)">0.31</td><td style="color:var(--green)">0.31</td>
+            <td style="text-align:left;color:var(--cyan)">ENGINE</td>
+            <td style="text-align:left;font-size:10px;color:var(--sub)">None</td>
+            <td style="text-align:left;font-family:var(--mono);font-size:9px;color:var(--muted)">b8e2d4...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /page-ledger -->
+
+<!-- ════════════════ PAGE: ABOUT ════════════════ -->
+<div class="page" id="page-about">
+
+  <div class="about-hero">
+    <div class="about-title">AgenticSOC &#x2014; Autonomous Security Operations Intelligence</div>
+    <div class="about-sub">AgenticSOC is a tier-1 agentic security operations platform that fuses Extreme Value Theory (EVT/GPD), Bayesian belief networks, topology-aware risk propagation, and mission-graph operability modelling into a single continuously-updated fused risk score. The system proposes, justifies, and requests human approval for containment actions &#x2014; providing a full cryptographic audit trail for every decision.</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:6px"><span class="status-pill pill-red">LIVE</span><span style="font-size:11px;color:var(--sub)">Real-time risk scoring</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span class="status-pill pill-orange">AGENTIC</span><span style="font-size:11px;color:var(--sub)">LLM-powered reasoning engine</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span class="status-pill pill-blue">HCIL</span><span style="font-size:11px;color:var(--sub)">Human-in-the-loop approvals</span></div>
+      <div style="display:flex;align-items:center;gap:6px"><span class="status-pill pill-green">AUDIT</span><span style="font-size:11px;color:var(--sub)">Immutable decision ledger</span></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><i data-lucide="layers" style="width:13px;height:13px;color:var(--orange)"></i><span class="panel-title">Architecture Layers</span></div>
+    <div style="padding:14px 16px">
+      <svg viewBox="0 0 860 420" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block">
+        <defs>
+          <!-- arrow marker -->
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L8,3 Z" fill="#444"/>
+          </marker>
+          <marker id="arr-blue"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#3b82f6"/></marker>
+          <marker id="arr-cyan"   markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#06b6d4"/></marker>
+          <marker id="arr-orange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#f59e0b"/></marker>
+          <marker id="arr-purple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#a855f7"/></marker>
+          <marker id="arr-green"  markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 Z" fill="#22c55e"/></marker>
+          <!-- layer bg gradients -->
+          <linearGradient id="g-blue"   x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#3b82f6" stop-opacity=".18"/><stop offset="100%" stop-color="#3b82f6" stop-opacity=".04"/></linearGradient>
+          <linearGradient id="g-cyan"   x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#06b6d4" stop-opacity=".18"/><stop offset="100%" stop-color="#06b6d4" stop-opacity=".04"/></linearGradient>
+          <linearGradient id="g-orange" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#f59e0b" stop-opacity=".18"/><stop offset="100%" stop-color="#f59e0b" stop-opacity=".04"/></linearGradient>
+          <linearGradient id="g-purple" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a855f7" stop-opacity=".18"/><stop offset="100%" stop-color="#a855f7" stop-opacity=".04"/></linearGradient>
+          <linearGradient id="g-green"  x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#22c55e" stop-opacity=".18"/><stop offset="100%" stop-color="#22c55e" stop-opacity=".04"/></linearGradient>
+        </defs>
+
+        <!-- ── LAYER 1: Data Ingestion ── y=10 h=60 -->
+        <rect x="10" y="10" width="840" height="60" rx="5" fill="url(#g-blue)" stroke="#3b82f6" stroke-width="1" stroke-opacity=".5"/>
+        <text x="20" y="26" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#3b82f6" letter-spacing="1" text-transform="uppercase">DATA INGESTION</text>
+        <!-- boxes -->
+        <rect x="90"  y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="145" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">SIEM Events</text>
+        <rect x="215" y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="270" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">NetFlow / PCAP</text>
+        <rect x="340" y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="395" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">EDR Telemetry</text>
+        <rect x="465" y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="520" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">Threat Intel</text>
+        <rect x="590" y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="645" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">AD / LDAP Logs</text>
+        <rect x="715" y="32" width="110" height="28" rx="3" fill="#1e2d45" stroke="#3b82f6" stroke-width="1" stroke-opacity=".6"/>
+        <text x="770" y="50" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#93c5fd">POST /ingest API</text>
+
+        <!-- connector 1→2 -->
+        <line x1="430" y1="70" x2="430" y2="82" stroke="#3b82f6" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr-blue)"/>
+
+        <!-- ── LAYER 2: Signal Processing ── y=85 h=60 -->
+        <rect x="10" y="85" width="840" height="60" rx="5" fill="url(#g-cyan)" stroke="#06b6d4" stroke-width="1" stroke-opacity=".5"/>
+        <text x="20" y="101" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#06b6d4" letter-spacing="1">SIGNAL PROCESSING</text>
+        <rect x="90"  y="107" width="130" height="28" rx="3" fill="#0f2830" stroke="#06b6d4" stroke-width="1" stroke-opacity=".6"/>
+        <text x="155" y="125" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#67e8f9">EVT / GPD Fitting</text>
+        <rect x="235" y="107" width="130" height="28" rx="3" fill="#0f2830" stroke="#06b6d4" stroke-width="1" stroke-opacity=".6"/>
+        <text x="300" y="125" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#67e8f9">Drift Detection</text>
+        <rect x="380" y="107" width="130" height="28" rx="3" fill="#0f2830" stroke="#06b6d4" stroke-width="1" stroke-opacity=".6"/>
+        <text x="445" y="125" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#67e8f9">Anomaly Scoring</text>
+        <rect x="525" y="107" width="130" height="28" rx="3" fill="#0f2830" stroke="#06b6d4" stroke-width="1" stroke-opacity=".6"/>
+        <text x="590" y="125" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#67e8f9">Weak Signal Store</text>
+        <rect x="670" y="107" width="130" height="28" rx="3" fill="#0f2830" stroke="#06b6d4" stroke-width="1" stroke-opacity=".6"/>
+        <text x="735" y="125" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#67e8f9">Warmup Buffer</text>
+
+        <!-- connector 2→3 -->
+        <line x1="430" y1="145" x2="430" y2="157" stroke="#06b6d4" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr-cyan)"/>
+
+        <!-- ── LAYER 3: Risk Engine ── y=160 h=70 -->
+        <rect x="10" y="160" width="840" height="70" rx="5" fill="url(#g-orange)" stroke="#f59e0b" stroke-width="1" stroke-opacity=".5"/>
+        <text x="20" y="176" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#f59e0b" letter-spacing="1">ANALYTICAL RISK ENGINE</text>
+        <rect x="50"  y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="109" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Bayesian Engine</text>
+        <text x="109" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">posterior · LR</text>
+        <rect x="183" y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="242" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Topology Agent</text>
+        <text x="242" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">graph · blast radius</text>
+        <rect x="316" y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="375" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Scenario FSM</text>
+        <text x="375" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">latent → resolved</text>
+        <rect x="449" y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="508" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Mission Graph</text>
+        <text x="508" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">operability · breach</text>
+        <rect x="582" y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="641" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Fusion Orchestrator</text>
+        <text x="641" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">Σ wᵢ × sᵢ = 0.91</text>
+        <rect x="715" y="182" width="118" height="34" rx="3" fill="#1e1500" stroke="#f59e0b" stroke-width="1" stroke-opacity=".6"/>
+        <text x="774" y="196" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#fcd34d">Assessment Loop</text>
+        <text x="774" y="208" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="7" fill="#a16207">async · 60s tick</text>
+
+        <!-- connector 3→4 -->
+        <line x1="430" y1="230" x2="430" y2="242" stroke="#f59e0b" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr-orange)"/>
+
+        <!-- ── LAYER 4: Persistence ── y=245 h=55 -->
+        <rect x="10" y="245" width="840" height="55" rx="5" fill="url(#g-purple)" stroke="#a855f7" stroke-width="1" stroke-opacity=".5"/>
+        <text x="20" y="261" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#a855f7" letter-spacing="1">PERSISTENCE &amp; AUDIT</text>
+        <rect x="90"  y="267" width="155" height="26" rx="3" fill="#1a0f2e" stroke="#a855f7" stroke-width="1" stroke-opacity=".6"/>
+        <text x="167" y="284" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#d8b4fe">agent_states (SQLite)</text>
+        <rect x="260" y="267" width="155" height="26" rx="3" fill="#1a0f2e" stroke="#a855f7" stroke-width="1" stroke-opacity=".6"/>
+        <text x="337" y="284" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#d8b4fe">ledger_entries (append)</text>
+        <rect x="430" y="267" width="155" height="26" rx="3" fill="#1a0f2e" stroke="#a855f7" stroke-width="1" stroke-opacity=".6"/>
+        <text x="507" y="284" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#d8b4fe">knowledge_snapshots</text>
+        <rect x="600" y="267" width="155" height="26" rx="3" fill="#1a0f2e" stroke="#a855f7" stroke-width="1" stroke-opacity=".6"/>
+        <text x="677" y="284" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#d8b4fe">SHA-256 hash chain</text>
+
+        <!-- connector 4→5 -->
+        <line x1="430" y1="300" x2="430" y2="312" stroke="#a855f7" stroke-width="1.5" stroke-opacity=".5" marker-end="url(#arr-purple)"/>
+
+        <!-- ── LAYER 5: API + UI ── y=315 h=60 -->
+        <rect x="10" y="315" width="840" height="60" rx="5" fill="url(#g-green)" stroke="#22c55e" stroke-width="1" stroke-opacity=".5"/>
+        <text x="20" y="331" font-family="-apple-system,sans-serif" font-size="9" font-weight="700" fill="#22c55e" letter-spacing="1">API &amp; HUMAN INTERFACE</text>
+        <rect x="80"  y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="135" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">FastAPI :8000</text>
+        <rect x="205" y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="260" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">React Dashboard</text>
+        <rect x="330" y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="385" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">Approval UI</text>
+        <rect x="455" y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="510" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">Decision Ledger</text>
+        <rect x="580" y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="635" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">Alert Routing</text>
+        <rect x="705" y="337" width="110" height="28" rx="3" fill="#0a1e10" stroke="#22c55e" stroke-width="1" stroke-opacity=".6"/>
+        <text x="760" y="355" text-anchor="middle" font-family="SF Mono,monospace" font-size="9" fill="#86efac">Docker Compose</text>
+
+        <!-- right-side flow label -->
+        <text x="848" y="46"  text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#3b82f6" opacity=".7">raw signals</text>
+        <text x="848" y="122" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#06b6d4" opacity=".7">weak signals</text>
+        <text x="848" y="202" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#f59e0b" opacity=".7">risk findings</text>
+        <text x="848" y="276" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#a855f7" opacity=".7">durable state</text>
+        <text x="848" y="358" text-anchor="end" font-family="-apple-system,sans-serif" font-size="8" fill="#22c55e" opacity=".7">decisions</text>
+
+        <!-- vertical flow arrow on right edge -->
+        <line x1="852" y1="70"  x2="852" y2="82"  stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="852" y1="145" x2="852" y2="157" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="852" y1="230" x2="852" y2="242" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+        <line x1="852" y1="300" x2="852" y2="312" stroke="#555" stroke-width="1" marker-end="url(#arr)"/>
+      </svg>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px">
+    <div class="math-section">
+      <div class="math-title">Extreme Value Theory &#x2014; GPD</div>
+      <div class="math-body">Anomaly signals exceeding threshold u are modelled as a Generalised Pareto Distribution. The exceedance probability P(X &gt; x | X &gt; u) = [1 + &#x3BE;(x&#x2212;u)/&#x3C3;]^{&#x2212;1/&#x3BE;} provides rigorous tail risk quantification. Current fit: &#x3BE;=0.41, &#x3C3;=2.31, u=47.2, 23 exceedances from 312 observations.</div>
+    </div>
+    <div class="math-section">
+      <div class="math-title">Bayesian Inference Engine</div>
+      <div class="math-body">Each observed signal E_i provides likelihood ratio LR_i = P(E_i|H)/P(E_i|&#x00AC;H). Joint update: P(H|E) = &#x39B;&#xB7;P(H) / [&#x39B;&#xB7;P(H) + (1&#x2212;P(H))]. Current posterior for Lateral Movement: 0.763, driven by LR product 82.4&#xD7; across 6 independent signals.</div>
+    </div>
+    <div class="math-section">
+      <div class="math-title">Decision Fusion &#x2014; Weighted Sum</div>
+      <div class="math-body">Fused risk R_fused = &#x3A3; w_i&#xB7;s_i integrates 8 orthogonal dimensions: scenario match (0.20), topology (0.15), tail EVT (0.15), impact (0.10), recovery (0.10), mission (0.10), scenario phase (0.10), temporal recency (0.10). Weights sum to 1.0 and are recalibrated quarterly.</div>
+    </div>
+    <div class="math-section">
+      <div class="math-title">Mission Graph Operability</div>
+      <div class="math-body">Capability operability O(C) = min{O(a) : a &#x2208; deps(C)} for critical path assets. Asset operability: O(a) = 1 &#x2212; R_fused(a). Mission breach declared when O(C) falls below threshold &#x3B8;_C = 0.70. Currently 3 of 5 capabilities in breach state.</div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><i data-lucide="layers" style="width:13px;height:13px;color:var(--cyan)"></i><span class="panel-title">Technology Stack</span></div>
+    <div style="padding:12px">
+      <div class="tech-grid">
+        <div class="tech-card"><div class="tech-name">Python 3.12</div><div class="tech-desc">Core engine, signal processing, GPD fitting via scipy.stats</div></div>
+        <div class="tech-card"><div class="tech-name">LangGraph</div><div class="tech-desc">Agentic reasoning graph, tool use, multi-step planning</div></div>
+        <div class="tech-card"><div class="tech-name">Claude 3.5 / GPT-4o</div><div class="tech-desc">LLM reasoning, justification, CISO-grade narration</div></div>
+        <div class="tech-card"><div class="tech-name">NetworkX</div><div class="tech-desc">Topology graph, shortest path, blast radius propagation</div></div>
+        <div class="tech-card"><div class="tech-name">NumPy / SciPy</div><div class="tech-desc">GPD MLE fitting, EVT computation, statistical tests</div></div>
+        <div class="tech-card"><div class="tech-name">FastAPI</div><div class="tech-desc">REST API, approval endpoints, webhook receiver</div></div>
+        <div class="tech-card"><div class="tech-name">PostgreSQL</div><div class="tech-desc">Immutable decision ledger with hash-chaining</div></div>
+        <div class="tech-card"><div class="tech-name">Elastic / OpenSearch</div><div class="tech-desc">SIEM event ingestion, anomaly alerting</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-header"><i data-lucide="terminal" style="width:13px;height:13px;color:var(--green)"></i><span class="panel-title">Quick Start</span></div>
+    <div style="padding:12px">
+      <div class="code-block"><span class="code-comment"># Clone and install</span>
+git clone https://github.com/your-org/agentic-soc
+cd agentic-soc &amp;&amp; pip install -r requirements.txt
+
+<span class="code-comment"># Configure environment</span>
+cp .env.example .env
+<span class="code-comment"># Set: ANTHROPIC_API_KEY, ELASTIC_URL, PG_DSN</span>
+
+<span class="code-comment"># Start the engine</span>
+python -m agentic_soc.engine --mode live --assets dc-01,vpn-gw
+
+<span class="code-comment"># Launch dashboard</span>
+uvicorn agentic_soc.api:app --host 0.0.0.0 --port 8080</div>
+    </div>
+  </div>
+
+</div><!-- /page-about -->
+
+<!-- ════════════════ PAGE: SETTINGS ════════════════ -->
+<div class="page" id="page-settings">
+
+  <div class="panel-header" style="background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:4px">
+    <i data-lucide="settings" style="width:13px;height:13px;color:var(--orange)"></i>
+    <span class="panel-title">System Settings</span>
+    <span class="panel-sub">Engine configuration &#xB7; v0.9.2-beta &#xB7; Build 2026-03-29</span>
+  </div>
+
+  <div class="row">
+    <div class="panel col">
+      <div class="panel-header"><span class="panel-title">Risk Engine Parameters</span></div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:8px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:11px;font-weight:600">Fusion update interval</div><div style="font-size:10px;color:var(--sub)">How often fused risk score is recomputed</div></div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--orange)">30s</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:11px;font-weight:600">EVT exceedance threshold (u)</div><div style="font-size:10px;color:var(--sub)">Percentile cutoff for GPD fitting</div></div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--orange)">47.2</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:11px;font-weight:600">Bayesian prior (lateral mvmt)</div><div style="font-size:10px;color:var(--sub)">Base rate for most common scenario</div></div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--orange)">0.030</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border)">
+          <div><div style="font-size:11px;font-weight:600">Approval auto-expire timeout</div><div style="font-size:10px;color:var(--sub)">Proposals rescinded after this time</div></div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--orange)">15min</div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 0">
+          <div><div style="font-size:11px;font-weight:600">Mission operability threshold</div><div style="font-size:10px;color:var(--sub)">Below this &#x2192; capability breach declared</div></div>
+          <div style="font-family:var(--mono);font-size:13px;color:var(--orange)">70%</div>
+        </div>
+      </div>
+    </div>
+    <div class="panel col">
+      <div class="panel-header"><span class="panel-title">Fusion Weights</span></div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:5px">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">scenario</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.20</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">topology</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.15</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">tail_evt</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.15</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">impact</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">recovery</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">mission</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px;color:var(--sub)">scen_phase</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0"><span style="font-size:11px;color:var(--sub)">temporal</span><span style="font-family:var(--mono);font-size:12px;color:var(--orange)">0.10</span></div>
+        <div style="display:flex;justify-content:space-between;padding:6px 0;border-top:1px solid var(--border2);margin-top:4px"><span style="font-size:11px;font-weight:700">Total</span><span style="font-family:var(--mono);font-size:12px;color:var(--green)">1.00</span></div>
+      </div>
+    </div>
+    <div class="panel col">
+      <div class="panel-header"><span class="panel-title">System Health</span></div>
+      <div class="panel-body" style="display:flex;flex-direction:column;gap:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px">Engine status</span><span class="status-pill pill-green">RUNNING</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px">LLM backend</span><span class="status-pill pill-green">CONNECTED</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px">SIEM ingestion</span><span class="status-pill pill-orange">LAG 47s</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px">Database</span><span class="status-pill pill-green">ONLINE</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0;border-bottom:1px solid var(--border)"><span style="font-size:11px">Graph topology</span><span style="font-family:var(--mono);font-size:11px;color:var(--green)">312 nodes / 847 edges</span></div>
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:4px 0"><span style="font-size:11px">Uptime</span><span style="font-family:var(--mono);font-size:11px;color:var(--sub)">14d 07h 22m</span></div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /page-settings -->
+
+</main>
+</div><!-- /shell -->
+
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<script>
+function switchPage(id, btn) {
+  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+  document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+  var pg = document.getElementById('page-' + id);
+  if (pg) pg.classList.add('active');
+  if (btn) btn.classList.add('active');
+}
+function updateClock() {
+  var now = new Date();
+  var pad = function(n) { return n < 10 ? '0' + n : n; };
+  var d = now.getUTCFullYear() + '-' + pad(now.getUTCMonth()+1) + '-' + pad(now.getUTCDate());
+  var t = pad(now.getUTCHours()) + ':' + pad(now.getUTCMinutes()) + ':' + pad(now.getUTCSeconds());
+  var el = document.getElementById('clock');
+  if (el) el.textContent = d + '  ' + t + ' UTC';
+}
+setInterval(updateClock, 1000);
+updateClock();
+document.addEventListener('DOMContentLoaded', function() { lucide.createIcons(); });
+</script>
+</body>
+</html>
