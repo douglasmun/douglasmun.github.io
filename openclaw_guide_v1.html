@@ -573,7 +573,7 @@ hr { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
 
 <p><strong>Adoption.</strong> OpenClaw shipped publicly in November 2025 (originally as Clawdbot, rebranded twice following trademark pressure from Anthropic) and crossed 100,000 GitHub stars in its first five days, reaching 180,000 by late January 2026. By early February, Token Security reported that 22% of its enterprise customers had employees running OpenClaw &mdash; frequently without IT's knowledge. Internet-wide scans by Censys, Bitsight, and Hunt.io identified 30,000&ndash;42,900 publicly exposed instances within weeks; researchers found roughly 15,200 of them were already vulnerable to documented remote code execution.</p>
 
-<p><strong>Why this guide exists.</strong> The threat record from those first weeks is what motivates the controls in this document. The jgamblin/OpenClawCVEs tracker has logged over 156 advisories with 128 awaiting formal CVE assignment, including:</p>
+<p><strong>Why this guide exists.</strong> The threat record from those first weeks is what motivates the controls in this document. The jgamblin/OpenClawCVEs tracker has logged 165+ advisories (a further nine high-severity CVEs were assigned on 28 April 2026 alone, all in the node-pairing trust-boundary cluster fixed in 2026.4.8), including:</p>
 <ul>
   <li><strong>CVE-2026-25253</strong> &mdash; a one-click RCE chain (Oasis Security, dubbed <em>ClawJacked</em>) that lets any website you visit silently take over your local agent via a cross-origin WebSocket. Patched in 2026.1.29.</li>
   <li><strong>CVE-2026-32922</strong> (CVSS 9.9) &mdash; an authenticated user could escalate to administrator simply by declaring an <code>operator.admin</code> scope during the WebSocket handshake. The authorization check was missing entirely. Patched in 2026.3.12.</li>
@@ -614,6 +614,8 @@ hr { border: none; border-top: 1px solid var(--rule); margin: 2rem 0; }
 <pre><code>openclaw --version
 docker inspect openclaw-gateway --format '{{.Config.Image}}'</code></pre>
 
+<p style="font-size:9pt;color:#4a5568"><strong>Most recent batch:</strong> on 28 April 2026, nine high-severity CVEs were published in a single coordinated disclosure, all addressing failures in OpenClaw's node-pairing and device-token trust boundary. The fix is in <code>2026.4.8</code>; if you are reading this guide on or after that date and your gateway is older, treat updating as the priority-1 action before applying anything else in this document.</p>
+
 <div class="table-wrap">
 <table>
   <thead><tr><th>Minimum version</th><th>Key CVEs it covers</th></tr></thead>
@@ -625,6 +627,7 @@ docker inspect openclaw-gateway --format '{{.Config.Image}}'</code></pre>
     <tr><td><code>2026.3.28</code></td><td>CVE-2026-33579 privilege escalation; CVE-2026-41361 SSRF IPv6 bypass; hooks/ escape</td></tr>
     <tr><td><code>2026.3.31</code></td><td>CVE-2026-41329 — sandbox bypass via heartbeat context <span class="badge critical">CVSS 9.9</span></td></tr>
     <tr><td><code>2026.4.5</code></td><td>CVE-2026-35639/35641 priv-esc + RCE; CVE-2026-35649 empty-allowlist fail-open; CVE-2026-35656 XFF spoofing</td></tr>
+    <tr><td><code>2026.4.8</code></td><td>9-CVE node-pairing trust-boundary cluster (April 28 batch) — see §30: CVE-2026-42432 paired-node reconnect priv-esc, CVE-2026-42431 browser.proxy security bypass, CVE-2026-42429 gateway-plugin HTTP auth scope widening, CVE-2026-42428 plugin archive integrity bypass, CVE-2026-42426/42423/42422 pairing/role bypasses, CVE-2026-41914/41912 SSRF</td></tr>
     <tr><td><code>2026.4.10</code></td><td>Unassigned GHSA — sandbox exec escape via <code>host=node</code> routing override (CVE pending)</td></tr>
   </tbody>
 </table>
@@ -2299,6 +2302,16 @@ openclaw run "check if /var/run/docker.sock exists"
     <tr><td><code>CVE-2026-35641</code></td><td><span class="badge high">8.4</span></td><td>Arbitrary code execution; .npmrc credential exposure during plugin install</td><td><code>2026.4.5</code></td></tr>
     <tr><td><code>CVE-2026-35649</code></td><td><span class="badge medium">6.3</span></td><td>Empty allowFrom treated as allow-all instead of deny-all</td><td><code>2026.4.5</code></td></tr>
     <tr><td><code>CVE-2026-35656</code></td><td><span class="badge medium">6.3</span></td><td>Loopback IP spoofing via X-Forwarded-For bypass</td><td><code>2026.4.5</code></td></tr>
+    <tr><td colspan="4" style="background:#fdf1f0;font-weight:600;color:#6b1515;padding:.4rem .6rem">— April 28 batch — node-pairing trust-boundary cluster —</td></tr>
+    <tr><td><code>CVE-2026-42432</code></td><td><span class="badge high">7.8</span></td><td>Paired nodes reconnect with exec-capable commands without operator.admin scope (re-pairing auth bypass)</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42431</code></td><td><span class="badge high">high</span></td><td>Security bypass in node.invoke(browser.proxy)</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42429</code></td><td><span class="badge high">high</span></td><td>Gateway plugin HTTP auth widens identity-bearing operator.read into runtime operator.write</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42428</code></td><td><span class="badge high">high</span></td><td>Plugin archive integrity verification not enforced on download</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42426</code></td><td><span class="badge high">high</span></td><td>node.pair.approve accepts operator.write where operator.pairing required</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42423</code></td><td><span class="badge high">high</span></td><td>Approval-timeout fallback bypasses strictInlineExec policy</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-42422</code></td><td><span class="badge high">high</span></td><td>device.token.rotate role bypass — mints tokens for unapproved roles</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-41914</code></td><td><span class="badge high">high</span></td><td>SSRF via QQ Bot media downloader</td><td><code>2026.4.8</code></td></tr>
+    <tr><td><code>CVE-2026-41912</code></td><td><span class="badge high">high</span></td><td>SSRF policy bypass</td><td><code>2026.4.8</code></td></tr>
     <tr><td>Unassigned GHSA</td><td><span class="badge critical">critical</span></td><td>Sandbox exec escape via host=node routing override — CVE pending assignment</td><td><code>2026.4.10</code></td></tr>
   </tbody>
 </table>
