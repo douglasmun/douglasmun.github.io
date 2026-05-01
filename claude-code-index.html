@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A verified Claude Code cheat sheet — v2.1.118, April 2026. Compiled by Douglas Mun.">
+<meta name="author" content="Douglas Mun">
+<meta property="og:title" content="Claude Code Cheat Sheet — v1.0">
+<meta property="og:description" content="5 pages. Every command, flag, hook, env var — plus tips on saving tokens and an Obsidian vault guide.">
+<title>Claude Code Cheat Sheet · v1.0</title>
+<style>
+:root {
+  --bg: #F8FAFC;
+  --panel: #FFFFFF;
+  --border: #E2E8F0;
+  --text: #1F2937;
+  --soft: #475569;
+  --muted: #64748B;
+  --titlebg: #0F172A;
+  --accent: #6D28D9;
+  --new: #BE185D;
+  --kbd: #E5E7EB;
+  --intro-bg: #F0F9FF;
+  --intro-bdr: #7DD3FC;
+}
+[data-theme="dark"] {
+  --bg: #0B1220;
+  --panel: #111827;
+  --border: #1F2937;
+  --text: #E5E7EB;
+  --soft: #CBD5E1;
+  --muted: #94A3B8;
+  --titlebg: #020617;
+  --accent: #C4B5FD;
+  --new: #F9A8D4;
+  --kbd: #1F2937;
+  --intro-bg: #1E3A8A22;
+  --intro-bdr: #3B82F6;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Top bar */
+header {
+  background: var(--titlebg);
+  color: white;
+  padding: 0.85rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+header .brand { font-size: 0.95rem; font-weight: 700; }
+header .meta  { font-size: 0.72rem; color: #94A3B8; font-weight: 400; }
+.theme-toggle {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+main {
+  max-width: 580px;
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+/* Pitch */
+.pitch {
+  text-align: center;
+  padding: 1.5rem 0.5rem 1.75rem;
+}
+.pitch .hook {
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin: 0 0 0.6rem;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+.pitch .lede {
+  font-size: 1.05rem;
+  margin: 0 0 1.25rem;
+  color: var(--soft);
+}
+.pitch .stats {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.pitch .stats .dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #10B981;
+  animation: pulse 2s ease-in-out infinite;
+}
+@keyframes pulse { 50% { opacity: 0.4; } }
+
+/* Download buttons */
+.downloads {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.5rem 0 1.5rem;
+}
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  transition: transform 0.1s, border-color 0.15s;
+}
+.btn:hover, .btn:active {
+  transform: translateY(-1px);
+  border-color: var(--accent);
+}
+.btn-primary {
+  background: var(--titlebg);
+  color: white;
+  border-color: var(--titlebg);
+}
+.btn-primary:hover { border-color: var(--titlebg); }
+.btn .label { display: flex; align-items: center; gap: 0.6rem; }
+.btn .icon { font-size: 1.1rem; }
+.btn .arrow { font-size: 1.1rem; opacity: 0.6; }
+.btn small {
+  display: block;
+  font-weight: 400;
+  font-size: 0.75rem;
+  color: var(--muted);
+  margin-top: 0.1rem;
+}
+.btn-primary small { color: rgba(255,255,255,0.65); }
+
+/* Intro card */
+.intro {
+  background: var(--intro-bg);
+  border: 1px solid var(--intro-bdr);
+  border-left: 4px solid var(--titlebg);
+  padding: 1.1rem 1.1rem;
+  border-radius: 10px;
+  margin: 1.5rem 0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+.intro h2 {
+  margin: 0 0 0.15rem;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+}
+.intro .subtitle {
+  font-size: 0.75rem;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0 0 0.85rem;
+}
+.intro p {
+  margin: 0.75rem 0;
+}
+.intro p strong { color: var(--text); }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.85em;
+  padding: 0.05rem 0.35rem;
+  background: var(--border);
+  border-radius: 3px;
+}
+kbd {
+  display: inline-block;
+  background: var(--kbd);
+  color: var(--text);
+  border: 1px solid #9CA3AF;
+  border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.78em;
+  padding: 0.05rem 0.4rem;
+  font-weight: 600;
+}
+.removed { color: var(--muted); text-decoration: line-through; }
+.badge {
+  display: inline-block;
+  background: var(--new);
+  color: white;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  letter-spacing: 0.04em;
+  vertical-align: 1px;
+}
+
+/* Question footer */
+.question {
+  text-align: center;
+  margin: 2rem 0 1rem;
+  padding: 1.25rem 1rem;
+  background: var(--panel);
+  border: 1px dashed var(--border);
+  border-radius: 10px;
+}
+.question p {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.question .hashtags {
+  margin-top: 0.4rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+footer {
+  text-align: center;
+  padding: 1.5rem 1rem 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+footer a { color: var(--soft); }
+footer .author { color: var(--text); font-weight: 600; }
+
+@media (max-width: 420px) {
+  .pitch .hook { font-size: 1.15rem; }
+  .pitch .lede { font-size: 0.98rem; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand">Claude Code Cheat Sheet</div>
+    <div class="meta">v1.0 · April 2026</div>
+  </div>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌓</button>
+</header>
+
+<main>
+
+  <section class="pitch">
+    <h1 class="hook">Every Claude Code cheat sheet I bookmarked was outdated within a month.</h1>
+    <p class="lede">So I made a verified one.</p>
+    <div class="stats"><span class="dot"></span> 5 pages · April 2026</div>
+  </section>
+
+  <section class="downloads">
+    <a href="claude-code-cheatsheet-v1.0-2026-04-24.pdf" class="btn btn-primary" download>
+      <span class="label">
+        <span class="icon">📄</span>
+        <span>Download PDF
+          <small>For the printer · A4 · 5 pages</small>
+        </span>
+      </span>
+      <span class="arrow">↓</span>
+    </a>
+    <a href="claude-code-cheatsheet-v1.0.html" class="btn">
+      <span class="label">
+        <span class="icon">🔍</span>
+        <span>Open HTML version
+          <small>For the searcher · live filter, dark mode</small>
+        </span>
+      </span>
+      <span class="arrow">→</span>
+    </a>
+  </section>
+
+  <section class="intro">
+    <h2>Getting the Most Out of Claude Code</h2>
+    <p class="subtitle">Verified April 24 2026 · Compiled by Douglas Mun</p>
+
+    <p>Claude Code is an <strong>agentic coding assistant</strong> — it reads your repo, runs commands, and edits files within the permission boundaries you set. The gap between casual and expert use is narrow but compounds: experts <strong>plan before they build</strong>, give Claude <strong>durable memory</strong>, isolate risky work in <strong>worktrees</strong>, and offload repetition to <strong>skills and subagents</strong>.</p>
+
+    <p><strong>How to read this.</strong> Section colours mark stable features. <span class="badge">new</span> entries arrived in 2026 (v2.1.84+). <span class="removed">Struck-through entries</span> are removed. Use the HTML version's search box to filter instantly.</p>
+
+    <p><strong>Path to expert.</strong> Start in plan mode (<kbd>Shift+Tab</kbd> or <code>/plan</code>) for anything multi-file. Put project context in <code>CLAUDE.md</code> at your repo root — it survives compaction. Codify repeated workflows as skills in <code>.claude/skills/</code>. Isolate risky work with <code>--worktree</code>. Use <code>/btw</code> for side questions. Raise to <code>/effort high</code> or <code>xhigh</code> for hard problems on Opus 4.7. Install an <strong>LSP plugin</strong> so Claude sees type errors as it edits.</p>
+  </section>
+
+  <section class="question">
+    <p>Version 1.0 — what should I add to 1.1?</p>
+    <div class="hashtags">#ClaudeCode &nbsp;·&nbsp; #AIEngineering</div>
+  </section>
+
+</main>
+
+<footer>
+  <p>Free to share, free to print, free to mark up.</p>
+  <p>Compiled by <span class="author">Douglas Mun</span> · Source: <a href="https://code.claude.com/docs" target="_blank">code.claude.com/docs</a></p>
+</footer>
+
+<script>
+const root = document.documentElement;
+const saved = localStorage.getItem('cc-theme');
+if (saved) root.setAttribute('data-theme', saved);
+else if (window.matchMedia('(prefers-color-scheme: dark)').matches) root.setAttribute('data-theme', 'dark');
+
+document.getElementById('theme-toggle').addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('cc-theme', next);
+});
+</script>
+
+</body>
+</html>
