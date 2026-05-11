@@ -229,6 +229,16 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
 .onramp-check-item label code{color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:11px}
 .skip-box{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.6}
 .skip-box strong{color:#818cf8}
+.community-wrap{padding:8px 20px 10px;border-bottom:1px solid var(--border)}
+.community-btn{display:block;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent);background:rgba(0,212,255,.06);border:1px solid rgba(0,212,255,.15);border-radius:4px;padding:7px 10px;text-decoration:none;text-align:center;letter-spacing:.5px;transition:all .2s}
+.community-btn:hover{background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.3)}
+.community-hero{display:flex;align-items:center;gap:14px;padding:14px 18px;background:rgba(0,212,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:8px;cursor:pointer;transition:all .2s;margin-top:20px;max-width:640px}
+.community-hero:hover{background:rgba(0,212,255,.09);border-color:rgba(0,212,255,.35)}
+.ch-icon{font-size:22px;flex-shrink:0}
+.ch-text{flex:1}
+.ch-title{font-size:13px;font-weight:700;color:var(--white);margin-bottom:3px}
+.ch-sub{font-size:11px;color:var(--text2);font-family:'JetBrains Mono',monospace;letter-spacing:.3px}
+.ch-arrow{font-size:16px;color:var(--accent);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -236,6 +246,9 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
   <div class="sidebar-header"><div class="sidebar-logo">// Claude Code + Cowork AI Course</div><div class="sidebar-title">Unaware → Curious → Fluent → Native</div><div class="sidebar-sub">Self-paced · 24 modules · 3 labs · Vetted May 2026</div><div class="a11y-bar"><button onclick="toggleHiContrast()" title="Toggle high contrast">⬤</button><button onclick="window.print()" title="Print">⎙</button><span class="kbd-hint-inline">⌨</span></div></div>
   <div class="progress-bar-wrap"><div class="progress-label"><span>Progress</span><span id="progress-pct">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div><button id="copy-progress-btn" onclick="exportProgress()" style="margin-top:8px;width:100%;padding:5px 10px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:9px;border-radius:4px;cursor:pointer;letter-spacing:.5px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text3)'">⎘ Copy Progress</button></div>
   <div class="search-wrap"><input class="search-input" id="search-input" type="text" placeholder="Search modules..." oninput="searchModules(this.value)"></div>
+  <div class="community-wrap">
+  <a class="community-btn" href="https://github.com/douglasmun/claude-code-course-starter/discussions" target="_blank">💬 Join the Discussion</a>
+</div>
   <div class="nav-wrap">
     <div class="nav-group" data-group="g-onramp"><div class="nav-group-header" onclick="toggleGroup('g-onramp')"><span class="level-bar lv-onramp-bar"></span><span class="arrow">›</span><span class="level-icon">◈</span><span class="level-info"><span class="level-name">On-Ramp</span><span class="level-desc">Terminal · Git · Node · 20 min</span></span><span class="level-count lv-onramp-count" id="count-g-onramp">0/1</span></div><div class="nav-group-items">
   <a class="nav-item" onclick="showPage('p-onramp',this)"><span class="nav-num">↑</span><span class="nav-label">Environment Setup</span><span class="nav-tag tag-tip">SKIP IF READY</span><span class="check-icon">✓</span></a>
@@ -367,6 +380,7 @@ git status
     <div class="onramp-check-item"><input type="checkbox" id="oc5"><label for="oc5">I know how to use <code>cd</code>, <code>ls</code>, and <code>Ctrl+C</code></label></div>
   </div>
 
+  <div class="blockquote">Stuck on setup? Post in the <a href="https://github.com/douglasmun/claude-code-course-starter/discussions/categories/q-a" target="_blank" style="color:#818cf8">Q&amp;A Discussion thread</a> — include your OS, the command you ran, and the error message.</div>
   <div class="note-box"><strong>Checkpoint:</strong> All five boxes checked. You're ready to install Claude Code. Continue to <a onclick="showPage('p-home',document.querySelector('[onclick*=p-home]'))" style="color:var(--accent);cursor:pointer">The Mental Model →</a></div>
   <button class="complete-btn" onclick="markComplete('p-onramp',this)">☐ &nbsp;Mark On-Ramp Complete</button>
 </div></div>
@@ -376,6 +390,14 @@ git status
   <div class="hero"><div class="hero-eyebrow">Self-Paced · 24 Modules · 3 Labs · Vetted against live product May 2026</div><h1>Claude Code + Cowork: From <span>Unaware to Native</span></h1><p class="hero-desc">Master the agent loop that powers both Claude Code (for developers) and Claude Cowork (for everyone). Same architecture, same mental model, two surfaces.</p>
     <div class="hero-stats"><div class="stat"><span class="stat-num">4</span><span class="stat-label">Levels</span></div><div class="stat"><span class="stat-num">24</span><span class="stat-label">Modules</span></div><div class="stat"><span class="stat-num">3</span><span class="stat-label">Labs</span></div><div class="stat"><span class="stat-num">~90m</span><span class="stat-label">Reading</span></div><div class="stat"><span class="stat-num">~30h</span><span class="stat-label">Lab Work</span></div></div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);line-height:1.8;margin-top:20px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:rgba(0,0,0,.2);display:inline-block">Last verified: 2026-05-11<br>Claude Code: ≥1.0  |  Node: ≥20  |  VS Code: any<br>Feature states may change — run <code style="font-size:10px;color:var(--text2)">claude doctor</code> to confirm your install.</div>
+    <div class="community-hero" onclick="window.open('https://github.com/douglasmun/claude-code-course-starter/discussions','_blank')">
+  <div class="ch-icon">💬</div>
+  <div class="ch-text">
+    <div class="ch-title">Course Community — GitHub Discussions</div>
+    <div class="ch-sub">Ask questions · Share your capstone · Get unstuck · Help others</div>
+  </div>
+  <div class="ch-arrow">→</div>
+</div>
     <div class="journey-map" style="margin-top:32px">
       <div class="journey-stage" style="background:rgba(255,107,53,.08)"><div class="j-icon">○</div><div class="j-label" style="color:var(--lv1)">Unaware</div><div class="j-count">4 modules · ~15m</div><div class="j-arrow">→</div></div>
       <div class="journey-stage" style="background:rgba(0,212,255,.06)"><div class="j-icon">◐</div><div class="j-label" style="color:var(--lv2)">Curious</div><div class="j-count">5 modules · ~25m</div><div class="j-arrow">→</div></div>
@@ -2558,6 +2580,15 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   </div>
 
   <button class="complete-btn" onclick="markComplete('p-capstone',this)">☐ &nbsp;Mark Capstone Complete</button>
+  <div class="divider"></div>
+  <div class="community-hero" style="margin-top:0" onclick="window.open('https://github.com/douglasmun/claude-code-course-starter/discussions/categories/show-and-tell','_blank')">
+  <div class="ch-icon">🎉</div>
+  <div class="ch-text">
+    <div class="ch-title">Share your capstone in Show &amp; Tell</div>
+    <div class="ch-sub">Post your repo link · Get feedback · See what others built</div>
+  </div>
+  <div class="ch-arrow">→</div>
+</div>
 </div></div>
 
 <!-- COMMANDS -->
@@ -2802,6 +2833,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   <div class="divider"></div>
   <h3>What's Next</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">You've completed the course. Here's where to go from here:</p>
+  <div class="card" style="border-color:rgba(0,212,255,.25);background:rgba(0,212,255,.03)"><div class="card-title">Community: GitHub Discussions</div><p>The course community lives at <a href="https://github.com/douglasmun/claude-code-course-starter/discussions" target="_blank" style="color:var(--accent)">github.com/douglasmun/claude-code-course-starter/discussions</a>. Ask questions, share what you built, get unstuck, and help other students. Organised into Q&amp;A, Show &amp; Tell, and Ideas categories.</p></div>
   <div class="card"><div class="card-title">Deepen: Claude Agent SDK</div><p>Build Claude Code into your own applications. The Agent SDK (Python/TypeScript) gives programmatic access to the full harness. Start with the <a href="https://code.claude.com/docs" target="_blank" style="color:var(--accent)">official docs</a>.</p></div>
   <div class="card"><div class="card-title">Expand: Custom MCP Servers</div><p>Build MCP servers for your internal tools — databases, APIs, proprietary systems. The MCP spec is open source. Your tools become first-class citizens in the agent loop.</p></div>
   <div class="card"><div class="card-title">Scale: Enterprise Deployment</div><p>Private plugin marketplaces, OTEL tracing, admin controls, SSO. If your team is larger than 10 people, the enterprise tier adds governance without sacrificing developer experience.</p></div>
