@@ -3474,7 +3474,26 @@ function exportProgress() {
 
 // ═══ ACCESSIBILITY (CCI-017) ═══
 function toggleHiContrast(){document.body.classList.toggle('hi-contrast');localStorage.setItem('hiContrast',document.body.classList.contains('hi-contrast'))}
-function openCertModal(){const name=document.getElementById('cert-name-field').value.trim();if(!name)return;document.getElementById('cert-modal-name').textContent=name;document.getElementById('cert-modal-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});document.getElementById('cert-modal-overlay').classList.add('open');document.getElementById('cert-gen-btn').style.opacity='1'}
+function openCertModal(){
+  const name=document.getElementById('cert-name-field').value.trim();
+  if(!name)return;
+  const missing=[];
+  document.querySelectorAll('.nav-item[onclick]').forEach(el=>{
+    const m=el.getAttribute('onclick').match(/showPage\('([^']+)'/);
+    if(m&&!completed.has(m[1])){
+      const num=el.querySelector('.nav-num')?el.querySelector('.nav-num').textContent:'';
+      const label=el.querySelector('.nav-label')?el.querySelector('.nav-label').textContent:'';
+      missing.push((num?num+' — ':'')+label);
+    }
+  });
+  if(missing.length){
+    alert('You have '+missing.length+' incomplete module'+(missing.length>1?'s':'')+':\n\n'+missing.join('\n')+'\n\nMark them complete before printing your certificate.');
+    return;
+  }
+  document.getElementById('cert-modal-name').textContent=name;
+  document.getElementById('cert-modal-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('cert-modal-overlay').classList.add('open');
+}
 function closeCertModal(){document.getElementById('cert-modal-overlay').classList.remove('open')}
 function printCertModal(){const c=document.getElementById('cert-modal-content');const w=window.open('','_blank','width=720,height=600');w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Certificate of Completion</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fff;padding:40px}.cert-border{border:3px double #0066cc;border-radius:8px;padding:40px 48px;text-align:center;max-width:640px;width:100%}.cert-logo{font-family:monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#0066cc;margin-bottom:6px}.cert-title{font-size:26px;font-weight:800;color:#111;margin-bottom:4px}.cert-sub{font-size:13px;color:#555;margin-bottom:24px}.cert-name{font-size:22px;font-weight:700;border-bottom:2px solid #111;display:inline-block;min-width:250px;padding:4px 16px;margin-bottom:8px;color:#111}.cert-label{font-size:11px;color:#666;margin-bottom:20px}.cert-details{font-size:12px;color:#444;line-height:1.8}.cert-date{font-family:monospace;font-size:11px;color:#666;margin-top:14px}@media print{body{padding:20px}}</style></head><body><div class="cert-border"><div class="cert-logo">Anthropic · Claude Code + Cowork</div><div class="cert-title">Certificate of Completion</div><div class="cert-sub">Unaware → Curious → Fluent → Native</div><div class="cert-name">'+c.querySelector('.cert-name').textContent+'</div><div class="cert-label">has completed the self-paced course</div><div class="cert-details">Claude Code + Cowork: From Unaware to Native<br>24 modules · 3 foundation labs · Capstone project<br>Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>Both surfaces: Claude Code (developers) + Cowork (knowledge workers)</div><div class="cert-date">'+c.querySelector('.cert-date').textContent+'</div></div></body></html>');w.document.close();w.focus();setTimeout(()=>{w.print();w.close()},400)}
 (function(){if(localStorage.getItem('hiContrast')==='true')document.body.classList.add('hi-contrast')})();
