@@ -670,7 +670,23 @@ Example writing sample:
 
   <div class="highlight-box"><p><strong style="color:var(--white)">Key insight:</strong> If you build a great CLAUDE.md, you already know how to build great context files for Cowork. If you learn Cowork's context file pattern, you'll write better CLAUDE.md files. The skill transfers because the concept — semantic memory for an agent — is the same.</p></div>
 
-  <div class="note-box"><strong>Checkpoint:</strong> You can map any Claude Code concept (CLAUDE.md, skills, MCP, hooks, subagents, worktrees) to its Cowork equivalent — and explain why they're the same underlying idea applied to different access permissions.</div>
+  <div class="divider"></div>
+  <h3>The Same Task — Two Surfaces</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">This is the clearest way to see that the mental model is identical. The task: <em>summarise last week's work and draft a status update.</em> Same agent loop, different access permissions.</p>
+
+  <div class="compare-grid">
+    <div class="compare-cell compare-header">Step</div><div class="compare-cell compare-header">Claude Code (developer)</div><div class="compare-cell compare-header">Cowork (anyone)</div>
+    <div class="compare-cell compare-label">Perceive</div><div class="compare-cell">Reads git log, commit messages, changed files, PR descriptions from the last 7 days</div><div class="compare-cell">Reads Slack #standup channel (via connector), Google Drive project folder, calendar events</div>
+    <div class="compare-cell compare-label">Memory</div><div class="compare-cell">CLAUDE.md describes the project, team conventions, and what "status update" means for this repo</div><div class="compare-cell">about-me.md, brand-voice.md describe role, stakeholders, and preferred tone</div>
+    <div class="compare-cell compare-label">Reason</div><div class="compare-cell">Groups commits by feature, identifies blockers from PR comments, notes what shipped vs. in-progress</div><div class="compare-cell">Groups Slack threads by topic, identifies decisions made, flags items needing follow-up</div>
+    <div class="compare-cell compare-label">Act</div><div class="compare-cell">Writes CHANGELOG.md entry + drafts a Slack message. Runs <code>/pr-review</code> skill if reviews are part of the update.</div><div class="compare-cell">Writes a formatted email draft saved to workspace. Runs <code>/weekly-update</code> plugin skill.</div>
+    <div class="compare-cell compare-label">Observe</div><div class="compare-cell">Runs <code>git diff</code> to verify the CHANGELOG is accurate; hook auto-formats on save</div><div class="compare-cell">You review the draft before sending; safety default flags any assumptions Claude made</div>
+    <div class="compare-cell compare-label">Your role</div><div class="compare-cell">Review the draft, approve or revise, send</div><div class="compare-cell">Review the draft, approve or revise, send</div>
+  </div>
+
+  <p style="font-size:12px;color:var(--text3);margin-top:8px;font-style:italic">The prompt you'd write is nearly identical in both surfaces: "Summarise what I worked on last week and draft a status update for my stakeholders." The agent loop steps are identical. Only the data sources differ.</p>
+
+  <div class="note-box"><strong>Checkpoint:</strong> You can map any Claude Code concept (CLAUDE.md, skills, MCP, hooks, subagents, worktrees) to its Cowork equivalent — and explain why they're the same underlying idea applied to different access permissions. You can describe what each agent loop step does for the same task across both surfaces.</div>
   <button class="complete-btn" onclick="markComplete('p-1-3',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
 
@@ -765,8 +781,10 @@ claude
 <span class="c"># and wait for your first prompt</span></div>
 
   <h3>Meet /powerup</h3>
-  <div class="highlight-box"><p><strong style="color:var(--white)">/powerup</strong> is Claude Code's built-in gamified tutorial system. It teaches real skills through interactive lessons inside the terminal — right where you'll actually use them. Run it after install. It covers prompting, file navigation, plan mode, and diff review through hands-on exercises, not slides. Think of it as the tutorial level of a game before the real missions start.</p></div>
-  <div class="code-block"><span class="c"># Launch the built-in tutorial</span>
+  <div class="highlight-box"><p><strong style="color:var(--white)">/powerup</strong> is Claude Code's built-in interactive tutorial. Run it now, before continuing the course. Type <code>/powerup</code> at the Claude Code prompt and it launches a sequence of guided exercises directly in your terminal — you practice on real files, not mock examples.</p>
+  <p style="margin-top:10px;color:var(--text2)"><strong style="color:var(--white)">What it covers:</strong> Prompting patterns, file navigation, plan mode, diff review, and basic context management. Each exercise takes 2–5 minutes. The full set runs about 20–30 minutes. You don't need to complete all of it before continuing — but do at least the first three exercises before moving to Module 6 (Context Management), because /powerup covers plan mode and diff review hands-on in a way this course's text cannot replicate.</p>
+  <p style="margin-top:10px;color:var(--text2)"><strong style="color:var(--white)">When to use it:</strong> Once on first install, then again if you take a long break from Claude Code and want to re-calibrate. It's not a one-time thing — experienced users sometimes replay specific exercises when learning a new surface (VS Code extension, web, JetBrains).</p></div>
+  <div class="code-block"><span class="c"># Launch the built-in tutorial — do this now</span>
 /powerup</div>
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>claude</code> · <code>claude --version</code> · <code>claude doctor</code> · <code>claude auth login</code> · <code>claude auth status</code> · <code>claude auth logout</code> · <code>/powerup</code></p></div>
@@ -821,14 +839,28 @@ claude
   <h3>Context Rot — Why AI Gets Worse the Longer You Chat</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">As your conversation grows, older context gets compressed or dropped entirely. Claude's behavior drifts from your original instructions. This is <em>context rot</em> — the agent equivalent of memory loss. It affects both Claude Code and Cowork sessions. Understanding it is essential for reliable results.</p>
   <div class="card"><div class="card-title">How to detect it</div><p>Claude starts ignoring rules from CLAUDE.md. It repeats patterns you corrected earlier. It "forgets" architectural decisions from the start of the session. Output quality drops noticeably. These are all signs of context rot.</p></div>
+
+  <h3>What Context Rot Looks Like in Practice</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">This is an annotated transcript from a real 40-turn session. The same instruction is given twice — once at the start, once at turn 38. The outputs are different.</p>
+
+  <div class="transcript-block">
+    <div class="t-turn t-human"><div class="t-label">Turn 3 · Session start · context clean</div><div class="t-content">Add error handling to the saveTask function. Use <code>console.error</code>, not <code>console.log</code> — that's the project convention.</div></div>
+    <div class="t-turn t-claude"><div class="t-label">Claude · turn 3</div><div class="t-content">I'll add error handling following the console.error convention from CLAUDE.md. [Correct diff — uses console.error, matches style guide.]</div></div>
+    <div class="t-turn t-human"><div class="t-label">Turn 38 · 35 turns of unrelated work later · context compressed</div><div class="t-content">Add error handling to the listTasks function.</div></div>
+    <div class="t-turn t-claude"><div class="t-label">Claude · turn 38 — context rot in effect</div><div class="t-content">I'll add error handling to listTasks. [Diff uses console.log — the console.error instruction from turn 3 has been compressed out of context and is no longer visible to the model.]</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--text3);margin:-8px 0 16px;font-style:italic">Claude is not malfunctioning — the instruction from turn 3 is genuinely no longer in its context window. This is context rot: information loss through compression, not a bug.</p>
+
+  <div class="card" style="margin-top:14px"><div class="card-title">The same session, with /compact at turn 20</div><p>Run <code>/compact</code> at turn 20 before starting a new phase of work. Claude summarizes the conversation history into a dense representation — the <code>console.error</code> rule survives because it was referenced multiple times. Turn 38 now produces the correct diff. Same session, same instruction, completely different outcome.</p></div>
+
   <div class="card"><div class="card-title">How to prevent it</div>
     <p>Five strategies, in order of effectiveness:</p>
     <div class="topic-list">
-      <div class="topic-item"><strong style="color:var(--white)">CLAUDE.md</strong> — critical rules survive compaction because they're re-loaded</div>
-      <div class="topic-item"><strong style="color:var(--white)">/compact proactively</strong> — don't wait for degradation, compress early</div>
-      <div class="topic-item"><strong style="color:var(--white)">Subagent delegation</strong> — subagents get fresh context, isolate complex tasks</div>
-      <div class="topic-item"><strong style="color:var(--white)">Session splitting</strong> — use /clear between unrelated tasks</div>
-      <div class="topic-item"><strong style="color:var(--white)">Hooks</strong> — deterministic behavior doesn't depend on context at all</div>
+      <div class="topic-item"><strong style="color:var(--white)">CLAUDE.md</strong> — critical rules survive compaction because they're re-loaded from disk, not from conversation history</div>
+      <div class="topic-item"><strong style="color:var(--white)">/compact proactively</strong> — run it at natural task boundaries, not after you notice drift</div>
+      <div class="topic-item"><strong style="color:var(--white)">Subagent delegation</strong> — subagents start with fresh context; complex sub-tasks never pollute the parent</div>
+      <div class="topic-item"><strong style="color:var(--white)">Session splitting</strong> — use /clear between unrelated tasks so early instructions don't crowd later ones</div>
+      <div class="topic-item"><strong style="color:var(--white)">Hooks</strong> — deterministic behavior (format on save, block dangerous commands) doesn't depend on context at all</div>
     </div>
   </div>
 
@@ -953,12 +985,9 @@ claude --model claude-sonnet-4-6
   <div class="card"><div class="card-title">Use the editor when...</div><p>Quick fixes on visible code, debugging with selected context, reviewing and editing in-place, when you want to stay in your normal editor flow without switching windows.</p></div>
 
   <h3>Other Surfaces</h3>
-  <div class="topic-list">
-    <div class="topic-item"><strong style="color:var(--white)">JetBrains</strong> — same extension for IntelliJ, PyCharm, WebStorm, CLion, Rider</div>
-    <div class="topic-item"><strong style="color:var(--white)">Desktop App</strong> — standalone application for non-IDE users</div>
-    <div class="topic-item"><strong style="color:var(--white)">Web</strong> — claude.ai/code in your browser</div>
-    <div class="topic-item"><strong style="color:var(--white)">iOS</strong> — mobile monitoring and Dispatch triggering</div>
-  </div>
+  <div class="card"><div class="card-title">JetBrains IDEs</div><p>The same extension works across IntelliJ IDEA, PyCharm, WebStorm, CLion, and Rider. Install from JetBrains Marketplace → search "Claude Code". Same keyboard shortcut (<code>Cmd+Esc</code> / <code>Ctrl+Esc</code>), same context model — Claude sees your selected code, open files, and IDE diagnostics. If you already did the hands-on task above in VS Code, the JetBrains experience is identical in practice.</p></div>
+  <div class="card"><div class="card-title">Desktop App & Web (claude.ai/code)</div><p>Both give you Claude Code without a terminal or IDE. The Desktop App is a standalone window; the web version runs in your browser. Both surfaces have the same session management and slash commands. Neither has direct file system access to your project by default — you paste code or upload files. Use these for quick questions or when you're away from your dev machine, not for multi-file work.</p></div>
+  <div class="card"><div class="card-title" style="color:var(--text3)">Mobile (iOS / Android)</div><p>There is no Claude Code mobile client. If you see references to "iOS monitoring" or "Dispatch triggering" from mobile in other resources, those refer to Cowork's Dispatch feature (text a task from your phone → Cowork runs it on your desktop), not Claude Code. Claude Code requires a terminal or IDE and runs on your computer.</p></div>
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Shortcuts Introduced</span></div><p><code>Cmd+Esc</code> / <code>Ctrl+Esc</code> (launch from editor)</p></div>
 
