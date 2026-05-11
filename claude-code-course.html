@@ -928,7 +928,7 @@ claude --model claude-sonnet-4-6
     <div class="matrix-cell">Quick reviews</div>
     <div class="matrix-cell matrix-best">Architecture ★</div>
     <div class="matrix-cell matrix-best">Hardest problems ★</div>
-    <div class="matrix-cell matrix-label" style="color:var(--accent)">Opusplan</div>
+    <div class="matrix-cell matrix-label" style="color:var(--accent)">opusplan</div>
     <div class="matrix-cell" style="opacity:.4">—</div>
     <div class="matrix-cell" style="opacity:.4">—</div>
     <div class="matrix-cell matrix-best">Refactoring ★</div>
@@ -1311,6 +1311,7 @@ coverage/
   <div class="time-est">⏱ MVP 3–5 hrs · Full 15–20 hrs</div>
   <h2 class="page-title">Advanced RAG & Security Knowledge Memory</h2>
   <p class="page-subtitle">Move beyond basic vector search into retrieval methods that preserve context, reduce hallucination, and give grounded citations.</p>
+  <div class="note-box" style="margin-bottom:14px"><strong>Prerequisites:</strong> Comfortable with Python (list comprehensions, functions, imports). Familiarity with pip and virtual environments. No prior ML or NLP experience required — the lab explains embeddings from first principles. Libraries needed: <code>sentence-transformers</code>, <code>numpy</code>, <code>rank-bm25</code> (all installable via pip). Sample documents are in <code>labs/lab-a-samples/</code> in the starter repo — clone it before starting.</div>
   <div class="highlight-box" style="margin-bottom:16px"><p><strong style="color:var(--white)">Time estimate — be honest with yourself:</strong> The MVP (load docs, chunk, embed, retrieve with cosine similarity) takes 3–5 hours if you know Python and have used ML libraries before. If you're new to embeddings or sentence-transformers, budget 6–8 hours for MVP. Full completion with hybrid BM25 + vector search, contextual compression, and citation grounding is 15–20 hours. The 10 sample documents in <code>lab-a-samples/</code> are ready to use — your time goes into the pipeline code, not data preparation.</p></div>
 
   <div class="blockquote">Module 10 teaches you to externalize knowledge into CLAUDE.md. This lab teaches you <em>why knowledge retrieval matters</em> by building a RAG system from scratch. The concepts — hybrid search, contextual compression, citation grounding — explain what happens under the hood when any agent retrieves context from files, MCP servers, or memory.</div>
@@ -1533,6 +1534,7 @@ Research $ARGUMENTS thoroughly:
   <div class="time-est">⏱ MVP 3–5 hrs · Full 12–16 hrs</div>
   <h2 class="page-title">Multi-Agent Orchestration</h2>
   <p class="page-subtitle">Understand agent roles, task decomposition, communication patterns, and safety boundaries by building a multi-agent pipeline from scratch.</p>
+  <div class="note-box" style="margin-bottom:14px"><strong>Prerequisites:</strong> Python comfort (TypedDict, dataclasses, basic async). No prior multi-agent framework experience required — the lab builds the orchestration logic from scratch using plain Python, so you see what frameworks like CrewAI and AutoGen abstract away. Sample threat intel data is in <code>labs/lab-b-samples/</code> in the starter repo. If you want to add a real LLM-powered extractor for the stretch goal, you'll need an <code>ANTHROPIC_API_KEY</code>.</div>
   <div class="highlight-box" style="margin-bottom:16px"><p><strong style="color:var(--white)">Time estimate:</strong> Getting the three-stage pipeline (collector → extractor → reporter) running with the provided sample data takes 3–5 hours. The sample data in <code>lab-b-samples/mock-threat-intel.json</code> has 10 IOCs across four types and three confidence levels — enough to verify your pipeline produces correct output. Full completion with the mapper stretch goal and a real LLM-powered extractor is 12–16 hours.</p></div>
 
   <div class="blockquote">Module 12 introduced Claude Code's built-in subagents (Explore, Plan, General-purpose). This lab teaches the <em>theory</em> of multi-agent systems so you can design better custom agents in Level 4. By building agents from scratch, you'll understand the orchestration principles that Claude Code's harness implements for you.</div>
@@ -2920,7 +2922,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   <div class="divider"></div>
   <h3>Frequently Asked Questions</h3>
   <div class="card"><div class="card-title">How much does Claude Code cost?</div><p>Claude Code is included with paid Claude plans (Pro $20/mo, Max $100–200/mo, Team $30/user/mo, Enterprise custom). API-key users pay per-token. Typical session: $0.10–$2.25 depending on model and length. Use <code>/cost</code> to check and <code>--max-budget-usd</code> to cap.</p></div>
-  <div class="card"><div class="card-title">Does it work offline?</div><p>No. Claude Code requires an internet connection to communicate with Anthropic's API. Your code stays local — only prompts, tool calls, and file contents referenced in conversation are sent to the API.</p></div>
+  <div class="card"><div class="card-title">Does it work offline?</div><p>The default setup requires an internet connection to reach Anthropic's API. Your code stays local — only prompts, tool calls, and file contents referenced in conversation are sent. Enterprise users running Claude via AWS Bedrock, Google Vertex AI, or Microsoft Azure Foundry keep traffic inside their VPC. Local model inference (fully air-gapped) is not currently supported.</p></div>
   <div class="card"><div class="card-title">Can I use my company's API key?</div><p>Yes. Set <code>ANTHROPIC_API_KEY</code> as an environment variable. Also supports AWS Bedrock (<code>CLAUDE_CODE_USE_BEDROCK</code>), Google Vertex (<code>CLAUDE_CODE_USE_VERTEX</code>), and Microsoft Foundry (<code>CLAUDE_CODE_USE_FOUNDRY</code>).</p></div>
   <div class="card"><div class="card-title">Is my code sent to Anthropic?</div><p>Only the portions Claude needs to see — files it reads, commands it runs, diffs it reviews. Code is not used for training. Enterprise plans offer additional data governance controls. Use <code>.claudeignore</code> to exclude sensitive files.</p></div>
   <div class="card"><div class="card-title">Claude Code vs. Cursor vs. GitHub Copilot?</div><p>Copilot is autocomplete (Generation 1). Cursor is chat + edit with context (Generation 2.5). Claude Code is fully agentic (Generation 3) — it reads, plans, acts, verifies, and iterates autonomously. Different tools for different workflows; many developers use Claude Code for complex tasks and Cursor/Copilot for quick inline completions.</p></div>
