@@ -981,7 +981,7 @@ function showPage(id,el){
   if(el)el.classList.add('active');
   const pg=el?el.closest('.nav-group'):null;
   if(pg&&!pg.classList.contains('open'))pg.classList.add('open');
-  document.getElementById('main').scrollTo({top:0,behavior:'smooth'});
+  document.getElementById('main').scrollTo({top:0,behavior:'instant'});
   if(document.getElementById('sidebar').classList.contains('open'))document.getElementById('sidebar').classList.remove('open');
 }
 function markComplete(pageId,btn){
