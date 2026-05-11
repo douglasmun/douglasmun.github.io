@@ -494,7 +494,7 @@ git checkout milestone-1-scaffold  <span class="c"># start at your level</span><
     <div class="topic-item">Powered by latest Opus and Sonnet models</div>
     <div class="topic-item">1M-token context window (Max/Team/Enterprise)</div>
     <div class="topic-item">Up to 10 parallel subagents</div>
-    <div class="topic-item">Plugin marketplace with 100+ skills</div>
+    <div class="topic-item">Plugin marketplace — 11 role-specific plugins (Productivity, Sales, Finance, Legal, Marketing, Data Analysis, Software Development, Customer Support, Creative Production, Project Management, Enterprise Search)</div>
     <div class="topic-item">MCP for external tool integration</div>
     <div class="topic-item">OTEL tracing for enterprise observability</div>
   </div>
@@ -721,7 +721,7 @@ Example writing sample:
   <h3>What Actually Changes</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">The shift isn't "AI writes code for you." The shift is in which tasks you attempt. Work that was too tedious, too cross-cutting, or too risky to start becomes feasible because the agent handles the drudgery while you handle the judgment:</p>
   <div class="card"><div class="card-title">Tasks you attempted but dreaded</div><p>Multi-file refactors, dependency upgrades, boilerplate migration, test coverage expansion. These go from "weekend project" to "20-minute delegation."</p></div>
-  <div class="card"><div class="card-title">Tasks you wouldn't have attempted</div><p>Full security audits of a module, generating ADRs from git history, building internal documentation from code comments, exploratory analysis of unfamiliar codebases. The 27% "wouldn't have touched" is where the real value compounds.</p></div>
+  <div class="card"><div class="card-title">Tasks you wouldn't have attempted</div><p>Full security audits of a module, generating ADRs from git history, building internal documentation from code comments, exploratory analysis of unfamiliar codebases. Work you'd never have queued because the effort-to-value ratio was wrong — that's where the compounding value is.</p></div>
   <div class="card"><div class="card-title">Tasks that change shape</div><p>Code review shifts from "read every line" to "review the agent's plan, then spot-check the diff." Onboarding shifts from "read the wiki" to "clone the repo, run claude, ask questions." Debugging shifts from "reproduce manually" to "paste the stack trace, ask for a failing test."</p></div>
 
   <div class="divider"></div>
@@ -960,7 +960,7 @@ claude --model claude-sonnet-4-6
   <div class="card"><div class="card-title"><code>--bare</code> for scripted one-shots</div><p>Skips loading plugins, hooks, and skills on startup. Faster and cheaper for simple headless tasks where you don't need the full harness.</p></div>
   <div class="card"><div class="card-title"><code>ENABLE_PROMPT_CACHING_1H=1</code></div><p>Enables 1-hour prompt cache TTL for API-key users. Subscription users get this automatically. Dramatically reduces cost on repeated turns — the system prompt and conversation prefix are cached instead of re-processed. Avoid switching models mid-conversation, which invalidates the cache.</p></div>
 
-  <div class="cowork-box"><strong>Cowork parallel:</strong> Cowork sessions also start fresh every time — no cross-session memory. Your context files are the equivalent of CLAUDE.md — they give the agent your history, preferences, and rules on every launch. Usage burns faster than chat; check Settings → Usage regularly. Batch related tasks into single sessions to stay efficient.</div>
+  <div class="cowork-box"><strong>Cowork parallel:</strong> Cowork sessions also start fresh every time — no cross-session memory. Your context files are the equivalent of CLAUDE.md — they give the agent your history, preferences, and rules on every launch. Usage burns faster than chat; check Settings → Usage regularly. Batch related tasks into single sessions to stay efficient.<br><br><strong>Model selection in Cowork:</strong> Cowork uses Sonnet by default for most tasks. Opus 4 is available on Max and Enterprise plans — select it in Settings → Model for complex multi-step work (large research tasks, long document synthesis, agent-heavy workflows). Haiku is used internally for sub-agent steps when Cowork decomposes a task into parallel parts. You don't pick Haiku directly — Cowork chooses it automatically for read-only subtasks to keep costs low.</div>
 
   <div class="note-box"><strong>Checkpoint:</strong> You've accepted your first AI-generated diff. You can explain context rot and name three strategies to prevent it. You know when to use <code>/compact</code> vs. subagent delegation vs. <code>/clear</code>. You can choose the right model for a given task.</div>
   <button class="complete-btn" onclick="markComplete('p-2-2',this)">☐ &nbsp;Mark Complete</button>
@@ -1799,8 +1799,32 @@ claude mcp run obsidian</div>
 
   <div class="card"><div class="card-title"><span class="ext-tag ext-harness">🎛</span> Agent Loop Connection</div><p>Hooks make the <em>Observe</em> step deterministic. Instead of hoping the agent checks formatting or runs tests, hooks <em>guarantee</em> it. They fire at specific points in the agent loop — before a tool runs (PreToolUse), after a tool runs (PostToolUse), when a session starts, when context compacts. This is the harness's enforcement layer.</p></div>
 
-  <h3>The /hooks Interactive UI</h3>
-  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Run <code>/hooks</code> for a menu interface to configure hooks. Much easier than editing JSON. You can also edit <code>.claude/settings.json</code> directly for version control.</p>
+  <h3>The /hooks Interactive UI — Step by Step</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Run <code>/hooks</code> for a menu interface. It writes <code>.claude/settings.json</code> for you — no manual JSON editing required. Here's exactly what the flow looks like for adding the two hooks you need for the checkpoint:</p>
+
+  <div class="card"><div class="card-title" style="color:var(--lv2)">Hook 1: Auto-format on edit (PostToolUse)</div>
+    <ol style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px;margin-top:8px">
+      <li>Run <code>/hooks</code> → select <strong>PostToolUse</strong></li>
+      <li>Matcher: type <code>Edit|Write</code> (matches either tool)</li>
+      <li>Hook type: <strong>command</strong></li>
+      <li>Command: <code>npx prettier --write $CLAUDE_FILE_PATH || true</code></li>
+      <li>Save → Claude writes the entry to <code>.claude/settings.json</code></li>
+    </ol>
+    <p style="margin-top:8px;font-size:12px;color:var(--text3)">Verify: make any edit → you should see <code>prettier</code> run automatically in the output.</p>
+  </div>
+
+  <div class="card"><div class="card-title" style="color:var(--accent4)">Hook 2: Block destructive Bash (PreToolUse)</div>
+    <ol style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px;margin-top:8px">
+      <li>Run <code>/hooks</code> → select <strong>PreToolUse</strong></li>
+      <li>Matcher: <code>Bash</code></li>
+      <li>Hook type: <strong>command</strong></li>
+      <li>Command: <code>echo "$CLAUDE_TOOL_INPUT" | grep -qE "rm -rf|DROP TABLE|sudo rm" && exit 2 || exit 0</code></li>
+      <li>Save</li>
+    </ol>
+    <p style="margin-top:8px;font-size:12px;color:var(--text3)">Exit code 2 = block + show error to Claude. Exit code 1 = block silently. Exit code 0 = allow. Verify: ask Claude to run <code>rm -rf /tmp/test</code> — it should be blocked.</p>
+  </div>
+
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">The resulting <code>.claude/settings.json</code> looks like this — commit it so the whole team gets the same hooks:</p>
 
   <h3>Hook Schema</h3>
   <div class="code-block">{
