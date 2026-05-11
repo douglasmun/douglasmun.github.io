@@ -224,7 +224,7 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
       <a class="nav-item" onclick="showPage('p-3-1',this)"><span class="nav-num">10</span><span class="nav-label">CLAUDE.md, Memory & Setup</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-lab-a',this)"><span class="nav-num">A</span><span class="nav-label">Lab: RAG & Knowledge Memory</span><span class="nav-tag tag-lab-nav">LAB</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-3-2',this)"><span class="nav-num">11</span><span class="nav-label">Skills & $ARGUMENTS</span><span class="check-icon">✓</span></a>
-      <a class="nav-item" onclick="showPage('p-3-3',this)"><span class="nav-num">12</span><span class="nav-label">Subagents & context:fork</span><span class="check-icon">✓</span></a>
+      <a class="nav-item" onclick="showPage('p-3-3',this)"><span class="nav-num">12</span><span class="nav-label">Built-in Subagents</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-lab-b',this)"><span class="nav-num">B</span><span class="nav-label">Lab: Multi-Agent Orchestration</span><span class="nav-tag tag-lab-nav">LAB</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-3-4',this)"><span class="nav-num">13</span><span class="nav-label">Plugins & Bundled Skills</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-3-5',this)"><span class="nav-num">14</span><span class="nav-label">MCP & Connectors</span><span class="check-icon">✓</span></a>
@@ -290,7 +290,7 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
 
     <div class="divider"></div>
     <h3>Course Project: Build a CLI Task Manager</h3>
-    <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--accent)">One project, built across modules</div><p>The best way to learn is to build something real. This course threads a single project through key modules — a CLI task manager app. You'll scaffold it in Module 05, add CLAUDE.md in Module 10, create a /deploy skill in Module 11, add a test hook in Module 15, build a security-reviewer agent in Module 17, and package everything as a plugin in Module 21. By the capstone, you have a working reference implementation demonstrating every level.</p>
+    <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--accent)">One project, built across modules</div><p>The best way to learn is to build something real. This course threads a single project through key modules — a CLI task manager app. You'll scaffold it in Module 05, add CLAUDE.md in Module 10, create a /deploy-check skill in Module 11, add a test hook in Module 15, build a security-reviewer agent in Module 17, and package everything as a plugin in Module 21. By the capstone, you have a working reference implementation demonstrating every level.</p>
     <p style="margin-top:8px"><strong style="color:var(--white)">You choose the stack.</strong> TypeScript + Node, Python + Click, Go + Cobra, Rust + Clap — whatever you're comfortable with. The project is a vehicle for learning Claude Code features, not a software engineering exercise. If you don't have a preference, use TypeScript:</p>
     <div class="code-block" style="margin:8px 0">mkdir task-cli && cd task-cli
 npm init -y && npm i commander chalk
@@ -623,7 +623,7 @@ claude
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>claude</code> · <code>claude --version</code> · <code>claude doctor</code> · <code>claude auth login</code> · <code>claude auth status</code> · <code>claude auth logout</code> · <code>/powerup</code></p></div>
 
-  <div class="card"><div class="card-title">Tooling Standard</div><div class="table-wrap"><table><thead><tr><th>Context</th><th>Command</th></tr></thead><tbody><tr><td>Install Claude Code</td><td><code>npm install -g @anthropic-ai/claude-code</code></td></tr><tr><td>Project package manager</td><td><code>npm</code> (or <code>pnpm</code> / <code>bun</code> — pick one, stay consistent)</td></tr><tr><td>Run in CI</td><td><code>npx @anthropic-ai/claude-code -p "..."</code></td></tr><tr><td>Bun fallback</td><td><code>bun run src/index.ts &lt;command&gt;</code></td></tr></tbody></table></div></div>
+  <div class="card"><div class="card-title">Tooling Standard</div><div class="table-wrap"><table><thead><tr><th>Context</th><th>Command</th></tr></thead><tbody><tr><td>Install Claude Code</td><td><code>curl -fsSL https://claude.ai/install.sh | sh</code></td></tr><tr><td>Project package manager</td><td><code>npm</code> (or <code>pnpm</code> / <code>bun</code> — pick one, stay consistent)</td></tr><tr><td>Run in CI</td><td><code>npx @anthropic-ai/claude-code -p "..."</code></td></tr><tr><td>Bun fallback</td><td><code>bun run src/index.ts &lt;command&gt;</code></td></tr></tbody></table></div><p style="color:var(--text3);font-size:11px;margin-top:6px">npm install is deprecated. Use the native binary above.</p></div>
 
   <div class="cowork-box"><strong>Cowork setup:</strong> Install the Claude Desktop app from claude.com. Create a dedicated workspace folder (not your Documents directory — use something like <code>~/claude-workspace/</code>). Drop your context files (about-me.md, brand-voice.md, working-preferences.md) into it. Enable Cowork in the app settings. No terminal needed — everything is GUI-driven.</div>
 
@@ -1177,21 +1177,21 @@ Run `git diff main..HEAD` and review the changes for:
 Post findings as a Markdown checklist with severity levels.</div>
 
   <h3>Pattern 2: Dynamic Skill with $ARGUMENTS</h3>
-  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Use <code>$ARGUMENTS</code> to accept parameters from the slash command. <code>/deploy staging</code> passes "staging" as the argument:</p>
-  <div class="code-block"><span class="c"># .claude/skills/deploy/SKILL.md</span>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Use <code>$ARGUMENTS</code> to accept parameters from the slash command. <code>/deploy-check staging</code> passes "staging" as the argument:</p>
+  <div class="code-block"><span class="c"># .claude/skills/deploy-check/SKILL.md</span>
 ---
-name: deploy
-description: Deploy the application to a target environment
+name: deploy-check
+description: Verify the application is ready to deploy to a target environment
 tools: [Bash]
 user-invocable: true
 disable-model-invocation: true   <span class="c"># only you can trigger deploys</span>
 allowed-tools: Bash(npm:*), Bash(git:*)
 ---
-Deploy to $ARGUMENTS:
+Check $ARGUMENTS is ready for deployment:
 1. Run `pnpm test` — abort if any test fails
 2. Run `pnpm build` — abort on build errors
-3. Push to the $ARGUMENTS deployment target
-4. Verify the deployment is healthy</div>
+3. Verify the $ARGUMENTS deployment target is healthy
+4. Report readiness status</div>
 
   <h3>Pattern 3: Forked Skill (auto-subagent)</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Add <code>context: fork</code> and <code>agent:</code> to frontmatter. The skill runs in an isolated subagent — your main context stays clean. Results are summarized back. This is the most powerful pattern for exploration and research tasks.</p>
@@ -1212,6 +1212,9 @@ Research $ARGUMENTS thoroughly:
   <h3>Skill Type Comparison</h3>
   <div class="card"><div class="card-title">When to use each skill type</div><div class="table-wrap"><table><thead><tr><th>Type</th><th>Trigger</th><th>Example</th></tr></thead><tbody><tr><td><strong>Static</strong></td><td>Fixed procedure, no user input</td><td><code>/pr-review</code> always does the same review</td></tr><tr><td><strong>$ARGUMENTS</strong></td><td>User passes a target</td><td><code>/deploy-check staging</code></td></tr><tr><td><strong>context:fork</strong></td><td>Background research needed</td><td><code>/deep-research topic</code> — forks a subagent</td></tr></tbody></table></div></div>
 
+  <h3>Project Skills Reference</h3>
+  <div class="card"><div class="card-title">Skills built across this course</div><div class="table-wrap"><table><thead><tr><th>Skill</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>/add-feature</code></td><td>$ARGUMENTS</td><td>Plan, implement, and test a new feature by name</td></tr><tr><td><code>/pr-review</code></td><td>Static</td><td>Review the current branch diff for bugs, security, and style</td></tr><tr><td><code>/deploy-check</code></td><td>$ARGUMENTS</td><td>Verify the application is ready to deploy to a target environment</td></tr><tr><td><code>/deep-research</code></td><td>context:fork</td><td>Research a topic thoroughly across the codebase</td></tr><tr><td><code>/generate-adr</code></td><td>Static</td><td>Draft an architecture decision record for a given decision</td></tr></tbody></table></div></div>
+
   <h3>Key Frontmatter Fields</h3>
   <div class="topic-list">
     <div class="topic-item"><code>name</code> — the /slash-command name</div>
@@ -1230,7 +1233,7 @@ Research $ARGUMENTS thoroughly:
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p>Custom <code>/skill-name</code> slash commands · <code>$ARGUMENTS</code> for dynamic parameters · <code>context: fork</code> + <code>agent:</code> frontmatter</p></div>
 
-  <div class="note-box"><strong>Checkpoint:</strong> You've built three skills: one static (/pr-review), one with $ARGUMENTS (/deploy), and one with context:fork (/deep-research). All three work from the slash menu.</div>
+  <div class="note-box"><strong>Checkpoint:</strong> You've built three skills: one static (/pr-review), one with $ARGUMENTS (/deploy-check), and one with context:fork (/deep-research). All three work from the slash menu.</div>
   <button class="complete-btn" onclick="markComplete('p-3-2',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
 
