@@ -6,7 +6,7 @@
 <title>Claude Code AI Course — Unaware to Native</title>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c10;--bg2:#0d1117;--bg3:#111820;--surface:#131c26;--surface2:#1a2535;--border:#1e2d3d;--border2:#243344;--accent:#00d4ff;--accent2:#7b5ea7;--accent3:#00ff9d;--accent4:#ff6b35;--text:#c9d8e8;--text2:#7a97b0;--text3:#4a6070;--white:#e8f4ff;--lv0:#6b7b8d;--lv1:#ff6b35;--lv2:#00d4ff;--lv3:#00ff9d;--lv4:#a78bfa;--lab:#f59e0b;--cap:#ff4d6d;--cowork:#38bdf8;--fix:#ef4444}
+:root{--bg:#080c10;--bg2:#0d1117;--bg3:#111820;--surface:#131c26;--surface2:#1a2535;--border:#1e2d3d;--border2:#243344;--accent:#00d4ff;--accent2:#7b5ea7;--accent3:#00ff9d;--accent4:#ff6b35;--text:#c9d8e8;--text2:#7a97b0;--text3:#4a6070;--white:#e8f4ff;--lv0:#6b7b8d;--lv1:#ff6b35;--lv2:#00d4ff;--lv3:#00ff9d;--lv4:#a78bfa;--lab:#f59e0b;--cap:#ff4d6d;--cowork:#38bdf8;--fix:#ef4444;--onramp:#818cf8}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;overflow-x:hidden}
 body::after{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.015) 2px,rgba(0,0,0,.015) 4px);pointer-events:none;z-index:9999}
@@ -215,6 +215,20 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
 .v-status{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
 .v-stable{background:rgba(0,255,157,.1);color:var(--accent3);border:1px solid rgba(0,255,157,.2)}
 .v-preview{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
+.tag-tip{background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)}
+/* ═══ ON-RAMP ═══ */
+.lv-onramp-bar{background:var(--onramp,#818cf8)}
+.lv-onramp-count{background:rgba(129,140,248,.12);color:#818cf8}
+.ey-onramp{color:#818cf8}.ey-onramp::before{background:#818cf8}
+.b-onramp{background:rgba(129,140,248,.1);color:#818cf8;border:1px solid rgba(129,140,248,.2)}
+.onramp-check{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.onramp-check-item{display:flex;align-items:flex-start;gap:10px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:var(--surface);cursor:pointer;transition:border-color .2s}
+.onramp-check-item:hover{border-color:var(--border2)}
+.onramp-check-item input[type=checkbox]{margin-top:2px;flex-shrink:0;accent-color:#818cf8}
+.onramp-check-item label{font-size:13px;color:var(--text2);line-height:1.5;cursor:pointer}
+.onramp-check-item label code{color:#818cf8;font-family:'JetBrains Mono',monospace;font-size:11px}
+.skip-box{background:rgba(129,140,248,.06);border:1px solid rgba(129,140,248,.2);border-radius:8px;padding:14px 18px;margin-bottom:20px;font-size:13px;color:var(--text2);line-height:1.6}
+.skip-box strong{color:#818cf8}
 </style>
 </head>
 <body>
@@ -223,6 +237,9 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
   <div class="progress-bar-wrap"><div class="progress-label"><span>Progress</span><span id="progress-pct">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div><button id="copy-progress-btn" onclick="exportProgress()" style="margin-top:8px;width:100%;padding:5px 10px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:9px;border-radius:4px;cursor:pointer;letter-spacing:.5px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text3)'">⎘ Copy Progress</button></div>
   <div class="search-wrap"><input class="search-input" id="search-input" type="text" placeholder="Search modules..." oninput="searchModules(this.value)"></div>
   <div class="nav-wrap">
+    <div class="nav-group" data-group="g-onramp"><div class="nav-group-header" onclick="toggleGroup('g-onramp')"><span class="level-bar lv-onramp-bar"></span><span class="arrow">›</span><span class="level-icon">◈</span><span class="level-info"><span class="level-name">On-Ramp</span><span class="level-desc">Terminal · Git · Node · 20 min</span></span><span class="level-count lv-onramp-count" id="count-g-onramp">0/1</span></div><div class="nav-group-items">
+  <a class="nav-item" onclick="showPage('p-onramp',this)"><span class="nav-num">↑</span><span class="nav-label">Environment Setup</span><span class="nav-tag tag-tip">SKIP IF READY</span><span class="check-icon">✓</span></a>
+</div></div>
     <div class="nav-group open" data-group="g0"><div class="nav-group-header" onclick="toggleGroup('g0')"><span class="level-bar lv0-bar"></span><span class="arrow">›</span><span class="level-icon">◇</span><span class="level-info"><span class="level-name">Level 0 — Framing</span><span class="level-desc">The mental model</span></span><span class="level-count lv0-count" id="count-g0">0/1</span></div><div class="nav-group-items"><a class="nav-item active" onclick="showPage('p-home',this)"><span class="nav-num">00</span><span class="nav-label">The Mental Model</span><span class="check-icon">✓</span></a></div></div>
     <div class="nav-group" data-group="g1"><div class="nav-group-header" onclick="toggleGroup('g1')"><span class="level-bar lv1-bar"></span><span class="arrow">›</span><span class="level-icon">○</span><span class="level-info"><span class="level-name">Level 1 — Unaware</span><span class="level-desc">Spark interest</span></span><span class="level-count lv1-count" id="count-g1">0/4</span></div><div class="nav-group-items">
       <a class="nav-item" onclick="showPage('p-1-1',this)"><span class="nav-num">01</span><span class="nav-label">What is Claude Code?</span><span class="check-icon">✓</span></a>
@@ -268,6 +285,91 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
   <div class="kbd-hint">Tab · Enter · Space to navigate</div>
 </nav>
 <main id="main">
+
+<!-- ON-RAMP -->
+<div class="page" id="p-onramp"><div class="content-wrap">
+  <div class="section-eyebrow ey-onramp">On-Ramp · Optional</div>
+  <div class="phase-badge b-onramp">◈ Environment Setup</div>
+  <div class="time-est">⏱ 20 min</div>
+  <h2 class="page-title">Terminal, Git & Node — 20-Minute Setup</h2>
+  <p class="page-subtitle">Claude Code runs in your terminal and works with Git and Node. This page gets you ready in 20 minutes. If you already use these tools daily, skip ahead — you're ready.</p>
+
+  <div class="skip-box">
+    <strong>Skip this page if:</strong> You can open a terminal, run <code>git --version</code>, run <code>node --version</code>, and know what a working directory is. Jump straight to <a onclick="showPage('p-home',document.querySelector('[onclick*=p-home]'))" style="color:#818cf8;cursor:pointer">The Mental Model →</a>
+  </div>
+
+  <div class="card"><div class="card-title"><span class="tag tag-obj">Objective</span></div><p>By the end of this page you will have: a working terminal, Git installed and configured, Node.js 20+ installed, and a test project folder ready. Every step has a verification command — run it before moving on.</p></div>
+
+  <h3>Step 1 — Open a Terminal</h3>
+  <div class="card"><div class="card-title">Mac</div><p>Press <code>Cmd+Space</code>, type <strong>Terminal</strong>, press Enter. Or install <a href="https://iterm2.com" target="_blank" style="color:#818cf8">iTerm2</a> for a better experience.</p></div>
+  <div class="card"><div class="card-title">Windows</div><p>Install <a href="https://apps.microsoft.com/detail/9n0dx20hk701" target="_blank" style="color:#818cf8">Windows Terminal</a> from the Microsoft Store. Use <strong>PowerShell</strong> or <strong>WSL2</strong> (Ubuntu). Claude Code works best in WSL2 on Windows.</p></div>
+  <div class="card"><div class="card-title">Linux</div><p>You already have a terminal. Open it with <code>Ctrl+Alt+T</code> on most distros.</p></div>
+  <div class="code-block"><span class="c"># Verify: your terminal is working</span>
+echo "hello"
+<span class="c"># Expected output: hello</span></div>
+
+  <h3>Step 2 — Install Git</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px">Git tracks changes to your files. Claude Code uses it constantly — checking diffs, creating branches, reading history.</p>
+  <div class="card"><div class="card-title">Mac</div><p>Run <code>git --version</code>. If not installed, macOS will prompt you to install Xcode Command Line Tools. Accept it. Takes ~5 minutes.</p></div>
+  <div class="card"><div class="card-title">Windows (WSL2)</div><p><code>sudo apt update && sudo apt install git -y</code></p></div>
+  <div class="card"><div class="card-title">Linux</div><p><code>sudo apt install git -y</code> (Ubuntu/Debian) or <code>sudo dnf install git -y</code> (Fedora)</p></div>
+  <div class="code-block"><span class="c"># Verify</span>
+git --version
+<span class="c"># Expected: git version 2.x.x or higher</span>
+
+<span class="c"># Configure your identity (one-time)</span>
+git config --global user.name <span class="s">"Your Name"</span>
+git config --global user.email <span class="s">"you@example.com"</span></div>
+
+  <h3>Step 3 — Install Node.js 20+</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px">Node.js runs JavaScript outside the browser. The course starter project uses Node. Claude Code itself is distributed via npm.</p>
+  <div class="card"><div class="card-title">All platforms — recommended method</div><p>Install <a href="https://github.com/nvm-sh/nvm" target="_blank" style="color:#818cf8">nvm</a> (Node Version Manager), then install Node 20:<br><code>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash</code><br>Close and reopen your terminal, then:<br><code>nvm install 20 && nvm use 20</code></p></div>
+  <div class="card"><div class="card-title">Alternative — direct installer</div><p>Download the LTS installer from <a href="https://nodejs.org" target="_blank" style="color:#818cf8">nodejs.org</a>. Choose "LTS" (20.x or higher).</p></div>
+  <div class="code-block"><span class="c"># Verify</span>
+node --version
+<span class="c"># Expected: v20.x.x or higher</span>
+npm --version
+<span class="c"># Expected: 10.x.x or higher</span></div>
+
+  <h3>Step 4 — Understand the Terminal Basics</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px">Five commands cover 90% of terminal use in this course:</p>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Command</th><th>What it does</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td><code>pwd</code></td><td>Print working directory — where you are</td><td><code>pwd</code> → <code>/Users/you/projects</code></td></tr>
+      <tr><td><code>ls</code></td><td>List files in current folder</td><td><code>ls</code> or <code>ls -la</code> for hidden files</td></tr>
+      <tr><td><code>cd</code></td><td>Change directory</td><td><code>cd my-project</code> or <code>cd ..</code> to go up</td></tr>
+      <tr><td><code>mkdir</code></td><td>Make a new folder</td><td><code>mkdir my-project</code></td></tr>
+      <tr><td><code>Ctrl+C</code></td><td>Stop a running command</td><td>Use when something hangs</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Step 5 — Create Your Project Folder</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px">Claude Code always runs inside a project folder. Create one now — you'll use it throughout the course.</p>
+  <div class="code-block"><span class="c"># Create and enter your project folder</span>
+mkdir my-claude-project
+cd my-claude-project
+
+<span class="c"># Initialise Git (makes it a repo)</span>
+git init
+
+<span class="c"># Verify</span>
+git status
+<span class="c"># Expected: On branch main, nothing to commit</span></div>
+
+  <h3>Step 6 — Verify You're Ready</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:10px">Check all five boxes before continuing:</p>
+  <div class="onramp-check">
+    <div class="onramp-check-item"><input type="checkbox" id="oc1"><label for="oc1">Terminal opens and I can type commands</label></div>
+    <div class="onramp-check-item"><input type="checkbox" id="oc2"><label for="oc2"><code>git --version</code> returns 2.x or higher</label></div>
+    <div class="onramp-check-item"><input type="checkbox" id="oc3"><label for="oc3"><code>node --version</code> returns v20.x or higher</label></div>
+    <div class="onramp-check-item"><input type="checkbox" id="oc4"><label for="oc4">I created a project folder and ran <code>git init</code></label></div>
+    <div class="onramp-check-item"><input type="checkbox" id="oc5"><label for="oc5">I know how to use <code>cd</code>, <code>ls</code>, and <code>Ctrl+C</code></label></div>
+  </div>
+
+  <div class="note-box"><strong>Checkpoint:</strong> All five boxes checked. You're ready to install Claude Code. Continue to <a onclick="showPage('p-home',document.querySelector('[onclick*=p-home]'))" style="color:var(--accent);cursor:pointer">The Mental Model →</a></div>
+  <button class="complete-btn" onclick="markComplete('p-onramp',this)">☐ &nbsp;Mark On-Ramp Complete</button>
+</div></div>
 
 <!-- HOME -->
 <div class="page active" id="p-home">
@@ -2726,8 +2828,8 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <button id="mobile-toggle" onclick="toggleSidebar()">☰</button>
 <footer style="position:fixed;bottom:0;right:0;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px;z-index:50;background:var(--bg);border-top:1px solid var(--border);border-left:1px solid var(--border);border-radius:8px 0 0 0">Claude Code + Cowork Course v1.0 · May 2026 · by Douglas Mun · Requires Claude Code v2.1.84+</footer>
 <script>
-const completed=new Set();const total=31;
-const groupPages={g0:['p-home'],g1:['p-1-1','p-1-2','p-1-3','p-1-4'],g2:['p-2-1','p-2-2','p-2-3','p-2-4','p-2-5'],g3:['p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7'],g4:['p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6'],g5:['p-capstone','p-commands','p-versions','p-glossary','p-rubric']};
+const completed=new Set();const total=32;
+const groupPages={'g-onramp':['p-onramp'],g0:['p-home'],g1:['p-1-1','p-1-2','p-1-3','p-1-4'],g2:['p-2-1','p-2-2','p-2-3','p-2-4','p-2-5'],g3:['p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7'],g4:['p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6'],g5:['p-capstone','p-commands','p-versions','p-glossary','p-rubric']};
 function toggleGroup(g){document.querySelector(`.nav-group[data-group="${g}"]`).classList.toggle('open')}
 function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');const pg=el?el.closest('.nav-group'):null;if(pg&&!pg.classList.contains('open'))pg.classList.add('open');document.getElementById('main').scrollTo({top:0,behavior:'instant'});if(document.getElementById('sidebar').classList.contains('open'))document.getElementById('sidebar').classList.remove('open')}
 function markComplete(pid,btn){completed.add(pid);btn.textContent='✓  Completed';btn.classList.add('done');btn.disabled=true;document.querySelectorAll('.nav-item').forEach(i=>{const o=i.getAttribute('onclick');if(o&&o.includes("'"+pid+"'"))i.classList.add('completed')});updateProgress();updateGroupCounts()}
@@ -2738,6 +2840,7 @@ updateGroupCounts();
 
 // ═══ PAGE ORDER, TIME ESTIMATES, AND TRY-IT EXERCISES ═══
 const pageOrder = [
+  'p-onramp',
   'p-home','p-1-1','p-1-2','p-1-3','p-1-4',
   'p-2-1','p-2-2','p-2-3','p-2-4','p-2-5',
   'p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7',
@@ -2746,6 +2849,7 @@ const pageOrder = [
 ];
 
 const pageMeta = {
+  'p-onramp': {time:'20 min', title:'Environment Setup'},
   'p-home':   {time:'5 min',  title:'The Mental Model'},
   'p-1-1':    {time:'3 min',  title:'What is Claude Code?'},
   'p-1-2':    {time:'5 min',  title:'What is an AI Agent?'},
@@ -2780,6 +2884,7 @@ const pageMeta = {
 };
 
 const tryItExercises = {
+  'p-onramp': 'Open your terminal and run: <code>echo "hello" && git --version && node --version</code>. All three should return output without errors. If any fails, go back to the relevant step on this page.',
   'p-1-1': 'Open <a href="https://claude.ai/code" target="_blank" style="color:var(--accent3)">claude.ai/code</a> in your browser (no install needed). Type <code>"What can you do?"</code> and read the response. Note three capabilities that surprise you.',
   'p-1-2': 'Draw the 5-step agent loop on paper or a whiteboard (Perceive → Reason → Act → Observe → Iterate). Next to each step, write the Claude Code feature that maps to it. Keep this drawing visible while you take the course.',
   'p-1-3': 'If you have the Claude Desktop app, open the Cowork tab. If not, read the <a href="https://claude.com/product/cowork" target="_blank" style="color:var(--accent3)">Cowork product page</a>. Identify three features that map to Claude Code concepts you just learned.',
