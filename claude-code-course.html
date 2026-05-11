@@ -100,8 +100,24 @@ h3{font-size:16px;font-weight:700;color:var(--white);margin:24px 0 10px}h3:first
 .certificate .cert-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text3);margin-top:16px}
 .cert-print-btn{margin-top:12px;padding:8px 20px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:6px;font-family:'Syne',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
 .cert-print-btn:hover{background:rgba(0,212,255,.1)}
-@media print{.certificate{border-color:#0066cc;page-break-inside:avoid}.cert-print-btn{display:none}.certificate .cert-name-input{border-bottom-color:#111;color:#111}}
-@media print{body.print-cert *{display:none!important}body.print-cert .certificate,body.print-cert .certificate *{display:revert!important}body.print-cert .certificate{border-color:#0066cc;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:680px;margin:0;background:#fff;color:#111}body.print-cert .certificate .cert-name-input{border-bottom-color:#111;color:#111}body.print-cert .certificate .cert-logo,body.print-cert .certificate .cert-date,body.print-cert .certificate .cert-details{color:#444}body.print-cert .certificate .cert-title{color:#111}body.print-cert .certificate .cert-sub{color:#555}}
+/* ═══ CERTIFICATE MODAL ═══ */
+.cert-modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;align-items:center;justify-content:center}
+.cert-modal-overlay.open{display:flex}
+.cert-modal{background:#fff;border-radius:12px;padding:48px 40px;max-width:640px;width:90%;text-align:center;position:relative;color:#111}
+.cert-modal .cert-logo{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#0066cc;margin-bottom:6px}
+.cert-modal .cert-title{font-size:26px;font-weight:800;color:#111;margin-bottom:4px}
+.cert-modal .cert-sub{font-size:13px;color:#555;margin-bottom:20px}
+.cert-modal .cert-name{font-size:22px;font-weight:700;border-bottom:2px solid #111;display:inline-block;min-width:250px;padding:4px 16px;margin-bottom:6px;color:#111}
+.cert-modal .cert-label{font-size:11px;color:#666;margin-bottom:20px}
+.cert-modal .cert-border{border:3px double #0066cc;border-radius:8px;padding:30px;margin-bottom:20px}
+.cert-modal .cert-details{font-size:12px;color:#444;line-height:1.8}
+.cert-modal .cert-date{font-family:'JetBrains Mono',monospace;font-size:11px;color:#666;margin-top:14px}
+.cert-modal-actions{display:flex;gap:12px;justify-content:center;margin-top:20px}
+.cert-modal-actions button{padding:8px 20px;border-radius:6px;font-family:'Syne',sans-serif;font-size:12px;cursor:pointer;transition:all .2s}
+.cert-modal-print{background:#0066cc;color:#fff;border:1px solid #0066cc}
+.cert-modal-print:hover{background:#0052a3}
+.cert-modal-close{background:transparent;color:#666;border:1px solid #ccc}
+.cert-modal-close:hover{border-color:#0066cc;color:#0066cc}
 /* ═══ QUIZZES ═══ */
 .quiz-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0}
 .quiz-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -2973,21 +2989,34 @@ Flag any assumptions you made about what counts as "last week".</div>
 
   <div class="divider"></div>
   <h3>Completion Certificate</h3>
-  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">When you've completed all modules and the capstone, type your name below and print this page (<code>Ctrl+P</code> / <code>Cmd+P</code>) to generate your certificate.</p>
-  <div class="certificate">
-    <div class="cert-logo">Anthropic · Claude Code + Cowork</div>
-    <div class="cert-title">Certificate of Completion</div>
-    <div class="cert-sub">Unaware → Curious → Fluent → Native</div>
-    <input class="cert-name-input" type="text" placeholder="Your Name">
-    <div class="cert-label">has completed the self-paced course</div>
-    <div class="cert-details">
-      Claude Code + Cowork: From Unaware to Native<br>
-      24 modules · 3 foundation labs · Capstone project<br>
-      Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>
-      Both surfaces: Claude Code (developers) + Cowork (knowledge workers)
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Enter your name below and click <strong style="color:var(--white)">Generate Certificate</strong> to open a print-ready certificate.</p>
+  <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+    <input id="cert-name-field" type="text" placeholder="Your full name" style="background:var(--surface);border:1px solid var(--border);border-radius:6px;color:var(--white);font-family:'Syne',sans-serif;font-size:14px;padding:8px 14px;outline:none;min-width:220px;flex:1" oninput="const b=document.getElementById('cert-gen-btn');b.disabled=!this.value.trim();b.style.opacity=this.value.trim()?'1':'.4'" onkeydown="if(event.key==='Enter'&&this.value.trim())openCertModal()">
+    <button id="cert-gen-btn" onclick="openCertModal()" disabled style="padding:8px 20px;background:var(--accent);color:var(--bg);border:none;border-radius:6px;font-family:'Syne',sans-serif;font-size:13px;font-weight:700;cursor:pointer;opacity:.4;transition:opacity .2s">Generate Certificate</button>
+  </div>
+
+  <!-- Certificate modal -->
+  <div class="cert-modal-overlay" id="cert-modal-overlay" onclick="if(event.target===this)closeCertModal()">
+    <div class="cert-modal" id="cert-modal-content">
+      <div class="cert-border">
+        <div class="cert-logo">Anthropic · Claude Code + Cowork</div>
+        <div class="cert-title">Certificate of Completion</div>
+        <div class="cert-sub">Unaware → Curious → Fluent → Native</div>
+        <div class="cert-name" id="cert-modal-name"></div>
+        <div class="cert-label">has completed the self-paced course</div>
+        <div class="cert-details">
+          Claude Code + Cowork: From Unaware to Native<br>
+          24 modules · 3 foundation labs · Capstone project<br>
+          Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>
+          Both surfaces: Claude Code (developers) + Cowork (knowledge workers)
+        </div>
+        <div class="cert-date" id="cert-modal-date"></div>
+      </div>
+      <div class="cert-modal-actions">
+        <button class="cert-modal-print" onclick="printCertModal()">Print / Save as PDF</button>
+        <button class="cert-modal-close" onclick="closeCertModal()">Close</button>
+      </div>
     </div>
-    <div class="cert-date" id="cert-date"></div>
-    <button class="cert-print-btn" onclick="printCertificate()">Print Certificate</button>
   </div>
 
   <button class="complete-btn" onclick="markComplete('p-rubric',this)">☐ &nbsp;Mark as Read</button>
@@ -3445,7 +3474,9 @@ function exportProgress() {
 
 // ═══ ACCESSIBILITY (CCI-017) ═══
 function toggleHiContrast(){document.body.classList.toggle('hi-contrast');localStorage.setItem('hiContrast',document.body.classList.contains('hi-contrast'))}
-function printCertificate(){document.getElementById('cert-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});document.body.classList.add('print-cert');window.print();document.body.classList.remove('print-cert')}
+function openCertModal(){const name=document.getElementById('cert-name-field').value.trim();if(!name)return;document.getElementById('cert-modal-name').textContent=name;document.getElementById('cert-modal-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});document.getElementById('cert-modal-overlay').classList.add('open');document.getElementById('cert-gen-btn').style.opacity='1'}
+function closeCertModal(){document.getElementById('cert-modal-overlay').classList.remove('open')}
+function printCertModal(){const c=document.getElementById('cert-modal-content');const w=window.open('','_blank','width=720,height=600');w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Certificate of Completion</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fff;padding:40px}.cert-border{border:3px double #0066cc;border-radius:8px;padding:40px 48px;text-align:center;max-width:640px;width:100%}.cert-logo{font-family:monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#0066cc;margin-bottom:6px}.cert-title{font-size:26px;font-weight:800;color:#111;margin-bottom:4px}.cert-sub{font-size:13px;color:#555;margin-bottom:24px}.cert-name{font-size:22px;font-weight:700;border-bottom:2px solid #111;display:inline-block;min-width:250px;padding:4px 16px;margin-bottom:8px;color:#111}.cert-label{font-size:11px;color:#666;margin-bottom:20px}.cert-details{font-size:12px;color:#444;line-height:1.8}.cert-date{font-family:monospace;font-size:11px;color:#666;margin-top:14px}@media print{body{padding:20px}}</style></head><body><div class="cert-border"><div class="cert-logo">Anthropic · Claude Code + Cowork</div><div class="cert-title">Certificate of Completion</div><div class="cert-sub">Unaware → Curious → Fluent → Native</div><div class="cert-name">'+c.querySelector('.cert-name').textContent+'</div><div class="cert-label">has completed the self-paced course</div><div class="cert-details">Claude Code + Cowork: From Unaware to Native<br>24 modules · 3 foundation labs · Capstone project<br>Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>Both surfaces: Claude Code (developers) + Cowork (knowledge workers)</div><div class="cert-date">'+c.querySelector('.cert-date').textContent+'</div></div></body></html>');w.document.close();w.focus();setTimeout(()=>{w.print();w.close()},400)}
 (function(){if(localStorage.getItem('hiContrast')==='true')document.body.classList.add('hi-contrast')})();
 </script>
 </body>
