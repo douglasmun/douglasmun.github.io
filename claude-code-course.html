@@ -1453,6 +1453,8 @@ Check $ARGUMENTS is ready for deployment:
 
   <h3>Pattern 3: Forked Skill (auto-subagent)</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Add <code>context: fork</code> and <code>agent:</code> to frontmatter. The skill runs in an isolated subagent — your main context stays clean. Results are summarized back. This is the most powerful pattern for exploration and research tasks.</p>
+
+  <div class="highlight-box"><p><strong style="color:var(--white)">context: fork vs agent: — what each field does.</strong> They are independent.<br><br><code>context: fork</code> controls <em>isolation</em>: the skill runs in a fresh subagent context that cannot read or pollute your main session. The subagent reports back a summary when it finishes. Use it whenever the task involves broad exploration or could accumulate a lot of irrelevant context.<br><br><code>agent:</code> controls <em>which subagent runs it</em>: <code>Explore</code> is read-only and runs on Haiku (fast, cheap — use for codebase mapping and search), <code>Plan</code> is analytical and cannot edit files (use for architecture review), <code>general-purpose</code> has full tools (default if you omit the field). You can also name a custom agent defined in <code>.claude/agents/</code>.<br><br>You can use <code>agent: Explore</code> <em>without</em> <code>context: fork</code> (the task runs in your current session but uses Haiku), and <code>context: fork</code> <em>without</em> <code>agent:</code> (forks a general-purpose subagent). The combination — fork + Explore — is the sweet spot for read-heavy research tasks: isolated context, fast model, cheap.</p></div>
   <div class="code-block"><span class="c"># .claude/skills/deep-research/SKILL.md</span>
 ---
 name: deep-research
@@ -2135,6 +2137,15 @@ After review:
   <h3>The Lab: Sandboxed Local Security Agent</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Build a secure local agent runtime where a locally-hosted LLM can execute a controlled set of security reconnaissance commands inside a Docker container. The agent must refuse to run denied commands even when prompted, and all interactions must be logged for audit.</p>
 
+  <div class="card" style="border-color:rgba(239,68,68,.3)"><div class="card-title" style="color:var(--fix)">Security boundaries — read before running any commands</div>
+    <div class="topic-list">
+      <div class="topic-item"><strong style="color:var(--white)">Only scan networks you own or have written permission to test.</strong> Running nmap, ping, or traceroute against infrastructure you don't control is illegal in most jurisdictions. The allowed command list in this lab is for localhost and private test ranges only.</div>
+      <div class="topic-item"><strong style="color:var(--white)">Never pipe remote scripts.</strong> <code>curl … | bash</code> and <code>wget -O- | sh</code> patterns are in the deny list for a reason — do not add exceptions, even for setup convenience.</div>
+      <div class="topic-item"><strong style="color:var(--white)">Use least-privilege connector scope.</strong> If you extend the lab to call external APIs or MCP servers, request only the minimum permissions needed. Broad scopes widen the blast radius if the agent is prompt-injected.</div>
+      <div class="topic-item"><strong style="color:var(--white)">Run inside Docker.</strong> The container isolation in Phase 3 is not optional polish — it is the primary safety boundary. Do not skip it when testing allowed commands against real targets.</div>
+    </div>
+  </div>
+
   <div class="card"><div class="card-title">Phase 1: Local LLM Setup (~2 hrs)</div>
     <p>Deploy a local model using Ollama (easiest) or vLLM (most flexible). Verify it runs, serves an API endpoint, and can handle tool-use-style prompts. Compare response quality and latency against the Claude API for a standard task. Document the tradeoffs — when would you choose local over API?</p>
   </div>
@@ -2418,6 +2429,20 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>claude -p "&lt;prompt&gt;"</code> · Agent SDK (Python/TypeScript) · OTEL tracing</p></div>
 
+  <div class="divider"></div>
+  <h3>CI Preflight Checklist</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Before wiring Claude into CI, verify these — each is a common silent failure point:</p>
+  <div class="card"><div class="card-title">Before you push the workflow</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--text2)">
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:7px 10px;width:38%"><strong style="color:var(--white)">ANTHROPIC_API_KEY secret set?</strong></td><td style="padding:7px 10px">Repo Settings → Secrets and variables → Actions. Missing secret = workflow fails silently on every run.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:7px 10px"><strong style="color:var(--white)">GITHUB_TOKEN write permission?</strong></td><td style="padding:7px 10px">Repo Settings → Actions → General → Workflow permissions → "Read and write". Required for <code>gh pr comment</code>. Default is read-only — you must change it.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:7px 10px"><strong style="color:var(--white)">Fork PRs blocked?</strong></td><td style="padding:7px 10px">By design, fork PRs cannot access secrets (prevents secret exfiltration). The workflow will trigger but skip the Claude step. Expected behaviour — not a bug.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:7px 10px"><strong style="color:var(--white)">Budget cap set?</strong></td><td style="padding:7px 10px">Always pass <code>--max-budget-usd 5</code> (or lower) in headless mode. Without it, a runaway task or prompt loop can drain your API credits before you notice.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:7px 10px"><strong style="color:var(--white)">Expected failure modes</strong></td><td style="padding:7px 10px"><code>exit 1</code> = Claude hit an error or the task failed. <code>exit 2</code> = budget exceeded. Empty output = ANTHROPIC_API_KEY missing or invalid. Review step logs before debugging the prompt.</td></tr>
+      <tr><td style="padding:7px 10px"><strong style="color:var(--white)">First run: watch it live</strong></td><td style="padding:7px 10px">Open Actions tab in GitHub while the first run executes. Tail the logs in real time. Claude's reasoning and tool calls are visible — diagnose there before anything else.</td></tr>
+    </table>
+  </div>
+
   <div class="note-box"><strong>Checkpoint:</strong> You've run Claude Code in CI via <code>claude -p</code> without a human at the keyboard. You have a working GitHub Action (or equivalent) that posts automated review comments.</div>
   <button class="complete-btn" onclick="markComplete('p-4-4',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
@@ -2466,7 +2491,57 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 /reload-plugins
 <span class="c"># All commands, agents, and hooks are now live</span></div>
 
-  <div class="cowork-box"><strong>Cowork plugins use the same format.</strong> Enterprise admins create private plugin marketplaces, control who can install what, and auto-install approved plugins for new team members. Cowork also offers Plugin Create — describe what you want, and Claude assembles the plugin package. Open-sourced on GitHub for forking and customization.</div>
+  <div class="divider"></div>
+  <h3>Building a Cowork Plugin — Minimal Working Example</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Cowork plugins use the same <code>plugin.json</code> format as Code plugins. If you've only used Claude Code, here's the full picture for the Cowork capstone requirement. A minimal Cowork plugin has four files:</p>
+
+  <div class="code-block">my-cowork-plugin/
+├── .claude-plugin/
+│   └── plugin.json        <span class="c"># required: name, version, description, author</span>
+├── skills/
+│   ├── weekly-update/
+│   │   └── SKILL.md       <span class="c"># /weekly-update slash command</span>
+│   └── draft-brief/
+│       └── SKILL.md       <span class="c"># /draft-brief slash command</span>
+└── context/
+    └── brand-voice.md     <span class="c"># loaded into every session (optional but valuable)</span></div>
+
+  <div class="card"><div class="card-title">plugin.json (Cowork)</div>
+    <div class="code-block" style="margin:8px 0">{
+  <span class="s">"name"</span>: <span class="s">"acme-gtm-toolkit"</span>,
+  <span class="s">"version"</span>: <span class="s">"1.0.0"</span>,
+  <span class="s">"description"</span>: <span class="s">"Weekly update and brief drafting workflows for GTM team"</span>,
+  <span class="s">"author"</span>: <span class="s">"Acme GTM"</span>
+}</div>
+  </div>
+
+  <div class="card"><div class="card-title">skills/weekly-update/SKILL.md</div>
+    <div class="code-block" style="margin:8px 0">---
+name: weekly-update
+description: Draft a weekly stakeholder update from Slack and project files
+user-invocable: true
+---
+
+Read the files in the current folder. Pull last week's Slack messages from
+#product-updates if connected. Draft a weekly stakeholder update using the
+brand voice in context/brand-voice.md.
+
+Format: subject line, 3-bullet executive summary, detail section.
+Save as: weekly-update-YYYY-MM-DD.docx in the current folder.
+Flag any assumptions you made about what counts as "last week".</div>
+  </div>
+
+  <div class="card"><div class="card-title">How a non-developer installs and uses it</div>
+    <ol style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px;margin-top:8px">
+      <li>Open Claude Desktop → Cowork tab → Customize → Plugins → Browse</li>
+      <li>Find your plugin (published to a GitHub repo) → Install</li>
+      <li>Type <code>/weekly-update</code> in any Cowork session — the skill appears in the slash menu</li>
+      <li>Claude reads the SKILL.md body as its instructions, accesses connected tools, and produces the output</li>
+    </ol>
+    <p style="font-size:12px;color:var(--text3);margin-top:8px">Or use Plugin Create: in the Cowork tab, say <em>"Help me create a plugin for weekly stakeholder updates with a /weekly-update slash command."</em> Claude walks you through building it conversationally — no SKILL.md syntax needed.</p>
+  </div>
+
+  <div class="cowork-box"><strong>Key difference from Code plugins:</strong> Cowork skills don't use <code>context: fork</code>, <code>agent:</code>, or tool lists in frontmatter — Cowork manages model selection and context isolation automatically. Your SKILL.md body is the instruction; the platform handles execution. Enterprise admins can create private marketplaces, control installation, and auto-install approved plugins for new team members.</div>
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>plugin.json</code> manifest · <code>--scope project|user|local</code> · <code>/plugin marketplace add</code> · <code>/reload-plugins</code></p></div>
 
@@ -2865,6 +2940,35 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   <div class="card"><div class="card-title">Cross-surface test</div><p>"Could I teach this to a peer who uses the <em>other</em> surface (Code ↔ Cowork)? Could I explain why the concepts transfer?" If yes, you've internalized the mental model, not just the tool.</p></div>
 
   <div class="blockquote">The course is complete when your expertise is externalized — it lives in the harness, compounds with every session, transfers to every new team member, and works across both surfaces. You are the architect. The harness is the system.</div>
+
+  <div class="divider"></div>
+  <h3>Artifact Taxonomy</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">These terms are used precisely throughout the course. If they blur together, use this table:</p>
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:0 0 20px">
+    <div class="rubric-row rubric-header-row"><div class="rubric-cell">Term</div><div class="rubric-cell">What it is</div><div class="rubric-cell">How invoked</div><div class="rubric-cell">Cowork equivalent</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Skill</div><div class="rubric-cell">A <code>SKILL.md</code> file with YAML frontmatter + instruction body. A persistent prompt, not compiled code.</div><div class="rubric-cell">Slash command (<code>/pr-review</code>) or by Claude automatically when relevant</div><div class="rubric-cell">Skill file in a Cowork plugin folder</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Slash command</div><div class="rubric-cell">The <code>/name</code> shortcut that invokes a skill. Slash command = the trigger. Skill = the instruction behind it.</div><div class="rubric-cell">Type <code>/</code> in any session to see the menu</div><div class="rubric-cell">Same — Cowork skills appear in the slash menu</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Agent</div><div class="rubric-cell">A <code>.claude/agents/name.md</code> file. Defines a specialist Claude instance with its own model, tools, memory, and permissions.</div><div class="rubric-cell">Dispatched from a skill (<code>context:fork</code>), called by name, or auto-invoked when relevant</div><div class="rubric-cell">Sub-agent inside a Cowork plugin</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Hook</div><div class="rubric-cell">A shell command (or http/mcp_tool/prompt/agent) wired to a lifecycle event in <code>settings.json</code>. Always runs — deterministic, not probabilistic.</div><div class="rubric-cell">Automatically at the wired event (e.g., every Edit → PostToolUse)</div><div class="rubric-cell">Global instruction safety defaults (approximate equivalent)</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Plugin</div><div class="rubric-cell">A folder with <code>.claude-plugin/plugin.json</code> bundling skills + agents + hooks + MCP config. Installable in one command.</div><div class="rubric-cell"><code>/plugin install</code> or marketplace browse</div><div class="rubric-cell">Cowork plugin (same format, simpler frontmatter)</div></div>
+  </div>
+
+  <div class="divider"></div>
+  <h3>Capstone Evidence Table</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">For each capstone requirement, here is what to submit and what passes:</p>
+  <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:0 0 20px">
+    <div class="rubric-row rubric-header-row"><div class="rubric-cell">Requirement</div><div class="rubric-cell">Expected file / output</div><div class="rubric-cell">Passes if…</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">CLAUDE.md</div><div class="rubric-cell"><code>CLAUDE.md</code> at repo root</div><div class="rubric-cell">Has stack, commands, conventions, and at least one <code>@file</code> reference. Under 200 lines.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Static skill</div><div class="rubric-cell"><code>.claude/skills/[name]/SKILL.md</code></div><div class="rubric-cell">Valid frontmatter. Body contains meaningful instructions Claude follows when invoked. Appears in <code>/</code> menu.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">$ARGUMENTS skill</div><div class="rubric-cell"><code>.claude/skills/[name]/SKILL.md</code> with <code>$ARGUMENTS</code> in body</div><div class="rubric-cell"><code>$ARGUMENTS</code> is used meaningfully — not just appended. Invoking with and without args produces different behaviour.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">context:fork skill</div><div class="rubric-cell"><code>.claude/skills/[name]/SKILL.md</code> with <code>context: fork</code> in frontmatter</div><div class="rubric-cell">Invocation triggers a subagent (visible in <code>/agents</code> Running tab) and returns a summary to the main session.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Custom agent</div><div class="rubric-cell"><code>.claude/agents/[name].md</code> with <code>memory: user</code></div><div class="rubric-cell">Agent has a meaningful description, defined tools list, and model. A <code>.claude/memory/</code> file exists after first invocation (gitignored — screenshot as evidence).</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Formatting hook</div><div class="rubric-cell"><code>.claude/settings.json</code> with PostToolUse hook</div><div class="rubric-cell">Making a code edit triggers the formatter automatically (show hook output in terminal screenshot).</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Safety hook</div><div class="rubric-cell"><code>.claude/settings.json</code> with PreToolUse hook</div><div class="rubric-cell">Asking Claude to run a blocked command produces a block message (show blocked output).</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">MCP connection</div><div class="rubric-cell"><code>.mcp.json</code> or <code>.claude/mcp.json</code></div><div class="rubric-cell">At least one MCP server configured. <code>/mcp</code> shows it as connected. Local filesystem MCP is sufficient.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">Plugin</div><div class="rubric-cell"><code>plugin/.claude-plugin/plugin.json</code> with bundled skills + agent + hook</div><div class="rubric-cell"><code>npm test &amp;&amp; npm run build</code> pass. Plugin installs locally with <code>/plugin install ./plugin</code>.</div></div>
+    <div class="rubric-row"><div class="rubric-cell rubric-area">CI workflow</div><div class="rubric-cell"><code>.github/workflows/claude-review.yml</code></div><div class="rubric-cell">Workflow runs on PR. Claude posts a review comment. Screenshot of the comment on a real PR.</div></div>
+  </div>
 
   <div class="divider"></div>
   <h3>Completion Certificate</h3>
