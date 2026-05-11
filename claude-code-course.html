@@ -198,6 +198,18 @@ h3{font-size:16px;font-weight:700;color:var(--white);margin:24px 0 10px}h3:first
 body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1a1a1a;--border:#555;--border2:#777;--text:#fff;--text2:#e0e0e0;--text3:#aaa;--white:#fff;--accent:#00ffff;--accent3:#00ff88}
 .a11y-bar{display:flex;align-items:center;gap:6px;margin-top:8px}.a11y-bar button{background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--text3);font-size:12px;padding:3px 8px;cursor:pointer;transition:all .2s;line-height:1}.a11y-bar button:hover{border-color:var(--accent);color:var(--accent)}.a11y-bar .kbd-hint-inline{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);margin-left:auto}
 .kbd-hint{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);padding:6px 20px 10px;letter-spacing:.5px}
+/* ═══ TRANSCRIPT ═══ */
+.time-est{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);letter-spacing:.5px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.time-est::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
+.transcript-block{display:flex;flex-direction:column;gap:0;margin:16px 0 24px;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.t-turn{padding:12px 16px;display:flex;flex-direction:column;gap:4px}
+.t-turn.t-human{background:rgba(0,212,255,.04);border-bottom:1px solid var(--border)}
+.t-turn.t-claude{background:rgba(0,255,157,.03);border-bottom:1px solid var(--border)}
+.t-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3)}
+.t-turn.t-human .t-label{color:var(--accent)}
+.t-turn.t-claude .t-label{color:var(--accent3)}
+.t-content{font-size:13px;color:var(--text2);line-height:1.6}
+.t-annotation{padding:8px 16px;font-size:12px;color:var(--lv4);line-height:1.6;background:rgba(167,139,250,.04);border-bottom:1px solid var(--border);border-left:3px solid var(--lv4);font-style:italic}
 </style>
 </head>
 <body>
@@ -263,6 +275,7 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
       <div class="journey-stage" style="background:rgba(167,139,250,.06)"><div class="j-icon">●</div><div class="j-label" style="color:var(--lv4)">Native</div><div class="j-count">6 modules + 1 lab</div></div>
     </div></div>
   <div class="content-wrap">
+    <div class="time-est">⏱ 10 min read</div>
     <h3>The Mental Model — Externalization</h3>
     <div class="blockquote">Claude Code and Cowork are both <strong style="color:var(--white)">harnesses</strong> that externalize memory, skills, and protocols around the same agent loop. Code gives the agent a codebase. Cowork gives it your work life. Learn the loop once, apply it everywhere.</div>
     <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">This course uses the <strong style="color:var(--white)">externalization</strong> framework from cognitive science and LLM agent research. Following Norman's theory of cognitive artifacts, external tools don't just enhance capabilities — they change the nature of the tasks the model addresses. Every Claude Code and Cowork feature maps to one of four externalization dimensions:</p>
@@ -318,6 +331,7 @@ git checkout milestone-1-scaffold  <span class="c"># start at your level</span><
 <!-- L1: WHAT IS CLAUDE CODE -->
 <div class="page" id="p-1-1"><div class="content-wrap">
   <div class="section-eyebrow ey-1">Level 1 · Unaware · Module 01</div><div class="phase-badge b-1">● What is Claude Code?</div>
+  <div class="time-est">⏱ 8 min</div>
   <h2 class="page-title">What is Claude Code?</h2>
   <p class="page-subtitle">Differentiate Claude Code from chat-based AI and code autocomplete. Understand what "agentic coding" means and why it matters.</p>
 
@@ -364,6 +378,7 @@ git checkout milestone-1-scaffold  <span class="c"># start at your level</span><
 <!-- L1: WHAT IS AN AI AGENT -->
 <div class="page" id="p-1-2"><div class="content-wrap">
   <div class="section-eyebrow ey-1">Level 1 · Unaware · Module 02</div><div class="phase-badge b-1">● What is an AI Agent?</div>
+  <div class="time-est">⏱ 12 min</div>
   <h2 class="page-title">What is an AI Agent?</h2>
   <p class="page-subtitle">The core concept behind everything in this course. Once you internalize the agent loop, you stop memorizing features and start understanding why they exist.</p>
 
@@ -422,6 +437,7 @@ git checkout milestone-1-scaffold  <span class="c"># start at your level</span><
 <!-- L1: CODE VS COWORK -->
 <div class="page" id="p-1-3"><div class="content-wrap">
   <div class="section-eyebrow ey-1">Level 1 · Unaware · Module 03</div><div class="phase-badge b-1">● Code vs. Cowork</div>
+  <div class="time-est">⏱ 10 min</div>
   <h2 class="page-title">Same Loop, Different Surface</h2>
   <p class="page-subtitle">Two products built on one architecture. Learn once, apply everywhere. This module maps every concept so you never need to learn twice.</p>
 
@@ -531,6 +547,7 @@ Example writing sample:
 <!-- L1: WHY SWITCHING -->
 <div class="page" id="p-1-4"><div class="content-wrap">
   <div class="section-eyebrow ey-1">Level 1 · Unaware · Module 04</div><div class="phase-badge b-1">● Why Teams Are Switching</div>
+  <div class="time-est">⏱ 8 min</div>
   <h2 class="page-title">Why Teams Are Switching</h2>
   <p class="page-subtitle">The productivity case for agentic AI — with real numbers, real workflows, and the three unlocks that change how teams ship.</p>
 
@@ -567,6 +584,7 @@ Example writing sample:
 <!-- L2: INSTALL -->
 <div class="page" id="p-2-1"><div class="content-wrap">
   <div class="section-eyebrow ey-2">Level 2 · Curious · Module 05</div><div class="phase-badge b-2">● Install & First Run</div>
+  <div class="time-est">⏱ 15 min + setup</div>
   <h2 class="page-title">Install & First Run</h2>
   <p class="page-subtitle">Get Claude Code running in your terminal. Verify the setup. Meet /powerup — the built-in tutorial that teaches you while you work.</p>
 
@@ -634,6 +652,7 @@ claude
 <!-- L2: PROMPTS + HOUSEKEEPING + CONTEXT -->
 <div class="page" id="p-2-2"><div class="content-wrap">
   <div class="section-eyebrow ey-2">Level 2 · Curious · Module 06</div><div class="phase-badge b-2">● Prompts, Context & Housekeeping</div>
+  <div class="time-est">⏱ 20 min</div>
   <h2 class="page-title">First Prompts, Context Management & Housekeeping</h2>
   <p class="page-subtitle">Put the agent loop into practice. Learn the everyday commands. Understand why sessions degrade and how to prevent it.</p>
 
@@ -771,6 +790,7 @@ claude --model claude-sonnet-4-6
 <!-- L2: VS CODE -->
 <div class="page" id="p-2-3"><div class="content-wrap">
   <div class="section-eyebrow ey-2">Level 2 · Curious · Module 07</div><div class="phase-badge b-2">● Claude Code in VS Code</div>
+  <div class="time-est">⏱ 10 min</div>
   <h2 class="page-title">Claude Code in VS Code</h2>
   <p class="page-subtitle">Bring the agent into the editor where you already work. No terminal switching, no copy-paste — Claude sees what you see.</p>
 
@@ -813,6 +833,7 @@ claude --model claude-sonnet-4-6
 <!-- L2: PLAN MODE -->
 <div class="page" id="p-2-4"><div class="content-wrap">
   <div class="section-eyebrow ey-2">Level 2 · Curious · Module 08</div><div class="phase-badge b-2">● Plan Mode & Diff Review</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Plan Mode & Reviewing Diffs</h2>
   <p class="page-subtitle">Think before you type. Review before you accept. These two skills separate productive Claude Code users from frustrated ones.</p>
 
@@ -859,6 +880,7 @@ claude --model claude-sonnet-4-6
 <!-- L2: PROMPTING -->
 <div class="page" id="p-2-5"><div class="content-wrap">
   <div class="section-eyebrow ey-2">Level 2 · Curious · Module 09</div><div class="phase-badge b-2">● Prompting Patterns</div>
+  <div class="time-est">⏱ 20 min</div>
   <h2 class="page-title">Prompting Patterns That Work</h2>
   <p class="page-subtitle">Universal patterns for any agent — Code or Cowork. These aren't chatbot tricks; they're ways of guiding the agent loop reliably.</p>
 
@@ -953,6 +975,7 @@ Save as .pptx with our brand template.
 <!-- L3: CLAUDE.MD + MEMORY -->
 <div class="page" id="p-3-1"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 10</div><div class="phase-badge b-3">● CLAUDE.md, Memory & Setup</div>
+  <div class="time-est">⏱ 25 min + hands-on</div>
   <h2 class="page-title">CLAUDE.md, .claude/memory/, & .claudeignore</h2>
   <p class="page-subtitle">Externalize codebase knowledge into three memory layers. Set up the project so every session starts smarter than the last.</p>
 
@@ -1049,6 +1072,53 @@ coverage/
 
   <div class="card"><div class="card-title">Artifact Taxonomy</div><div class="table-wrap"><table><thead><tr><th>Artifact</th><th>What it is</th></tr></thead><tbody><tr><td><strong>Skill</strong> (<code>/skill-name</code>)</td><td>A markdown procedure file in <code>.claude/skills/</code></td></tr><tr><td><strong>Slash command</strong></td><td>What you type to invoke a skill</td></tr><tr><td><strong>Agent</strong></td><td>A subagent with its own persona and memory, in <code>.claude/agents/</code></td></tr><tr><td><strong>Plugin</strong></td><td>A packaged bundle of skills, agents, hooks, and MCP config</td></tr></tbody></table></div></div>
 
+  <h3>Real Session: Bootstrapping CLAUDE.md</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Here is what a real setup session looks like. Annotations in <span style="color:var(--lv4)">purple</span> explain what Claude is doing at each step.</p>
+
+  <div class="transcript-block">
+    <div class="t-turn t-human">
+      <div class="t-label">You (terminal)</div>
+      <div class="t-content"><code>claude init</code></div>
+    </div>
+    <div class="t-annotation">Claude reads your package.json, tsconfig.json, src/ structure, and existing test files. It infers stack, conventions, and patterns — this takes 10–20 seconds on a typical project.</div>
+    <div class="t-turn t-claude">
+      <div class="t-label">Claude</div>
+      <div class="t-content">I've analyzed your codebase. Generated <code>CLAUDE.md</code> with your TypeScript/Commander stack, npm commands, and src/commands/ pattern. Review and edit it — I'll treat it as authoritative policy from this session forward.</div>
+    </div>
+    <div class="t-annotation">The generated file is a starting point, not finished. The next step is to make it authoritative.</div>
+
+    <div class="t-turn t-human">
+      <div class="t-label">You</div>
+      <div class="t-content">Update CLAUDE.md: we never use console.log for errors — always console.error. And all file I/O goes through src/store/tasks.ts, never directly from commands.</div>
+    </div>
+    <div class="t-annotation">You are encoding team conventions that a linter can't catch. These are the highest-value lines in CLAUDE.md — non-obvious rules Claude would otherwise violate.</div>
+    <div class="t-turn t-claude">
+      <div class="t-label">Claude</div>
+      <div class="t-content">Updated CLAUDE.md with two rules under ## Don't: "Use console.log for errors — use console.error" and "Read/write files directly from src/commands/ — all I/O goes through src/store/tasks.ts".</div>
+    </div>
+
+    <div class="t-turn t-human">
+      <div class="t-label">You</div>
+      <div class="t-content">Add @docs/architecture.md as an @file reference in the Architecture section.</div>
+    </div>
+    <div class="t-annotation">@file references load the target file into context on demand, without pasting its full content into CLAUDE.md. Keeps CLAUDE.md short; Claude fetches depth when it needs it.</div>
+    <div class="t-turn t-claude">
+      <div class="t-label">Claude</div>
+      <div class="t-content">Added <code>See @docs/architecture.md for system boundaries.</code> under ## Architecture. Claude will load that file whenever architecture context is relevant.</div>
+    </div>
+
+    <div class="t-turn t-human">
+      <div class="t-label">You</div>
+      <div class="t-content">What are the conventions for this project?</div>
+    </div>
+    <div class="t-annotation">This is the verification step. You're confirming Claude reads CLAUDE.md correctly before writing any code. A wrong answer here means your CLAUDE.md has an issue — fix it now, not after a broken diff.</div>
+    <div class="t-turn t-claude">
+      <div class="t-label">Claude</div>
+      <div class="t-content">From CLAUDE.md: TypeScript strict mode, no any. One file per command in src/commands/. All I/O through src/store/tasks.ts. Errors via console.error. Tests in __tests__/ mirroring src/ structure. New commands and features both require tests before the PR.</div>
+    </div>
+    <div class="t-annotation" style="border-color:rgba(0,255,157,.3);background:rgba(0,255,157,.04)">✓ Claude recited the rules correctly. CLAUDE.md is working. You can now start writing code with confidence that Claude will follow your project's conventions.</div>
+  </div>
+
   <div class="note-box"><strong>Checkpoint:</strong> Your repo has a CLAUDE.md (under 200 lines), a .claudeignore, and you can explain the three memory layers (CLAUDE.md = semantic, .claude/memory/ = episodic, agent memory = per-agent). You know which goes in git and which doesn't.</div>
   <button class="complete-btn" onclick="markComplete('p-3-1',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
@@ -1056,6 +1126,7 @@ coverage/
 <!-- LAB A -->
 <div class="page" id="p-lab-a"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab A · Self-Study Guide Part 1 Module 2</div><div class="phase-badge b-lab">📘 Advanced RAG & Knowledge Memory</div>
+  <div class="time-est">⏱ 2–4 hrs (MVP: 45 min)</div>
   <h2 class="page-title">Advanced RAG & Security Knowledge Memory</h2>
   <p class="page-subtitle">~8–12 hours. Move beyond basic vector search into retrieval methods that preserve context, reduce hallucination, and give grounded citations.</p>
 
@@ -1149,6 +1220,7 @@ filtered = vector_retriever.with_config(
 <!-- L3: SKILLS -->
 <div class="page" id="p-3-2"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 11</div><div class="phase-badge b-3">● Skills & $ARGUMENTS</div>
+  <div class="time-est">⏱ 20 min + hands-on</div>
   <h2 class="page-title">Custom Skills, $ARGUMENTS, & context:fork</h2>
   <p class="page-subtitle">Externalize procedures into reusable slash commands. Make them dynamic with parameters. Run them in isolated subagents for clean context.</p>
 
@@ -1240,6 +1312,7 @@ Research $ARGUMENTS thoroughly:
 <!-- L3: SUBAGENTS -->
 <div class="page" id="p-3-3"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 12</div><div class="phase-badge b-3">● Subagents & Background</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Built-in Subagents</h2>
   <p class="page-subtitle">Nested agent loops that protect your main context. Up to 10 in parallel. Background them and keep working.</p>
 
@@ -1272,6 +1345,7 @@ Research $ARGUMENTS thoroughly:
 <!-- LAB B -->
 <div class="page" id="p-lab-b"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab B · Self-Study Guide Part 1 Module 1</div><div class="phase-badge b-lab">📘 Multi-Agent Orchestration</div>
+  <div class="time-est">⏱ 3–5 hrs (MVP: 60 min)</div>
   <h2 class="page-title">Multi-Agent Orchestration</h2>
   <p class="page-subtitle">~8–12 hours. Understand agent roles, task decomposition, communication patterns, and safety boundaries by building a multi-agent pipeline from scratch.</p>
 
@@ -1396,6 +1470,7 @@ crew = Crew(
 <!-- L3: PLUGINS -->
 <div class="page" id="p-3-4"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 13</div><div class="phase-badge b-3">● Plugins & Bundled Skills</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Plugins & Bundled Skills</h2>
   <p class="page-subtitle">Install before building. Use the built-ins you didn't know existed. The plugin ecosystem is the fastest way to add capability without writing a single skill file.</p>
 
@@ -1462,6 +1537,7 @@ npm i -g typescript-language-server typescript
 <!-- L3: MCP -->
 <div class="page" id="p-3-5"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 14</div><div class="phase-badge b-3">● MCP & Connectors</div>
+  <div class="time-est">⏱ 20 min + setup</div>
   <h2 class="page-title">MCP Servers & Connectors</h2>
   <p class="page-subtitle">How agents talk to external tools. The Model Context Protocol is the open standard behind both Code's MCP servers and Cowork's connectors.</p>
 
@@ -1529,6 +1605,7 @@ claude mcp run obsidian</div>
 <!-- L3: HOOKS -->
 <div class="page" id="p-3-6"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 15</div><div class="phase-badge b-3">● Hooks & Safety Defaults</div>
+  <div class="time-est">⏱ 20 min + hands-on</div>
   <h2 class="page-title">Hooks & Safety Defaults</h2>
   <p class="page-subtitle">Deterministic shell commands that fire at lifecycle events. They always run — unlike LLM behavior, which is probabilistic. Hooks are your quality gates.</p>
 
@@ -1651,6 +1728,7 @@ date "+Today is %A, %B %d, %Y"</div>
 <!-- L3: DEBUGGING -->
 <div class="page" id="p-3-7"><div class="content-wrap">
   <div class="section-eyebrow ey-3">Level 3 · Fluent · Module 16</div><div class="phase-badge b-3">● Debugging Patterns</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Debugging with Claude Code</h2>
   <p class="page-subtitle">The #1 daily use case. Start with the built-in /debug skill, then apply manual patterns for complex cases.</p>
 
@@ -1712,6 +1790,7 @@ date "+Today is %A, %B %d, %Y"</div>
 <!-- L4: AGENT TEAMS -->
 <div class="page" id="p-4-1"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 17</div><div class="phase-badge b-4">● Custom Agent Teams</div>
+  <div class="time-est">⏱ 25 min + hands-on</div>
   <h2 class="page-title">Custom Subagents & Agent Teams</h2>
   <p class="page-subtitle">Design specialized agents with persistent memory, permission boundaries, and model selection. Chain them into multi-phase pipelines. Up to 10 in parallel.</p>
 
@@ -1807,6 +1886,7 @@ After review:
 <!-- LAB C -->
 <div class="page" id="p-lab-c"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab C · Self-Study Guide Part 1 Module 3</div><div class="phase-badge b-lab">📘 Local LLM Security & Deployment</div>
+  <div class="time-est">⏱ 3–5 hrs (MVP: 60 min)</div>
   <h2 class="page-title">Local LLM Security & Deployment</h2>
   <p class="page-subtitle">~8–12 hours. Deploy agents outside the managed harness — with proper sandboxing, audit logging, command enforcement, and container isolation.</p>
 
@@ -1931,6 +2011,7 @@ DENIED_CMDS  = [<span class="s">"rm -rf"</span>, <span class="s">"curl | bash"</
 <!-- L4: SCHEDULING -->
 <div class="page" id="p-4-2"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 18</div><div class="phase-badge b-4">● Background, Scheduling & Voice</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Background Agents, Scheduling & Voice</h2>
   <p class="page-subtitle">Schedule Claude to do work while you sleep. Talk to it hands-free. Both Code and Cowork now have scheduling — in different forms.</p>
 
@@ -1989,6 +2070,7 @@ Ctrl+F</div>
 <!-- L4: WORKTREES -->
 <div class="page" id="p-4-3"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 19</div><div class="phase-badge b-4">● Worktrees & Batch</div>
+  <div class="time-est">⏱ 12 min</div>
   <h2 class="page-title">Git Worktrees & /batch</h2>
   <p class="page-subtitle">Stop stashing. Start parallelizing. Each Claude session gets its own isolated directory with its own branch.</p>
 
@@ -2043,6 +2125,7 @@ claude -w feature-auth -n <span class="s">"auth-oauth2"</span>
 <!-- L4: HEADLESS -->
 <div class="page" id="p-4-4"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 20</div><div class="phase-badge b-4">● Headless Mode & Agent SDK</div>
+  <div class="time-est">⏱ 20 min</div>
   <h2 class="page-title">Headless Mode & the Agent SDK</h2>
   <p class="page-subtitle">If Claude Code can fix a bug manually, it can fix a bug in CI. Run the agent loop without a human at the keyboard.</p>
 
@@ -2127,6 +2210,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- L4: BUILD PLUGIN -->
 <div class="page" id="p-4-5"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 21</div><div class="phase-badge b-4">● Build Your Plugin</div>
+  <div class="time-est">⏱ 30 min + hands-on</div>
   <h2 class="page-title">Build & Publish Your Plugin</h2>
   <p class="page-subtitle">Your team has tribal knowledge locked in people's heads. A plugin turns it into a one-command install for every new hire — on both Code and Cowork.</p>
 
@@ -2178,6 +2262,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- L4: TEAM OS -->
 <div class="page" id="p-4-6"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 22</div><div class="phase-badge b-4">● Team Operating System</div>
+  <div class="time-est">⏱ 15 min</div>
   <h2 class="page-title">Building Your Team's Operating System</h2>
   <p class="page-subtitle">Fluency is personal. Native means the whole team moves differently — developers and non-developers alike.</p>
 
@@ -2266,6 +2351,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- CAPSTONE -->
 <div class="page" id="p-capstone"><div class="content-wrap">
   <div class="section-eyebrow ey-cap">Synthesis</div><div class="phase-badge b-cap">★ Capstone</div>
+  <div class="time-est">⏱ 4–8 hrs total</div>
   <h2 class="page-title">AI-Augmented Team Workflow</h2>
   <p class="page-subtitle">Build a complete, portable team setup demonstrating every level of the course — for both Code and Cowork surfaces. This is your portfolio piece.</p>
 
@@ -2355,6 +2441,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- COMMANDS -->
 <div class="page" id="p-commands"><div class="content-wrap">
   <div class="section-eyebrow ey-cap">Reference</div>
+  <div class="time-est">⏱ reference</div>
   <h2 class="page-title">Full Command Reference</h2>
   <p class="page-subtitle">Every command, shortcut, and flag — organized by maturity level. The Cowork column shows the equivalent on the non-code surface.</p>
 
@@ -2432,6 +2519,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- RUBRIC -->
 <div class="page" id="p-rubric"><div class="content-wrap">
   <div class="section-eyebrow ey-cap">Synthesis</div>
+  <div class="time-est">⏱ 10 min</div>
   <h2 class="page-title">Assessment Rubric</h2>
   <p class="page-subtitle">Calibrate your progress at the end of each level. Use this for self-assessment or peer evaluation.</p>
 
@@ -2487,6 +2575,7 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <!-- GLOSSARY + FAQ + WHAT'S NEXT -->
 <div class="page" id="p-glossary"><div class="content-wrap">
   <div class="section-eyebrow ey-cap">Reference</div>
+  <div class="time-est">⏱ reference</div>
   <h2 class="page-title">Glossary, FAQ & What's Next</h2>
   <p class="page-subtitle">Every term defined. Top questions answered. Where to go after this course.</p>
 
