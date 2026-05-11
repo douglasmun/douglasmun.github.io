@@ -210,6 +210,11 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
 .t-turn.t-claude .t-label{color:var(--accent3)}
 .t-content{font-size:13px;color:var(--text2);line-height:1.6}
 .t-annotation{padding:8px 16px;font-size:12px;color:var(--lv4);line-height:1.6;background:rgba(167,139,250,.04);border-bottom:1px solid var(--border);border-left:3px solid var(--lv4);font-style:italic}
+.track-guide{display:flex;flex-direction:column;gap:6px;margin-bottom:16px;padding:12px 16px;background:rgba(255,255,255,.02);border:1px solid var(--border);border-radius:6px}
+.track-guide-item{font-size:13px;color:var(--text2);line-height:1.5;display:flex;align-items:baseline;gap:8px}
+.v-status{font-family:'JetBrains Mono',monospace;font-size:9px;padding:2px 7px;border-radius:3px;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+.v-stable{background:rgba(0,255,157,.1);color:var(--accent3);border:1px solid rgba(0,255,157,.2)}
+.v-preview{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.2)}
 </style>
 </head>
 <body>
@@ -255,6 +260,7 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
     <div class="nav-group" data-group="g5"><div class="nav-group-header" onclick="toggleGroup('g5')"><span class="level-bar cap-bar"></span><span class="arrow">›</span><span class="level-icon">★</span><span class="level-info"><span class="level-name">Synthesis</span><span class="level-desc">Capstone & reference</span></span><span class="level-count cap-count" id="count-g5">0/4</span></div><div class="nav-group-items">
       <a class="nav-item" onclick="showPage('p-capstone',this)"><span class="nav-num">★</span><span class="nav-label">Capstone Project</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-commands',this)"><span class="nav-num">—</span><span class="nav-label">Command Reference</span><span class="check-icon">✓</span></a>
+      <a class="nav-item" onclick="showPage('p-versions',this)"><span class="nav-num">—</span><span class="nav-label">Version Matrix</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-glossary',this)"><span class="nav-num">—</span><span class="nav-label">Glossary, FAQ & Next</span><span class="check-icon">✓</span></a>
       <a class="nav-item" onclick="showPage('p-rubric',this)"><span class="nav-num">—</span><span class="nav-label">Assessment Rubric</span><span class="check-icon">✓</span></a>
     </div></div>
@@ -2358,9 +2364,15 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   <div class="card"><div class="card-title"><span class="tag tag-obj">Objective</span></div><p>Produce a working repo that another team could clone and be productive with immediately. This proves you've internalized externalization — your knowledge lives in the harness, not in your head.</p></div>
 
   <h3>Capstone Tracks</h3>
-  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">Choose a track based on your access to paid/external services. Higher tracks build on lower ones.</p>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:6px">Three complete outcomes — each one is a genuine win. Pick the track that fits your context.</p>
+<div class="track-guide">
+  <div class="track-guide-item"><span style="color:var(--lv2)">◆</span> <strong style="color:var(--white)">Solo developer</strong> → Core Pass is your target. It proves you can externalize a full dev workflow.</div>
+  <div class="track-guide-item"><span style="color:var(--lv3)">◆</span> <strong style="color:var(--white)">Individual contributor with CI access</strong> → Professional Pass. Your setup runs while you sleep.</div>
+  <div class="track-guide-item"><span style="color:var(--lv4)">◆</span> <strong style="color:var(--white)">Tech lead or team builder</strong> → Native/Team Pass. Your knowledge lives in the harness, not your head.</div>
+</div>
 
-  <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--lv2)"><span class="tag tag-obj">Core Pass</span> No paid/external services required</div>
+  <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--lv2)"><span class="tag tag-obj">Core Pass</span> The complete solo developer setup</div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px">A self-contained AI-augmented development workflow. No external accounts, no team required. This is a complete outcome — not a stepping stone.</p>
     <ol style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px;margin-top:8px">
       <li>CLAUDE.md with <code>@file</code> references — under 200 lines, stack/commands/conventions/don'ts</li>
       <li>Three custom skills: one static, one with <code>$ARGUMENTS</code>, one with <code>context:fork</code></li>
@@ -2370,16 +2382,16 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
     </ol>
   </div>
 
-  <div class="card" style="border-color:rgba(0,255,157,.3)"><div class="card-title" style="color:var(--lv3)"><span class="tag tag-cmd">Professional Pass</span> Adds external services</div>
-    <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Complete Core Pass first, then add:</p>
+  <div class="card" style="border-color:rgba(0,255,157,.3)"><div class="card-title" style="color:var(--lv3)"><span class="tag tag-cmd">Professional Pass</span> Your workflow runs in CI, not just locally</div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px">Everything in Core Pass, plus automated review that runs on every PR — your standards enforced even when you're not at the keyboard.</p>
     <ol start="6" style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px">
       <li>Plugin package with <code>plugin.json</code> — bundles all skills, agents, hooks, and MCP config</li>
       <li>CI headless task in GitHub Actions — <code>claude -p</code> for automated PR review or security scan</li>
     </ol>
   </div>
 
-  <div class="card" style="border-color:rgba(167,139,250,.3)"><div class="card-title" style="color:var(--lv4)"><span class="tag tag-new">Native/Team Pass</span> Full team OS</div>
-    <p style="font-size:12px;color:var(--text3);margin-bottom:8px">Complete Professional Pass first, then add:</p>
+  <div class="card" style="border-color:rgba(167,139,250,.3)"><div class="card-title" style="color:var(--lv4)"><span class="tag tag-new">Native/Team Pass</span> Your expertise ships with the repo</div>
+    <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:8px">Everything in Professional Pass, plus your institutional knowledge encoded for teammates and non-developers. A new hire is productive on day one without reading a wiki.</p>
     <ol start="8" style="font-size:13px;color:var(--text2);line-height:1.9;padding-left:20px">
       <li>Cowork context files — about-me.md, brand-voice.md, working-preferences.md with real content</li>
       <li>Custom Cowork plugin for a non-developer role (marketing, ops, legal, sales)</li>
@@ -2423,6 +2435,14 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 
   <div class="divider"></div>
   <h3>The Onboarding Test</h3>
+  <div class="card" style="margin-bottom:12px">
+  <div class="card-title">How to validate your track</div>
+  <div class="topic-list" style="margin-top:6px">
+    <div class="topic-item"><strong style="color:var(--lv2)">Core:</strong> Run <code>git clone . /tmp/test && cd /tmp/test && claude</code> — does Claude know your project without explanation?</div>
+    <div class="topic-item"><strong style="color:var(--lv3)">Professional:</strong> Open a PR — does the CI workflow run and produce a useful review?</div>
+    <div class="topic-item"><strong style="color:var(--lv4)">Native/Team:</strong> Hand the repo to a colleague — can they ship something on day one?</div>
+  </div>
+</div>
   <div class="blockquote">The ultimate validation: hand your repo to someone who has never seen it. Give them 10 minutes with Claude Code (or Cowork). Can they produce useful work? If yes, you've built a team operating system. If not, your score will tell you which layer is weakest.</div>
 
   <div class="card"><div class="card-title">Self-assessment questions</div>
@@ -2514,6 +2534,69 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
   </tbody></table></div>
 
   <button class="complete-btn" onclick="markComplete('p-commands',this)">☐ &nbsp;Mark as Read</button>
+</div></div>
+
+<!-- VERSION MATRIX -->
+<div class="page" id="p-versions"><div class="content-wrap">
+  <div class="section-eyebrow ey-cap">Reference</div>
+  <div class="time-est">⏱ reference</div>
+  <h2 class="page-title">Version Matrix</h2>
+  <p class="page-subtitle">Which course content requires which Claude Code version. Use this to identify what changed when you update.</p>
+
+  <div class="note-box"><strong>How to use this page:</strong> Run <code>claude --version</code> to check your current version. If a feature row shows a higher version than you have, run <code>claude update</code> or check the install page for the native binary installer.</div>
+
+  <h3>Feature Version Requirements</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Feature</th><th>Module</th><th>Min Version</th><th>Plan Required</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr data-surface="cli"><td>Core CLI (<code>claude</code>, <code>/help</code>, <code>/clear</code>)</td><td>M05</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>CLAUDE.md + <code>claude init</code></td><td>M10</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Skills + <code>$ARGUMENTS</code></td><td>M11</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Built-in subagents (Explore, Plan)</td><td>M12</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>MCP servers (<code>.mcp.json</code>)</td><td>M14</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Hooks (PostToolUse, PreToolUse)</td><td>M15</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Custom subagents + <code>memory: user</code></td><td>M17</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Git worktrees (<code>claude -w</code>)</td><td>M19</td><td>v2.0+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="ci"><td>Headless mode (<code>claude -p</code>)</td><td>M20</td><td>Any</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Plugin marketplace (<code>/plugin install</code>)</td><td>M13</td><td>v2.0+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>1M token context window</td><td>M06</td><td>v2.1+</td><td>Max / Team / Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Private plugin marketplaces</td><td>M13</td><td>v2.1+</td><td>Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td><code>opusplan</code> hybrid mode</td><td>M06</td><td>v2.1.84+</td><td>Max / Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Auto mode (<code>claude --auto</code>)</td><td>M06</td><td>v2.1.84+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>LSP plugin (type-aware editing)</td><td>M13</td><td>v2.1+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Background scheduling (<code>/schedule</code>)</td><td>M18</td><td>v2.1.84+</td><td>Pro / Max</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Voice control (<code>/voice</code>)</td><td>M18</td><td>v2.1.84+</td><td>Max</td><td><span class="v-status v-preview">Preview</span></td></tr>
+      <tr data-surface="cli"><td>Cowork Routines (cloud-hosted)</td><td>M18</td><td>—</td><td>Pro / Max</td><td><span class="v-status v-preview">Preview</span></td></tr>
+      <tr data-surface="cli"><td>Computer Use (screen control)</td><td>M03</td><td>—</td><td>Max / Enterprise</td><td><span class="v-status v-preview">Preview</span></td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>Course Version History</h3>
+  <div class="table-wrap"><table>
+    <thead><tr><th>Course Version</th><th>Date</th><th>Vetted Against</th><th>Key Changes</th></tr></thead>
+    <tbody>
+      <tr><td><code>v1.0</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Initial release. 24 modules, 3 labs.</td></tr>
+      <tr><td><code>v1.1</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>21 product gaps fixed. Install method updated to native binary.</td></tr>
+      <tr><td><code>v1.2</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Cheat sheet cross-reference. 18 items added. Auto mode. WebSearch/WebFetch.</td></tr>
+      <tr><td><code>v1.3</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Full content expansion. 7 diagrams. All Levels 0–4 elaborated.</td></tr>
+      <tr><td><code>v1.4</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Time estimates. Scored capstone rubric. Glossary. FAQ. Try-it exercises.</td></tr>
+      <tr><td><code>v1.5</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>CCI backlog (20 items): track split, skill templates, hook schema, offline fallbacks, export progress, print mode, high contrast, command filters, transcript, lab skeletons, reference capstone branch.</td></tr>
+    </tbody>
+  </table></div>
+
+  <h3>How to Stay Current</h3>
+  <div class="card"><div class="card-title">When you see a new Claude Code release</div>
+    <p style="margin-bottom:8px">1. Run <code>claude update</code> to get the latest binary.</p>
+    <p style="margin-bottom:8px">2. Check the <strong>Preview</strong> rows in the Feature Version Requirements table above — previews are the most likely to change.</p>
+    <p style="margin-bottom:8px">3. Run <code>claude doctor</code> to verify your install is healthy after the update.</p>
+    <p>4. If a module stops matching your Claude Code behavior, check the course changelog in the Glossary page — a course update may already be available.</p>
+  </div>
+  <div class="card"><div class="card-title">Version symbols used in this course</div>
+    <p><span class="v-status v-stable">Stable</span> — shipped and generally available, behavior unlikely to change<br>
+    <span class="v-status v-preview" style="margin-left:0">Preview</span> — research preview or early access; behavior may change; plan requirements may shift</p>
+  </div>
+
+  <button class="complete-btn" onclick="markComplete('p-versions',this)">☐ &nbsp;Mark as Read</button>
 </div></div>
 
 <!-- RUBRIC -->
@@ -2643,8 +2726,8 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 <button id="mobile-toggle" onclick="toggleSidebar()">☰</button>
 <footer style="position:fixed;bottom:0;right:0;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px;z-index:50;background:var(--bg);border-top:1px solid var(--border);border-left:1px solid var(--border);border-radius:8px 0 0 0">Claude Code + Cowork Course v1.0 · May 2026 · by Douglas Mun · Requires Claude Code v2.1.84+</footer>
 <script>
-const completed=new Set();const total=30;
-const groupPages={g0:['p-home'],g1:['p-1-1','p-1-2','p-1-3','p-1-4'],g2:['p-2-1','p-2-2','p-2-3','p-2-4','p-2-5'],g3:['p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7'],g4:['p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6'],g5:['p-capstone','p-commands','p-glossary','p-rubric']};
+const completed=new Set();const total=31;
+const groupPages={g0:['p-home'],g1:['p-1-1','p-1-2','p-1-3','p-1-4'],g2:['p-2-1','p-2-2','p-2-3','p-2-4','p-2-5'],g3:['p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7'],g4:['p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6'],g5:['p-capstone','p-commands','p-versions','p-glossary','p-rubric']};
 function toggleGroup(g){document.querySelector(`.nav-group[data-group="${g}"]`).classList.toggle('open')}
 function showPage(id,el){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));if(el)el.classList.add('active');const pg=el?el.closest('.nav-group'):null;if(pg&&!pg.classList.contains('open'))pg.classList.add('open');document.getElementById('main').scrollTo({top:0,behavior:'instant'});if(document.getElementById('sidebar').classList.contains('open'))document.getElementById('sidebar').classList.remove('open')}
 function markComplete(pid,btn){completed.add(pid);btn.textContent='✓  Completed';btn.classList.add('done');btn.disabled=true;document.querySelectorAll('.nav-item').forEach(i=>{const o=i.getAttribute('onclick');if(o&&o.includes("'"+pid+"'"))i.classList.add('completed')});updateProgress();updateGroupCounts()}
@@ -2659,7 +2742,7 @@ const pageOrder = [
   'p-2-1','p-2-2','p-2-3','p-2-4','p-2-5',
   'p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7',
   'p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6',
-  'p-capstone','p-commands','p-glossary','p-rubric'
+  'p-capstone','p-commands','p-versions','p-glossary','p-rubric'
 ];
 
 const pageMeta = {
@@ -2691,6 +2774,7 @@ const pageMeta = {
   'p-4-6':    {time:'5 min',  title:'Team Operating System'},
   'p-capstone':{time:'2–4 hrs',title:'Capstone Project'},
   'p-commands':{time:'3 min',  title:'Command Reference'},
+  'p-versions':{time:'2 min',  title:'Version Matrix'},
   'p-glossary':{time:'5 min',  title:'Glossary, FAQ & Next'},
   'p-rubric': {time:'3 min',  title:'Assessment Rubric'}
 };
