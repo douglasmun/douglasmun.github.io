@@ -2288,6 +2288,8 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}</div>
 
+  <div class="card"><div class="card-title">Required secrets — add these in repo Settings → Secrets and variables → Actions</div><div class="table-wrap"><table><thead><tr><th>Secret</th><th>What to set</th><th>Used by</th></tr></thead><tbody><tr><td><code>ANTHROPIC_API_KEY</code></td><td>Your key from console.anthropic.com</td><td>claude-review.yml (PR review)</td></tr><tr><td><code>NOTIFY_EMAIL_USER</code></td><td>Your Yahoo address</td><td>discussion-notify.yml (sender)</td></tr><tr><td><code>NOTIFY_EMAIL_PASS</code></td><td>Yahoo App Password (not account password)</td><td>discussion-notify.yml (auth)</td></tr><tr><td><code>NOTIFY_EMAIL_TO</code></td><td>Where discussion alerts go (can be same as USER)</td><td>discussion-notify.yml (recipient)</td></tr></tbody></table></div><p style="font-size:12px;color:var(--text3);margin-top:8px">Missing any secret → that workflow fails silently. See <code>.github/workflows/README.md</code> in the starter repo for setup steps including how to create a Yahoo App Password.</p></div>
+
   <h3>The Agent SDK</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">The Agent SDK (Python and TypeScript) gives you programmatic access to Claude Code's full harness — hooks, tools, memory, and agent orchestration. Build Claude Code into your own applications, not just your terminal:</p>
 
