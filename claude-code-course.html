@@ -101,6 +101,7 @@ h3{font-size:16px;font-weight:700;color:var(--white);margin:24px 0 10px}h3:first
 .cert-print-btn{margin-top:12px;padding:8px 20px;border:1px solid var(--accent);background:transparent;color:var(--accent);border-radius:6px;font-family:'Syne',sans-serif;font-size:11px;cursor:pointer;transition:all .2s}
 .cert-print-btn:hover{background:rgba(0,212,255,.1)}
 @media print{.certificate{border-color:#0066cc;page-break-inside:avoid}.cert-print-btn{display:none}.certificate .cert-name-input{border-bottom-color:#111;color:#111}}
+@media print{body.print-cert *{display:none!important}body.print-cert .certificate,body.print-cert .certificate *{display:revert!important}body.print-cert .certificate{border-color:#0066cc;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);width:680px;margin:0;background:#fff;color:#111}body.print-cert .certificate .cert-name-input{border-bottom-color:#111;color:#111}body.print-cert .certificate .cert-logo,body.print-cert .certificate .cert-date,body.print-cert .certificate .cert-details{color:#444}body.print-cert .certificate .cert-title{color:#111}body.print-cert .certificate .cert-sub{color:#555}}
 /* ═══ QUIZZES ═══ */
 .quiz-wrap{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;margin:24px 0}
 .quiz-title{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:14px;display:flex;align-items:center;gap:8px}
@@ -2986,7 +2987,7 @@ Flag any assumptions you made about what counts as "last week".</div>
       Both surfaces: Claude Code (developers) + Cowork (knowledge workers)
     </div>
     <div class="cert-date" id="cert-date"></div>
-    <button class="cert-print-btn" onclick="document.getElementById('cert-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});window.print()">Print Certificate</button>
+    <button class="cert-print-btn" onclick="printCertificate()">Print Certificate</button>
   </div>
 
   <button class="complete-btn" onclick="markComplete('p-rubric',this)">☐ &nbsp;Mark as Read</button>
@@ -3444,6 +3445,7 @@ function exportProgress() {
 
 // ═══ ACCESSIBILITY (CCI-017) ═══
 function toggleHiContrast(){document.body.classList.toggle('hi-contrast');localStorage.setItem('hiContrast',document.body.classList.contains('hi-contrast'))}
+function printCertificate(){document.getElementById('cert-date').textContent='Completed: '+new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});document.body.classList.add('print-cert');window.print();document.body.classList.remove('print-cert')}
 (function(){if(localStorage.getItem('hiContrast')==='true')document.body.classList.add('hi-contrast')})();
 </script>
 </body>
