@@ -686,6 +686,23 @@ Example writing sample:
 
   <p style="font-size:12px;color:var(--text3);margin-top:8px;font-style:italic">The prompt you'd write is nearly identical in both surfaces: "Summarise what I worked on last week and draft a status update for my stakeholders." The agent loop steps are identical. Only the data sources differ.</p>
 
+  <div class="divider"></div>
+  <h3>Going Deeper: 30 Cowork Best Practices</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">The quick-start above gets you productive. The guide below makes you dangerous. <em>30 Best Practices That Make Claude Cowork 100x More Powerful</em> was compiled from Nav Toor's foundational work, Anthropic's official documentation, and community workflows — and it maps directly to the externalization framework you just learned.</p>
+
+  <div class="compare-grid" style="grid-template-columns:1fr 2fr">
+    <div class="compare-cell compare-header">Part</div><div class="compare-cell compare-header">What it covers</div>
+    <div class="compare-cell compare-label">1 — Context Architecture (1–5)</div><div class="compare-cell">_MANIFEST.md structure, Global Instructions as your permanent OS, three persistent context files (about-me, brand-voice, working-style), folder instructions, deliberate context scoping</div>
+    <div class="compare-cell compare-label">2 — Task Design (6–10)</div><div class="compare-cell">Define end state not process, plan before execution, uncertainty handling, batch related work, subagents for parallel processing</div>
+    <div class="compare-cell compare-label">3 — Automation (11–13)</div><div class="compare-cell">/schedule for recurring tasks, externalize everything to files, combine scheduling with connectors for real automation</div>
+    <div class="compare-cell compare-label">4 — Plugins & Skills (14–16)</div><div class="compare-cell">Stack plugins for compound capability, build custom skills for repeatable workflows, Plugin Create for conversational plugin building</div>
+    <div class="compare-cell compare-label">5 — Safety (17)</div><div class="compare-cell">Treat Cowork like a powerful employee: backup protocols, folder isolation, prompt injection awareness, connector trust verification</div>
+    <div class="compare-cell compare-label">6 — Continuity & QA (18–22)</div><div class="compare-cell">decisions-log.md for session-to-session continuity, self-review steps, rollback protocols for file ops, incremental refinement, monthly system audits</div>
+    <div class="compare-cell compare-label">7 — Workflow Intelligence (23–30)</div><div class="compare-cell">Dedicated sandbox folder, Chat vs. Cowork decision matrix, pre-answer clarifying questions, mid-task steering, Excel↔PowerPoint cross-app, context rot via subagents, draft prompts in Chat first, always review before you ship</div>
+  </div>
+
+  <div class="cowork-box"><strong>The core principle in one line:</strong> Invest in setup. Reduce prompting. Review before shipping. The people thriving with Cowork spent an afternoon on context architecture — and now write ten-word prompts that produce client-ready deliverables. Download the full guide: <a href="https://github.com/douglasmun/Douglas-Guidebook/blob/main/30-cowork-best-practices.pdf" target="_blank" rel="noopener" style="color:var(--cowork)">30-cowork-best-practices.pdf</a></div>
+
   <div class="note-box"><strong>Checkpoint:</strong> You can map any Claude Code concept (CLAUDE.md, skills, MCP, hooks, subagents, worktrees) to its Cowork equivalent — and explain why they're the same underlying idea applied to different access permissions. You can describe what each agent loop step does for the same task across both surfaces.</div>
   <button class="complete-btn" onclick="markComplete('p-1-3',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
@@ -2515,6 +2532,21 @@ claude -p <span class="s">"List all TODO comments"</span> --output-format json</
 └── plugin/
     ├── .claude-plugin/plugin.json  <span class="c"># team plugin manifest</span>
     └── ...                   <span class="c"># bundled skills, agents, hooks</span></div>
+
+  <div class="divider"></div>
+  <h3>Cowork Reference: 30 Best Practices</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">Once your team has the five-layer harness in place, the next step is operating discipline. These 30 practices — compiled from Nav Toor's foundational guide, Anthropic's official documentation, and community workflows — map directly to the layers above and fill the gaps that setup alone doesn't address.</p>
+
+  <div class="card"><div class="card-title">Implementation Checklist (from the guide)</div>
+    <table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--text2)">
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:8px 10px;color:var(--white);width:22%"><strong>Today</strong> (30 min)</td><td style="padding:8px 10px">Create a dedicated working folder. Create your three context files (about-me.md, brand-voice.md, working-style.md). Set your Global Instructions. This alone puts you ahead of 95% of Cowork users.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:8px 10px;color:var(--white)"><strong>This week</strong></td><td style="padding:8px 10px">Add a _MANIFEST.md to your most-used project folder. Install 2–3 role-matched plugins. Set up one scheduled task. Start a decisions-log.md. Use Chat to draft a complex Cowork prompt before running it.</td></tr>
+      <tr style="border-bottom:1px solid var(--border2)"><td style="padding:8px 10px;color:var(--white)"><strong>This month</strong></td><td style="padding:8px 10px">Build your first custom skill for your most repeated workflow. Experiment with subagents on a complex research task. Refine context files based on output quality. Add self-review steps to high-stakes skills.</td></tr>
+      <tr><td style="padding:8px 10px;color:var(--white)"><strong>Monthly</strong> (ongoing)</td><td style="padding:8px 10px">Run a system audit: update manifests, context files, and skills. Mark superseded decisions. Identify new workflows to automate. Review every output before it ships — always.</td></tr>
+    </table>
+  </div>
+
+  <div class="cowork-box"><strong>The gap most teams don't close:</strong> Practices 18–22 (continuity and QA) — decisions-log.md for session handoffs, self-review steps in skills, rollback protocols for file operations, incremental refinement instead of full regeneration, and monthly system audits. These are what separates teams that get consistent results from teams that get impressive demos. Full guide: <a href="https://github.com/douglasmun/Douglas-Guidebook/blob/main/30-cowork-best-practices.pdf" target="_blank" rel="noopener" style="color:var(--cowork)">30-cowork-best-practices.pdf</a></div>
 
   <div class="note-box"><strong>Checkpoint:</strong> Your team repo has all five layers configured. A new contributor (developer or non-developer) has verified they can start their tool and be productive immediately. The team's knowledge is externalized into the harness.</div>
   <button class="complete-btn" onclick="markComplete('p-4-6',this)">☐ &nbsp;Mark Complete</button>
