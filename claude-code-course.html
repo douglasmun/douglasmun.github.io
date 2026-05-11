@@ -683,7 +683,7 @@ Example writing sample:
 
   <div class="card"><div class="card-title"><span class="tag tag-obj">Objective</span></div><p>Understand the business case for agentic AI, be motivated to install, and know what changes in your daily workflow.</p></div>
 
-  <div class="blockquote">Anthropic's internal study found engineers merged 67% more PRs per day with Claude Code — and attempted 27% of work they wouldn't have touched otherwise.</div>
+  <div class="blockquote">The productivity case for AI coding tools is real but contested. Anthropic has published internal adoption data. GitHub's Copilot studies show measurable PR velocity gains. Individual reports vary wildly — 2× for some workflows, near-zero for others. What the evidence consistently shows is that the gains are concentrated in specific task types: boilerplate, test generation, cross-file refactors. That's where this course focuses.</div>
 
   <h3>What Actually Changes</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:14px">The shift isn't "AI writes code for you." The shift is in which tasks you attempt. Work that was too tedious, too cross-cutting, or too risky to start becomes feasible because the agent handles the drudgery while you handle the judgment:</p>
@@ -939,8 +939,14 @@ claude --model claude-sonnet-4-6
     <div class="topic-item"><strong style="color:var(--white)">Git state</strong> — current branch, staged changes, recent commits</div>
   </div>
 
-  <h3>Demo Workflow</h3>
-  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Select a buggy function in the editor. Hit <code>Cmd+Esc</code>. Ask: "Why is this returning null on empty arrays?" Claude reads the selected code plus surrounding context (imports, types, callers), explains the bug, and proposes a fix rendered as an inline diff. Accept or reject directly in the editor.</p>
+  <h3>Hands-On Task — Fix a Bug Without Leaving the Editor</h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Do this now. It takes under 5 minutes and gives you a concrete feel for editor-mode context.</p>
+  <div class="card"><div class="card-title">Step 1 — Open the starter repo in VS Code</div><p>Open the <code>claude-code-course-starter</code> folder. Navigate to <code>src/commands/done.ts</code>. This file handles the <code>done &lt;id&gt;</code> command.</p></div>
+  <div class="card"><div class="card-title">Step 2 — Select the <code>done</code> function body</div><p>Highlight the function from its opening brace to its closing brace. You're telling Claude exactly what to focus on — selected code is weighted more heavily than open tabs.</p></div>
+  <div class="card"><div class="card-title">Step 3 — Launch Claude Code (<code>Cmd+Esc</code> / <code>Ctrl+Esc</code>) and ask:</div><p><em>"What happens if the user passes a non-numeric ID like 'abc'? Is that case handled? If not, propose a fix."</em></p></div>
+  <div class="card"><div class="card-title">Step 4 — Review the inline diff</div><p>Claude proposes a change rendered as a diff in the editor panel. Read the diff. If the fix is correct, accept it. If you disagree with the approach, type a follow-up: <em>"Add the validation but keep the error message consistent with the existing style."</em></p></div>
+  <div class="card"><div class="card-title">Step 5 — Run the tests without leaving VS Code</div><p>Open the VS Code terminal panel (<code>Ctrl+`</code>) and run <code>npm test</code>. If the test for <code>done</code> was already covering this case, it will still pass. If not, ask Claude to add a test for the invalid-ID path.</p></div>
+  <div class="note-box" style="margin-top:16px"><strong>What you just experienced:</strong> Claude had selected code + open tabs + file diagnostics as context — no terminal copy-paste, no switching windows. The editor surface works best for exactly this: a focused question about visible code, answered and applied without breaking your flow.</div>
 
   <h3>Terminal vs. Editor: When to Use Which</h3>
   <div class="card"><div class="card-title">Use the terminal when...</div><p>Multi-file refactors, plan mode explorations, subagent delegation, running tests, git operations, large-scope tasks where you want full context control.</p></div>
@@ -956,7 +962,7 @@ claude --model claude-sonnet-4-6
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Shortcuts Introduced</span></div><p><code>Cmd+Esc</code> / <code>Ctrl+Esc</code> (launch from editor)</p></div>
 
-  <div class="note-box"><strong>Checkpoint:</strong> You've fixed a real bug using the VS Code extension without leaving the editor. You can articulate when you'd use the terminal vs. the editor for a given task.</div>
+  <div class="note-box"><strong>Checkpoint:</strong> You completed Steps 1–5 above: opened <code>done.ts</code>, selected a function, asked Claude a specific question, reviewed the diff, and ran the tests — all without leaving VS Code. You can describe one scenario where you'd use the editor instead of the terminal.</div>
   <button class="complete-btn" onclick="markComplete('p-2-3',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
 
@@ -1256,9 +1262,10 @@ coverage/
 <!-- LAB A -->
 <div class="page" id="p-lab-a"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab A · Self-Study Guide Part 1 Module 2</div><div class="phase-badge b-lab">📘 Advanced RAG & Knowledge Memory</div>
-  <div class="time-est">⏱ 2–4 hrs (MVP: 45 min)</div>
+  <div class="time-est">⏱ MVP 3–5 hrs · Full 15–20 hrs</div>
   <h2 class="page-title">Advanced RAG & Security Knowledge Memory</h2>
-  <p class="page-subtitle">Move beyond basic vector search into retrieval methods that preserve context, reduce hallucination, and give grounded citations. Full completion: 8–12 hours.</p>
+  <p class="page-subtitle">Move beyond basic vector search into retrieval methods that preserve context, reduce hallucination, and give grounded citations.</p>
+  <div class="highlight-box" style="margin-bottom:16px"><p><strong style="color:var(--white)">Time estimate — be honest with yourself:</strong> The MVP (load docs, chunk, embed, retrieve with cosine similarity) takes 3–5 hours if you know Python and have used ML libraries before. If you're new to embeddings or sentence-transformers, budget 6–8 hours for MVP. Full completion with hybrid BM25 + vector search, contextual compression, and citation grounding is 15–20 hours. The 10 sample documents in <code>lab-a-samples/</code> are ready to use — your time goes into the pipeline code, not data preparation.</p></div>
 
   <div class="blockquote">Module 10 teaches you to externalize knowledge into CLAUDE.md. This lab teaches you <em>why knowledge retrieval matters</em> by building a RAG system from scratch. The concepts — hybrid search, contextual compression, citation grounding — explain what happens under the hood when any agent retrieves context from files, MCP servers, or memory.</div>
 
@@ -1358,6 +1365,8 @@ filtered = vector_retriever.with_config(
 
   <div class="card"><div class="card-title"><span class="ext-tag ext-skill">🛠</span> Externalization: Procedural Knowledge</div><p>Skills transform improvised prompts into structured, repeatable procedures. The YAML frontmatter is the <em>specification</em> (what, when, permissions); the body is the <em>execution</em> (how). This maps to the Act step in the agent loop — structured action instead of improvisation.</p></div>
 
+  <div class="highlight-box"><p><strong style="color:var(--white)">What skills are — and are not.</strong> A skill is a <strong style="color:var(--white)">persistent prompt</strong>, not a script. When you invoke <code>/pr-review</code>, Claude reads the SKILL.md body as its instructions and then reasons and acts — just as if you had typed those instructions directly. There is no compiled code, no deterministic execution path, no guaranteed output format. The skill makes Claude <em>more consistent and more repeatable</em>, but it is still Claude reasoning from natural language each time.<br><br>This means: skills can't loop, can't branch conditionally, can't call external APIs, and can't guarantee identical output on identical input. What they <em>can</em> do is encode your team's best practices, constraint set, and process into a reusable form that Claude follows reliably. Think of a skill as a <strong style="color:var(--white)">standing operating procedure</strong>, not a function call.</p></div>
+
   <h3>Skill Anatomy</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Skills live in <code>.claude/skills/</code> (team, committed to repo) or <code>~/.claude/skills/</code> (personal). Each is a folder with a SKILL.md file and optional helper scripts. Slash commands and skills are unified — <code>.claude/commands/</code> still works but <code>.claude/skills/</code> is recommended.</p>
 
@@ -1415,7 +1424,7 @@ Research $ARGUMENTS thoroughly:
   <div class="card"><div class="card-title">When to use each skill type</div><div class="table-wrap"><table><thead><tr><th>Type</th><th>Trigger</th><th>Example</th></tr></thead><tbody><tr><td><strong>Static</strong></td><td>Fixed procedure, no user input</td><td><code>/pr-review</code> always does the same review</td></tr><tr><td><strong>$ARGUMENTS</strong></td><td>User passes a target</td><td><code>/deploy-check staging</code></td></tr><tr><td><strong>context:fork</strong></td><td>Background research needed</td><td><code>/deep-research topic</code> — forks a subagent</td></tr></tbody></table></div></div>
 
   <h3>Project Skills Reference</h3>
-  <div class="card"><div class="card-title">Skills built across this course</div><div class="table-wrap"><table><thead><tr><th>Skill</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>/add-feature</code></td><td>$ARGUMENTS</td><td>Plan, implement, and test a new feature by name</td></tr><tr><td><code>/pr-review</code></td><td>Static</td><td>Review the current branch diff for bugs, security, and style</td></tr><tr><td><code>/deploy-check</code></td><td>$ARGUMENTS</td><td>Verify the application is ready to deploy to a target environment</td></tr><tr><td><code>/deep-research</code></td><td>context:fork</td><td>Research a topic thoroughly across the codebase</td></tr><tr><td><code>/generate-adr</code></td><td>Static</td><td>Draft an architecture decision record for a given decision</td></tr></tbody></table></div></div>
+  <div class="card"><div class="card-title">Skills built across this course</div><div class="table-wrap"><table><thead><tr><th>Skill</th><th>Type</th><th>Description</th></tr></thead><tbody><tr><td><code>/add-feature</code></td><td>$ARGUMENTS</td><td>Plan, implement, and test a new feature by name</td></tr><tr><td><code>/pr-review</code></td><td>Static</td><td>Review the current branch diff for bugs, security, and style</td></tr><tr><td><code>/deploy-check</code></td><td>$ARGUMENTS</td><td>Verify the application is ready to deploy to a target environment</td></tr><tr><td><code>/deep-research</code></td><td>context:fork</td><td>Research a topic across the codebase via Explore subagent</td></tr><tr><td><code>/generate-adr</code></td><td>Static</td><td>Draft an architecture decision record for a given decision</td></tr><tr><td><code>/review-suite</code></td><td>context:fork (orchestrator)</td><td>Dispatch security-scanner + test-reviewer in parallel; synthesise go/no-go</td></tr></tbody></table></div></div>
 
   <h3>Key Frontmatter Fields</h3>
   <div class="topic-list">
@@ -1435,7 +1444,7 @@ Research $ARGUMENTS thoroughly:
 
   <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p>Custom <code>/skill-name</code> slash commands · <code>$ARGUMENTS</code> for dynamic parameters · <code>context: fork</code> + <code>agent:</code> frontmatter</p></div>
 
-  <div class="note-box"><strong>Checkpoint:</strong> You've built three skills: one static (/pr-review), one with $ARGUMENTS (/deploy-check), and one with context:fork (/deep-research). All three work from the slash menu.</div>
+  <div class="note-box"><strong>Checkpoint:</strong> You can explain what a skill actually is (a persistent prompt, not a script), name the three patterns (static, $ARGUMENTS, context:fork), and describe when each is appropriate. You've built at least one skill in the starter repo that Claude follows when you invoke it from the slash menu.</div>
   <button class="complete-btn" onclick="markComplete('p-3-2',this)">☐ &nbsp;Mark Complete</button>
 </div></div>
 
@@ -1475,9 +1484,10 @@ Research $ARGUMENTS thoroughly:
 <!-- LAB B -->
 <div class="page" id="p-lab-b"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab B · Self-Study Guide Part 1 Module 1</div><div class="phase-badge b-lab">📘 Multi-Agent Orchestration</div>
-  <div class="time-est">⏱ 3–5 hrs (MVP: 60 min)</div>
+  <div class="time-est">⏱ MVP 3–5 hrs · Full 12–16 hrs</div>
   <h2 class="page-title">Multi-Agent Orchestration</h2>
-  <p class="page-subtitle">Understand agent roles, task decomposition, communication patterns, and safety boundaries by building a multi-agent pipeline from scratch. Full completion: 8–12 hours.</p>
+  <p class="page-subtitle">Understand agent roles, task decomposition, communication patterns, and safety boundaries by building a multi-agent pipeline from scratch.</p>
+  <div class="highlight-box" style="margin-bottom:16px"><p><strong style="color:var(--white)">Time estimate:</strong> Getting the three-stage pipeline (collector → extractor → reporter) running with the provided sample data takes 3–5 hours. The sample data in <code>lab-b-samples/mock-threat-intel.json</code> has 10 IOCs across four types and three confidence levels — enough to verify your pipeline produces correct output. Full completion with the mapper stretch goal and a real LLM-powered extractor is 12–16 hours.</p></div>
 
   <div class="blockquote">Module 12 introduced Claude Code's built-in subagents (Explore, Plan, General-purpose). This lab teaches the <em>theory</em> of multi-agent systems so you can design better custom agents in Level 4. By building agents from scratch, you'll understand the orchestration principles that Claude Code's harness implements for you.</div>
 
@@ -2016,9 +2026,10 @@ After review:
 <!-- LAB C -->
 <div class="page" id="p-lab-c"><div class="content-wrap">
   <div class="section-eyebrow ey-lab">Foundation Lab C · Self-Study Guide Part 1 Module 3</div><div class="phase-badge b-lab">📘 Local LLM Security & Deployment</div>
-  <div class="time-est">⏱ 3–5 hrs (MVP: 60 min)</div>
+  <div class="time-est">⏱ MVP 2–3 hrs · Full 10–14 hrs</div>
   <h2 class="page-title">Local LLM Security & Deployment</h2>
-  <p class="page-subtitle">Deploy agents outside the managed harness — with proper sandboxing, audit logging, command enforcement, and container isolation. Full completion: 8–12 hours.</p>
+  <p class="page-subtitle">Deploy agents outside the managed harness — with proper sandboxing, audit logging, command enforcement, and container isolation.</p>
+  <div class="highlight-box" style="margin-bottom:16px"><p><strong style="color:var(--white)">Time estimate:</strong> The MVP (implement <code>is_allowed()</code> and <code>run_sandboxed()</code>, verify with the three sample scripts) is 2–3 hours — this lab has the most scaffolding and the tightest scope. The three sample files in <code>lab-c-samples/</code> give you immediate feedback: <code>sandbox_test.py</code> should exit 0, <code>timeout_test.py</code> should hit your timeout, and <code>blocked_command_test.py</code> documents what the allowlist must reject. Full completion with the audit logger stretch goal and Docker isolation is 10–14 hours.</p></div>
 
   <div class="blockquote">Module 17 gives you agent teams inside Claude Code's managed harness. But what happens when you deploy agents <em>outside</em> that harness — in CI/CD, on local infrastructure, or in production pipelines? This lab teaches the security principles you need: sandboxing, allowed/denied command lists, prompt/response logging, secrets handling, and container isolation. These are the same principles Claude Code's hooks and Cowork's safety defaults implement — but now you understand them deeply enough to build your own.</div>
 
