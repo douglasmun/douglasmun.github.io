@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A practical reference and tips guide for Claude Code — verified against official docs, v2.1.211.">
+<meta name="author" content="Douglas Mun">
+<title>Claude Code Cheat Sheet · v2.0 · Compiled by Douglas Mun</title>
+<style>
+:root {
+  --c-bg:        #F8FAFC;
+  --c-panel:     #FFFFFF;
+  --c-border:    #E2E8F0;
+  --c-text:      #1F2937;
+  --c-text-soft: #475569;
+  --c-muted:     #64748B;
+  --c-blue:      #1D4ED8;
+  --c-purple:    #6D28D9;
+  --c-red:       #B91C1C;
+  --c-green:     #047857;
+  --c-teal:      #0E7490;
+  --c-orange:    #B45309;
+  --c-new:       #BE185D;
+  --c-removed:   #94A3B8;
+  --c-titlebg:   #0F172A;
+  --c-kbd:       #E5E7EB;
+  --c-kbd-text:  #111827;
+  --c-tips-bg:   #F0FDF4;
+  --c-tips-bdr:  #86EFAC;
+  --c-warn-bg:   #FEF3C7;
+  --c-warn-bdr:  #F59E0B;
+  --c-purple-bg: #FDF4FF;
+  --c-purple-bdr:#E9D5FF;
+  --c-intro-bg:  #F0F9FF;
+  --c-intro-bdr: #7DD3FC;
+}
+[data-theme="dark"] {
+  --c-bg:        #0B1220;
+  --c-panel:     #111827;
+  --c-border:    #1F2937;
+  --c-text:      #E5E7EB;
+  --c-text-soft: #CBD5E1;
+  --c-muted:     #94A3B8;
+  --c-blue:      #60A5FA;
+  --c-purple:    #C4B5FD;
+  --c-red:       #FCA5A5;
+  --c-green:     #6EE7B7;
+  --c-teal:      #67E8F9;
+  --c-orange:    #FCD34D;
+  --c-new:       #F9A8D4;
+  --c-removed:   #64748B;
+  --c-titlebg:   #020617;
+  --c-kbd:       #1F2937;
+  --c-kbd-text:  #E5E7EB;
+  --c-tips-bg:   #064E3B22;
+  --c-tips-bdr:  #047857;
+  --c-warn-bg:   #78350F22;
+  --c-warn-bdr:  #B45309;
+  --c-purple-bg: #4C1D9522;
+  --c-purple-bdr:#7C3AED;
+  --c-intro-bg:  #1E3A8A22;
+  --c-intro-bdr: #3B82F6;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ─────────────────────────────────────────── */
+header.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--c-titlebg);
+  color: white;
+  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.brand {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+}
+.brand-meta {
+  font-size: 0.8rem;
+  color: #CBD5E1;
+  font-weight: 400;
+}
+nav.toc {
+  display: flex;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+  flex: 1;
+  justify-content: center;
+}
+nav.toc a {
+  color: #CBD5E1;
+  text-decoration: none;
+  padding: 0.3rem 0.7rem;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+nav.toc a:hover { background: rgba(255,255,255,0.08); color: white; }
+
+.search-wrap {
+  position: relative;
+  min-width: 220px;
+}
+input.search {
+  width: 100%;
+  padding: 0.4rem 0.7rem 0.4rem 2rem;
+  font-size: 0.85rem;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  color: white;
+  outline: none;
+}
+input.search::placeholder { color: #94A3B8; }
+input.search:focus {
+  border-color: #60A5FA;
+  background: rgba(255,255,255,0.12);
+}
+.search-icon {
+  position: absolute;
+  left: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94A3B8;
+  pointer-events: none;
+  font-size: 0.85rem;
+}
+.theme-toggle {
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  color: white;
+  padding: 0.4rem 0.7rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+.theme-toggle:hover { background: rgba(255,255,255,0.15); }
+
+/* ── Main layout ────────────────────────────────────── */
+main {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1.5rem 1.25rem 4rem;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  margin: 1rem 0 1.5rem;
+  font-size: 0.78rem;
+  color: var(--c-text-soft);
+}
+.legend-label { font-weight: 600; color: var(--c-text); }
+.swatch {
+  display: inline-block;
+  width: 11px;
+  height: 11px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 0.15rem;
+}
+.sw-blue { background: var(--c-blue); }
+.sw-purple { background: var(--c-purple); }
+.sw-red { background: var(--c-red); }
+.sw-green { background: var(--c-green); }
+.sw-teal { background: var(--c-teal); }
+.sw-orange { background: var(--c-orange); }
+.sw-new { background: var(--c-new); }
+.sw-removed { background: var(--c-removed); }
+
+/* ── Pages ─────────────────────────────────────────── */
+section.page {
+  margin-bottom: 3rem;
+  scroll-margin-top: 70px;
+}
+section.page > h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin: 0 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--c-border);
+  letter-spacing: -0.02em;
+}
+
+/* ── Intro panel ───────────────────────────────────── */
+.intro-page { margin-top: 0; }
+.intro-banner {
+  background: var(--c-intro-bg);
+  border: 1px solid var(--c-intro-bdr);
+  border-left: 5px solid var(--c-titlebg);
+  padding: 1.5rem 1.75rem;
+  border-radius: 10px;
+}
+.intro-banner h2 {
+  margin: 0 0 0.3rem;
+  font-size: 1.5rem;
+  letter-spacing: -0.02em;
+}
+.intro-banner .subtle {
+  color: var(--c-muted);
+  font-size: 0.85rem;
+  font-style: italic;
+  margin: 0 0 1rem;
+}
+.intro-banner p {
+  margin: 0.7rem 0;
+  font-size: 0.93rem;
+  line-height: 1.6;
+}
+
+/* ── Grid layouts ──────────────────────────────────── */
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+}
+@media (max-width: 1024px) {
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .grid-3, .grid-2 { grid-template-columns: 1fr; }
+}
+
+.grid-2-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.3rem 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.7rem 0 0;
+  font-size: 0.85rem;
+}
+.grid-2-list li {
+  position: relative;
+  padding-left: 1rem;
+  line-height: 1.45;
+}
+.grid-2-list li::before {
+  content: "›";
+  position: absolute;
+  left: 0;
+  color: var(--c-green);
+  font-weight: 700;
+}
+@media (max-width: 700px) {
+  .grid-2-list { grid-template-columns: 1fr; }
+}
+
+/* ── Block (column section) ───────────────────────── */
+.block {
+  background: var(--c-panel);
+  border: 1px solid var(--c-border);
+  border-radius: 8px;
+  padding: 1rem 1.1rem;
+  font-size: 0.85rem;
+}
+.block h3 {
+  margin: 0 0 0.7rem;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: white;
+  text-transform: uppercase;
+}
+.block-blue h3 { background: var(--c-blue); }
+.block-purple h3 { background: var(--c-purple); }
+.block-red h3 { background: var(--c-red); }
+.block-green h3 { background: var(--c-green); }
+.block-teal h3 { background: var(--c-teal); }
+.block-orange h3 { background: var(--c-orange); }
+
+.block h4 {
+  margin: 0.9rem 0 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--c-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-top: 1px solid var(--c-border);
+  padding-top: 0.6rem;
+}
+.block h4:first-of-type { border-top: none; padding-top: 0; }
+
+.muted { color: var(--c-muted); font-size: 0.8rem; line-height: 1.4; }
+
+/* ── Entries ──────────────────────────────────────── */
+.entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  padding: 0.25rem 0;
+  font-size: 0.83rem;
+  line-height: 1.4;
+  flex-wrap: wrap;
+}
+.entry .desc { color: var(--c-text); flex: 1; min-width: 0; }
+.entry.removed code, .entry.removed .desc {
+  color: var(--c-removed);
+  text-decoration: line-through;
+}
+.entry.new code { color: var(--c-new) !important; }
+
+.cmd {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-weight: 600;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+.cmd-blue   { color: var(--c-blue); }
+.cmd-purple { color: var(--c-purple); }
+.cmd-red    { color: var(--c-red); }
+.cmd-green  { color: var(--c-green); }
+.cmd-teal   { color: var(--c-teal); }
+.cmd-orange { color: var(--c-orange); }
+
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.86em;
+  padding: 0.05rem 0.3rem;
+  background: var(--c-border);
+  border-radius: 3px;
+  color: var(--c-text);
+}
+
+pre {
+  background: var(--c-titlebg);
+  color: #E5E7EB;
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0.5rem 0;
+}
+pre code {
+  background: transparent;
+  padding: 0;
+  color: inherit;
+  font-size: 0.95em;
+}
+.install-block { font-size: 0.75rem; }
+
+/* ── Keyboard chips ───────────────────────────────── */
+.keys {
+  display: inline-flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+kbd {
+  display: inline-block;
+  background: var(--c-kbd);
+  color: var(--c-kbd-text);
+  border: 1px solid #9CA3AF;
+  border-radius: 3px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.72rem;
+  padding: 0.05rem 0.35rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* ── Badges ───────────────────────────────────────── */
+.badge {
+  display: inline-block;
+  background: var(--c-new);
+  color: white;
+  font-size: 0.62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.05rem 0.35rem;
+  border-radius: 2px;
+  letter-spacing: 0.05em;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.removed-text {
+  color: var(--c-removed);
+  text-decoration: line-through;
+}
+
+/* ── Callouts ─────────────────────────────────────── */
+.callout {
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin: 1.5rem 0;
+  font-size: 0.88rem;
+}
+.callout h3 { margin: 0 0 0.3rem; font-size: 1.1rem; }
+.callout h4 { margin: 0.8rem 0 0.4rem; font-size: 0.85rem; font-weight: 700; }
+.callout-sub { color: var(--c-muted); font-size: 0.8rem; font-style: italic; margin: 0 0 1rem; }
+.callout-tips {
+  background: var(--c-tips-bg);
+  border: 1px solid var(--c-tips-bdr);
+  border-left: 5px solid var(--c-green);
+}
+.callout-warn {
+  background: var(--c-warn-bg);
+  border: 1px solid var(--c-warn-bdr);
+  border-left: 5px solid var(--c-orange);
+}
+.callout-purple {
+  background: var(--c-purple-bg);
+  border: 1px solid var(--c-purple-bdr);
+  border-left: 5px solid var(--c-purple);
+}
+.callout p { margin: 0.5rem 0; }
+.callout ul { margin: 0.5rem 0; padding-left: 1.2rem; }
+
+/* ── LSP entry ───────────────────────────────────── */
+.lsp-entry { flex-direction: column; align-items: stretch; gap: 0.15rem; padding: 0.4rem 0; }
+.lsp-entry > .cmd, .lsp-entry > .desc { display: inline; }
+.lsp-binary { font-size: 0.72rem; color: var(--c-muted); margin-top: 0.1rem; }
+.lsp-binary code { font-size: 0.95em; }
+
+/* ── Lists ───────────────────────────────────────── */
+ul.rules, ul.prompts { margin: 0.5rem 0; padding-left: 1.2rem; font-size: 0.82rem; }
+ul.rules li, ul.prompts li { margin: 0.25rem 0; }
+
+/* ── Footer ──────────────────────────────────────── */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  color: var(--c-muted);
+  font-size: 0.8rem;
+  border-top: 1px solid var(--c-border);
+  margin-top: 3rem;
+}
+footer a { color: var(--c-text-soft); }
+footer .author { font-weight: 600; color: var(--c-text); }
+
+/* ── Search hidden state ─────────────────────────── */
+.entry.hidden { display: none !important; }
+.block.empty { display: none; }
+
+/* ── Print ───────────────────────────────────────── */
+@media print {
+  header.site-header { position: static; }
+  nav.toc, .search-wrap, .theme-toggle { display: none; }
+  body { background: white; color: black; }
+  .page { page-break-before: always; }
+  .page:first-of-type { page-break-before: avoid; }
+  .block { break-inside: avoid; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="brand">
+    Claude Code Cheat Sheet
+    <span class="brand-meta">v2.0 · Jul 2026 · CLI 2.1.211</span>
+  </div>
+  <nav class="toc">
+    <a href="#intro">Intro</a>
+    <a href="#slash-commands">Slash Commands</a>
+    <a href="#keyboard">Keyboard &amp; Tips</a>
+    <a href="#cli">CLI &amp; Config</a>
+    <a href="#plugins">Plugins</a>
+    <a href="#obsidian">Obsidian</a>
+  </nav>
+  <div class="search-wrap">
+    <span class="search-icon">⌕</span>
+    <input type="search" class="search" placeholder="Search commands, flags, env vars…" id="search">
+  </div>
+  <button class="theme-toggle" id="theme-toggle" title="Toggle dark mode">🌓</button>
+</header>
+
+<main>
+
+    <div class="legend">
+      <span class="legend-label">Colour key:</span>
+      <span class="swatch sw-blue"></span> Keyboard
+      <span class="swatch sw-purple"></span> Slash command
+      <span class="swatch sw-red"></span> Workflow
+      <span class="swatch sw-green"></span> Skill / agent
+      <span class="swatch sw-teal"></span> CLI / flag
+      <span class="swatch sw-orange"></span> Config / env
+      <span class="swatch sw-new"></span> ★ New in 2026
+      <span class="swatch sw-removed"></span> Removed
+    </div>
+    
+
+    <section id="intro" class="page intro-page">
+      <div class="intro-banner">
+        <h2>Getting the Most Out of Claude Code</h2>
+        <p class="subtle">A practical guide and reference — verified July 16 2026 against CLI v2.1.211 · Compiled by Douglas Mun</p>
+
+        <p>Claude Code is an <strong>agentic coding assistant</strong> — it reads your repo, runs commands, edits files, and manages git workflows on its own, within the permission boundaries you set. The gap between casual and expert use is narrow but compounds quickly: the practitioners who get the most out of it <strong>plan before they build</strong>, give Claude <strong>durable project memory</strong>, isolate risky work in <strong>worktrees</strong>, and offload repeated thinking to <strong>skills, plugins, and subagents</strong>.</p>
+
+        <p><strong>How to read this guide.</strong> Entries shown in their section colour are stable features. <span class="badge">new</span> entries are new in 2026 (v2.1.160 or later) and may require a current install or specific plan tier. <span class="removed-text">Struck-through entries</span> have been removed or deprecated and should be avoided in scripts. Use the search box at the top to filter all entries instantly.</p>
+
+        <p><strong>The short path from competent to expert.</strong> For anything touching more than a couple of files, start in plan mode (<kbd>Shift+Tab</kbd> cycles permission modes, or type <code>/plan</code>) and let Claude propose a structured approach before editing. Put essential project context in a <code>CLAUDE.md</code> at your repo root — it survives compaction and grounds every turn. Codify repeated workflows as skills in <code>.claude/skills/</code>. Isolate parallel or risky work with <code>--worktree</code>. Ask side questions with <code>/btw</code> to keep the main conversation clean. Raise effort with <code>/effort high</code> or <code>xhigh</code> for hard problems on Opus 4.8. And install an <strong>LSP plugin</strong> for your language so Claude sees type errors in real time as it edits.</p>
+      </div>
+    </section>
+    <section id="slash-commands" class="page">
+<h2>Slash Commands</h2>
+<div class="grid-3">
+<section class="block block-purple" id="session-and-context"><h3> Session &amp; Context</h3>
+<div class="entry" data-search="/clear clear history — aliases: /reset, /new"><code class="cmd cmd-purple">/clear</code><span class="desc">Clear history — aliases: /reset, /new</span></div>
+<div class="entry" data-search="/compact [instr] compact conversation with optional focus"><code class="cmd cmd-purple">/compact [instr]</code><span class="desc">Compact conversation with optional focus</span></div>
+<div class="entry" data-search="/context visualise context usage as a coloured grid"><code class="cmd cmd-purple">/context</code><span class="desc">Visualise context usage as a coloured grid</span></div>
+<div class="entry" data-search="/copy [n] copy last (or nth) response"><code class="cmd cmd-purple">/copy [N]</code><span class="desc">Copy last (or Nth) response</span></div>
+<div class="entry" data-search="/diff interactive diff — uncommitted + per-turn"><code class="cmd cmd-purple">/diff</code><span class="desc">Interactive diff — uncommitted + per-turn</span></div>
+<div class="entry" data-search="/export [file] export conversation as plain text"><code class="cmd cmd-purple">/export [file]</code><span class="desc">Export conversation as plain text</span></div>
+<div class="entry" data-search="/rewind rewind conversation/code (alias: /checkpoint)"><code class="cmd cmd-purple">/rewind</code><span class="desc">Rewind conversation/code (alias: /checkpoint)</span></div>
+<div class="entry" data-search="/branch [name] branch conversation (alias: /fork)"><code class="cmd cmd-purple">/branch [name]</code><span class="desc">Branch conversation (alias: /fork)</span></div>
+<div class="entry" data-search="/resume [session] resume by id/name (alias: /continue)"><code class="cmd cmd-purple">/resume [session]</code><span class="desc">Resume by ID/name (alias: /continue)</span></div>
+<div class="entry" data-search="/rename [name] rename session — shows on prompt bar"><code class="cmd cmd-purple">/rename [name]</code><span class="desc">Rename session — shows on prompt bar</span></div>
+<div class="entry new" data-search="/recap show session context recap"><code class="cmd cmd-purple">/recap</code><span class="desc">Show session context recap</span><span class=badge>new</span></div>
+<div class="entry" data-search="/btw &lt;question&gt; side question — no context cost"><code class="cmd cmd-purple">/btw &lt;question&gt;</code><span class="desc">Side question — no context cost</span></div>
+</section>
+<section class="block block-purple" id="model-and-effort"><h3> Model &amp; Effort</h3>
+<div class="entry" data-search="/model [model] pick/change model; ←→ adjusts effort"><code class="cmd cmd-purple">/model [model]</code><span class="desc">Pick/change model; ←→ adjusts effort</span></div>
+<div class="entry" data-search="/effort [level] low / medium / high / xhigh★ / max / auto"><code class="cmd cmd-purple">/effort [level]</code><span class="desc">low / medium / high / xhigh★ / max / auto</span></div>
+<div class="entry" data-search="/fast [on|off] toggle fast mode"><code class="cmd cmd-purple">/fast [on|off]</code><span class="desc">Toggle fast mode</span></div>
+</section>
+<section class="block block-purple" id="display-and-config"><h3> Display &amp; Config</h3>
+<div class="entry" data-search="/config open settings (alias: /settings)"><code class="cmd cmd-purple">/config</code><span class="desc">Open settings (alias: /settings)</span></div>
+<div class="entry new" data-search="/theme change theme — now supports custom themes"><code class="cmd cmd-purple">/theme</code><span class="desc">Change theme — now supports custom themes</span><span class=badge>new</span></div>
+<div class="entry" data-search="/color [color] set prompt-bar color for session"><code class="cmd cmd-purple">/color [color]</code><span class="desc">Set prompt-bar color for session</span></div>
+<div class="entry new" data-search="/tui [fullscreen] flicker-free fullscreen rendering"><code class="cmd cmd-purple">/tui [fullscreen]</code><span class="desc">Flicker-free fullscreen rendering</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/focus toggle focus view"><code class="cmd cmd-purple">/focus</code><span class="desc">Toggle focus view</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/statusline configure shell prompt status line"><code class="cmd cmd-purple">/statusline</code><span class="desc">Configure shell prompt status line</span><span class=badge>new</span></div>
+<div class="entry" data-search="/keybindings open/create keybindings config"><code class="cmd cmd-purple">/keybindings</code><span class="desc">Open/create keybindings config</span></div>
+<div class="entry" data-search="/terminal-setup configure shift+enter shortcut"><code class="cmd cmd-purple">/terminal-setup</code><span class="desc">Configure Shift+Enter shortcut</span></div>
+<div class="entry" data-search="/permissions manage allow/ask/deny rules"><code class="cmd cmd-purple">/permissions</code><span class="desc">Manage allow/ask/deny rules</span></div>
+<div class="entry" data-search="/status settings — version, model, network"><code class="cmd cmd-purple">/status</code><span class="desc">Settings — version, model, network</span></div>
+</section>
+<section class="block block-purple" id="tools-and-integration"><h3> Tools &amp; Integration</h3>
+<div class="entry" data-search="/init initialize project claude.md"><code class="cmd cmd-purple">/init</code><span class="desc">Initialize project CLAUDE.md</span></div>
+<div class="entry" data-search="/memory edit claude.md; manage auto-memory"><code class="cmd cmd-purple">/memory</code><span class="desc">Edit CLAUDE.md; manage auto-memory</span></div>
+<div class="entry" data-search="/mcp manage mcp server connections"><code class="cmd cmd-purple">/mcp</code><span class="desc">Manage MCP server connections</span></div>
+<div class="entry" data-search="/hooks view hook configurations"><code class="cmd cmd-purple">/hooks</code><span class="desc">View hook configurations</span></div>
+<div class="entry" data-search="/skills list skills — t sorts by tokens"><code class="cmd cmd-purple">/skills</code><span class="desc">List skills — t sorts by tokens</span></div>
+<div class="entry" data-search="/agents agents view — wizard removed v2.1.198"><code class="cmd cmd-purple">/agents</code><span class="desc">Agents view (setup wizard removed)</span></div>
+<div class="entry" data-search="/plugin plugin manager (alias: /plugins); list --enabled/--disabled"><code class="cmd cmd-purple">/plugin [list]</code><span class="desc">Plugin manager; list with --enabled/--disabled<span class=badge>new</span></span></div>
+<div class="entry" data-search="/chrome configure claude in chrome"><code class="cmd cmd-purple">/chrome</code><span class="desc">Configure Claude in Chrome</span></div>
+<div class="entry" data-search="/reload-plugins hot-reload plugins"><code class="cmd cmd-purple">/reload-plugins</code><span class="desc">Hot-reload plugins</span></div>
+<div class="entry" data-search="/ide manage ide integration status"><code class="cmd cmd-purple">/ide</code><span class="desc">Manage IDE integration status</span></div>
+<div class="entry" data-search="/add-dir &lt;path&gt; add working directory"><code class="cmd cmd-purple">/add-dir &lt;path&gt;</code><span class="desc">Add working directory</span></div>
+<div class="entry new" data-search="/cd &lt;path&gt; change session working directory"><code class="cmd cmd-purple">/cd &lt;path&gt;</code><span class="desc">Change session working directory</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/dataviz chart + dashboard design skill"><code class="cmd cmd-purple">/dataviz</code><span class="desc">Chart + dashboard design skill</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/install-github-app set up claude github actions"><code class="cmd cmd-purple">/install-github-app</code><span class="desc">Set up Claude GitHub Actions</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/install-slack-app install claude slack app (oauth)"><code class="cmd cmd-purple">/install-slack-app</code><span class="desc">Install Claude Slack app (OAuth)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/web-setup connect github to claude code on web"><code class="cmd cmd-purple">/web-setup</code><span class="desc">Connect GitHub to Claude Code on web</span><span class=badge>new</span></div>
+</section>
+<section class="block block-purple" id="workflows-and-agentic"><h3> Workflows &amp; Agentic</h3>
+<div class="entry" data-search="/plan [desc] enter plan mode with optional task"><code class="cmd cmd-purple">/plan [desc]</code><span class="desc">Enter plan mode with optional task</span></div>
+<div class="entry" data-search="/batch &lt;instr&gt; 5–30 worktree agents [skill]"><code class="cmd cmd-purple">/batch &lt;instr&gt;</code><span class="desc">5–30 worktree agents [Skill]</span></div>
+<div class="entry" data-search="/simplify [focus] 3-agent parallel code review [skill]"><code class="cmd cmd-purple">/simplify [focus]</code><span class="desc">3-agent parallel code review [Skill]</span></div>
+<div class="entry" data-search="/debug [desc] debug logging + analysis [skill]"><code class="cmd cmd-purple">/debug [desc]</code><span class="desc">Debug logging + analysis [Skill]</span></div>
+<div class="entry" data-search="/loop [interval] recurring task; self-paces [skill]"><code class="cmd cmd-purple">/loop [interval]</code><span class="desc">Recurring task; self-paces [Skill]</span></div>
+<div class="entry new" data-search="/workflows deterministic multi-agent orchestration"><code class="cmd cmd-purple">/workflows</code><span class="desc">Deterministic multi-agent orchestration</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/schedule [desc] create/run routines"><code class="cmd cmd-purple">/schedule [desc]</code><span class="desc">Create/run routines</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/ultraplan &lt;prompt&gt; cloud plan editor → web ui"><code class="cmd cmd-purple">/ultraplan &lt;prompt&gt;</code><span class="desc">Cloud plan editor → web UI</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/code-review ultra [pr#] cloud multi-agent review (was /ultrareview)"><code class="cmd cmd-purple">/code-review ultra [PR#]</code><span class="desc">Cloud multi-agent review — /ultrareview is deprecated alias</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/autofix-pr [prompt] web agent auto-fix pr ci/comments"><code class="cmd cmd-purple">/autofix-pr [prompt]</code><span class="desc">Web agent auto-fix PR CI/comments</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/security-review scan branch diff for vulnerabilities"><code class="cmd cmd-purple">/security-review</code><span class="desc">Scan branch diff for vulnerabilities</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/team-onboarding replayable guide from 30-day history"><code class="cmd cmd-purple">/team-onboarding</code><span class="desc">Replayable guide from 30-day history</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/less-permission-prompts propose allowlist from transcripts"><code class="cmd cmd-purple">/less-permission-prompts</code><span class="desc">Propose allowlist from transcripts</span><span class=badge>new</span></div>
+<div class="entry" data-search="/claude-api load api reference [skill]"><code class="cmd cmd-purple">/claude-api</code><span class="desc">Load API reference [Skill]</span></div>
+</section>
+<section class="block block-purple" id="remote-and-sessions"><h3> Remote &amp; Sessions</h3>
+<div class="entry" data-search="/remote-control enable remote control (alias: /rc)"><code class="cmd cmd-purple">/remote-control</code><span class="desc">Enable remote control (alias: /rc)</span></div>
+<div class="entry new" data-search="/teleport  /tp pull web session into local terminal"><code class="cmd cmd-purple">/teleport  /tp</code><span class="desc">Pull web session into local terminal</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/remote-env configure default remote environment"><code class="cmd cmd-purple">/remote-env</code><span class="desc">Configure default remote environment</span><span class=badge>new</span></div>
+<div class="entry" data-search="/voice toggle push-to-talk dictation"><code class="cmd cmd-purple">/voice</code><span class="desc">Toggle push-to-talk dictation</span></div>
+<div class="entry" data-search="/desktop  /app continue in desktop app (mac/win)"><code class="cmd cmd-purple">/desktop  /app</code><span class="desc">Continue in Desktop app (mac/Win)</span></div>
+<div class="entry" data-search="/mobile  /ios qr code for claude mobile app"><code class="cmd cmd-purple">/mobile  /ios</code><span class="desc">QR code for Claude mobile app</span></div>
+<div class="entry new" data-search="/sandbox toggle sandbox mode"><code class="cmd cmd-purple">/sandbox</code><span class="desc">Toggle sandbox mode</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/tasks list background tasks (alias: /bashes)"><code class="cmd cmd-purple">/tasks</code><span class="desc">List background tasks (alias: /bashes)</span><span class=badge>new</span></div>
+</section>
+<section class="block block-purple" id="utility"><h3> Utility</h3>
+<div class="entry new" data-search="/usage plan limits + rate status"><code class="cmd cmd-purple">/usage</code><span class="desc">Plan limits + rate status</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/usage-credits request more credits from admin"><code class="cmd cmd-purple">/usage-credits</code><span class="desc">Request more credits from admin</span><span class=badge>new</span></div>
+<div class="entry" data-search="/stats opens /usage → stats tab"><code class="cmd cmd-purple">/stats</code><span class="desc">Opens /usage → Stats tab</span></div>
+<div class="entry" data-search="/cost opens /usage → cost tab"><code class="cmd cmd-purple">/cost</code><span class="desc">Opens /usage → Cost tab</span></div>
+<div class="entry" data-search="/extra-usage keep working past rate limits"><code class="cmd cmd-purple">/extra-usage</code><span class="desc">Keep working past rate limits</span></div>
+<div class="entry" data-search="/insights report on patterns + friction"><code class="cmd cmd-purple">/insights</code><span class="desc">Report on patterns + friction</span></div>
+<div class="entry" data-search="/doctor /checkup full setup checkup; f = auto-fix"><code class="cmd cmd-purple">/doctor  /checkup</code><span class="desc">Full setup checkup; f = auto-fix</span></div>
+<div class="entry new" data-search="/powerup interactive tutorials + demos"><code class="cmd cmd-purple">/powerup</code><span class="desc">Interactive tutorials + demos</span><span class=badge>new</span></div>
+<div class="entry" data-search="/release-notes changelog — version picker"><code class="cmd cmd-purple">/release-notes</code><span class="desc">Changelog — version picker</span></div>
+<div class="entry" data-search="/feedback  /bug submit feedback"><code class="cmd cmd-purple">/feedback  /bug</code><span class="desc">Submit feedback</span></div>
+<div class="entry" data-search="/help show help and commands"><code class="cmd cmd-purple">/help</code><span class="desc">Show help and commands</span></div>
+<div class="entry" data-search="/exit  /quit exit the cli"><code class="cmd cmd-purple">/exit  /quit</code><span class="desc">Exit the CLI</span></div>
+<div class="entry" data-search="/login / /logout sign in / out"><code class="cmd cmd-purple">/login / /logout</code><span class="desc">Sign in / out</span></div>
+<div class="entry new" data-search="/mcp elicitation mcp server structured-input dialog"><code class="cmd cmd-purple">/mcp elicitation</code><span class="desc">MCP server structured-input dialog</span><span class=badge>new</span></div>
+</section>
+<section class="block block-red" id="removed---deprecated"><h3> Removed / Deprecated</h3>
+<div class="entry removed" data-search="/pr-comments removed v2.1.91 — ask claude directly"><code class="cmd cmd-red">/pr-comments</code><span class="desc">Removed v2.1.91 — ask Claude directly</span></div>
+<div class="entry removed" data-search="/vim removed v2.1.92 — use /config → editor"><code class="cmd cmd-red">/vim</code><span class="desc">Removed v2.1.92 — use /config → Editor</span></div>
+<div class="entry removed" data-search="/review deprecated — install code-review plugin"><code class="cmd cmd-red">/review</code><span class="desc">Deprecated — install code-review plugin</span></div>
+<div class="entry removed" data-search="/tag removed in v2.1.92"><code class="cmd cmd-red">/tag</code><span class="desc">Removed in v2.1.92</span></div>
+<div class="entry removed" data-search="/ultrareview deprecated — use /code-review ultra"><code class="cmd cmd-red">/ultrareview</code><span class="desc">Deprecated alias — use /code-review ultra</span></div>
+<div class="entry removed" data-search="/agents wizard setup wizard removed v2.1.198"><code class="cmd cmd-red">/agents wizard</code><span class="desc">Setup wizard removed v2.1.198</span></div>
+</section>
+</div></section><section id="keyboard" class="page">
+<h2>Keyboard & Interactive Mode</h2>
+<div class="grid-3">
+<section class="block block-blue" id="general-controls"><h3> General Controls</h3>
+<div class="entry" data-search="ctrl c cancel input / generation"><span class="keys"><kbd>Ctrl</kbd><kbd>C</kbd></span><span class="desc">Cancel input / generation</span></div>
+<div class="entry" data-search="ctrl d exit session (eof)"><span class="keys"><kbd>Ctrl</kbd><kbd>D</kbd></span><span class="desc">Exit session (EOF)</span></div>
+<div class="entry" data-search="ctrl l clear prompt + force redraw"><span class="keys"><kbd>Ctrl</kbd><kbd>L</kbd></span><span class="desc">Clear prompt + force redraw</span></div>
+<div class="entry" data-search="ctrl o toggle transcript viewer"><span class="keys"><kbd>Ctrl</kbd><kbd>O</kbd></span><span class="desc">Toggle transcript viewer</span></div>
+<div class="entry" data-search="ctrl r reverse search command history"><span class="keys"><kbd>Ctrl</kbd><kbd>R</kbd></span><span class="desc">Reverse search command history</span></div>
+<div class="entry" data-search="ctrl g open prompt in editor"><span class="keys"><kbd>Ctrl</kbd><kbd>G</kbd></span><span class="desc">Open prompt in editor</span></div>
+<div class="entry" data-search="ctrl x ctrl e open in editor (readline)"><span class="keys"><kbd>Ctrl</kbd><kbd>X</kbd><kbd>Ctrl</kbd><kbd>E</kbd></span><span class="desc">Open in editor (readline)</span></div>
+<div class="entry" data-search="ctrl b background task (tmux: twice)"><span class="keys"><kbd>Ctrl</kbd><kbd>B</kbd></span><span class="desc">Background task (tmux: twice)</span></div>
+<div class="entry" data-search="ctrl t toggle task list"><span class="keys"><kbd>Ctrl</kbd><kbd>T</kbd></span><span class="desc">Toggle task list</span></div>
+<div class="entry" data-search="ctrl v paste image → [image #n] chip"><span class="keys"><kbd>Ctrl</kbd><kbd>V</kbd></span><span class="desc">Paste image → [Image #N] chip</span></div>
+<div class="entry" data-search="ctrl x ctrl k kill bg agents (2× in 3s)"><span class="keys"><kbd>Ctrl</kbd><kbd>X</kbd><kbd>Ctrl</kbd><kbd>K</kbd></span><span class="desc">Kill bg agents (2× in 3s)</span></div>
+<div class="entry" data-search="esc esc rewind / summarize"><span class="keys"><kbd>Esc</kbd><kbd>Esc</kbd></span><span class="desc">Rewind / summarize</span></div>
+<div class="entry" data-search="↑ ↓ cursor / history navigation"><span class="keys"><kbd>↑</kbd><kbd>↓</kbd></span><span class="desc">Cursor / history navigation</span></div>
+<div class="entry" data-search="ctrl p up — history nav"><span class="keys"><kbd>Ctrl</kbd><kbd>P</kbd></span><span class="desc">Up — history nav</span></div>
+<div class="entry" data-search="ctrl n down — history nav"><span class="keys"><kbd>Ctrl</kbd><kbd>N</kbd></span><span class="desc">Down — history nav</span></div>
+</section>
+<section class="block block-blue" id="text-editing"><h3> Text Editing</h3>
+<div class="entry" data-search="ctrl a start of current line"><span class="keys"><kbd>Ctrl</kbd><kbd>A</kbd></span><span class="desc">Start of current line</span></div>
+<div class="entry" data-search="ctrl e end of current line"><span class="keys"><kbd>Ctrl</kbd><kbd>E</kbd></span><span class="desc">End of current line</span></div>
+<div class="entry" data-search="ctrl k delete to end of line"><span class="keys"><kbd>Ctrl</kbd><kbd>K</kbd></span><span class="desc">Delete to end of line</span></div>
+<div class="entry" data-search="ctrl u delete to start of line"><span class="keys"><kbd>Ctrl</kbd><kbd>U</kbd></span><span class="desc">Delete to start of line</span></div>
+<div class="entry" data-search="ctrl w delete previous word"><span class="keys"><kbd>Ctrl</kbd><kbd>W</kbd></span><span class="desc">Delete previous word</span></div>
+<div class="entry" data-search="ctrl y paste deleted text (yank)"><span class="keys"><kbd>Ctrl</kbd><kbd>Y</kbd></span><span class="desc">Paste deleted text (yank)</span></div>
+<div class="entry" data-search="alt y cycle paste history *"><span class="keys"><kbd>Alt</kbd><kbd>Y</kbd></span><span class="desc">Cycle paste history *</span></div>
+<div class="entry" data-search="alt b back one word *"><span class="keys"><kbd>Alt</kbd><kbd>B</kbd></span><span class="desc">Back one word *</span></div>
+<div class="entry" data-search="alt f forward one word *"><span class="keys"><kbd>Alt</kbd><kbd>F</kbd></span><span class="desc">Forward one word *</span></div>
+</section>
+<section class="block block-blue" id="multiline-input"><h3> Multiline Input</h3>
+<div class="entry" data-search="\ enter universal — any terminal"><span class="keys"><kbd>\</kbd><kbd>Enter</kbd></span><span class="desc">Universal — any terminal</span></div>
+<div class="entry" data-search="ctrl j universal control sequence"><span class="keys"><kbd>Ctrl</kbd><kbd>J</kbd></span><span class="desc">Universal control sequence</span></div>
+<div class="entry" data-search="shift enter iterm2 / wezterm / ghostty / kitty"><span class="keys"><kbd>Shift</kbd><kbd>Enter</kbd></span><span class="desc">iTerm2 / WezTerm / Ghostty / Kitty</span></div>
+<div class="entry" data-search="option enter macos w/ option-as-meta"><span class="keys"><kbd>Option</kbd><kbd>Enter</kbd></span><span class="desc">macOS w/ Option-as-Meta</span></div>
+</section>
+<section class="block block-blue" id="mode-switching"><h3> Mode Switching</h3>
+<div class="entry" data-search="shift tab cycle permission modes"><span class="keys"><kbd>Shift</kbd><kbd>Tab</kbd></span><span class="desc">Cycle permission modes</span></div>
+<div class="entry" data-search="alt m cycle permission modes (alt)"><span class="keys"><kbd>Alt</kbd><kbd>M</kbd></span><span class="desc">Cycle permission modes (alt)</span></div>
+<div class="entry" data-search="option p switch model (mac)"><span class="keys"><kbd>Option</kbd><kbd>P</kbd></span><span class="desc">Switch model (mac)</span></div>
+<div class="entry" data-search="alt p switch model (win/linux)"><span class="keys"><kbd>Alt</kbd><kbd>P</kbd></span><span class="desc">Switch model (Win/Linux)</span></div>
+<div class="entry" data-search="option t toggle extended thinking"><span class="keys"><kbd>Option</kbd><kbd>T</kbd></span><span class="desc">Toggle extended thinking</span></div>
+<div class="entry" data-search="alt t toggle thinking (win/linux)"><span class="keys"><kbd>Alt</kbd><kbd>T</kbd></span><span class="desc">Toggle thinking (Win/Linux)</span></div>
+<div class="entry" data-search="option o toggle fast mode (mac)"><span class="keys"><kbd>Option</kbd><kbd>O</kbd></span><span class="desc">Toggle fast mode (mac)</span></div>
+<div class="entry" data-search="alt o toggle fast mode (win/linux)"><span class="keys"><kbd>Alt</kbd><kbd>O</kbd></span><span class="desc">Toggle fast mode (Win/Linux)</span></div>
+</section>
+<section class="block block-blue" id="transcript-viewer-(ctrl+o)"><h3> Transcript Viewer (Ctrl+O)</h3>
+<div class="entry" data-search="ctrl e toggle show all content"><span class="keys"><kbd>Ctrl</kbd><kbd>E</kbd></span><span class="desc">Toggle show all content</span></div>
+<div class="entry" data-search="/ search transcript"><span class="keys"><kbd>/</kbd></span><span class="desc">Search transcript</span></div>
+<div class="entry" data-search="n next match"><span class="keys"><kbd>n</kbd></span><span class="desc">Next match</span></div>
+<div class="entry" data-search="n previous match"><span class="keys"><kbd>N</kbd></span><span class="desc">Previous match</span></div>
+<div class="entry" data-search="[ dump to scrollback"><span class="keys"><kbd>[</kbd></span><span class="desc">Dump to scrollback</span></div>
+<div class="entry" data-search="v open in $visual/$editor"><span class="keys"><kbd>v</kbd></span><span class="desc">Open in $VISUAL/$EDITOR</span></div>
+<div class="entry" data-search="q exit transcript"><span class="keys"><kbd>q</kbd></span><span class="desc">Exit transcript</span></div>
+</section>
+<section class="block block-blue" id="vim-mode-(enable-in--config)"><h3> Vim Mode (enable in /config)</h3>
+<div class="entry" data-search="esc normal mode"><span class="keys"><kbd>Esc</kbd></span><span class="desc">NORMAL mode</span></div>
+<div class="entry" data-search="i insert before cursor"><span class="keys"><kbd>i</kbd></span><span class="desc">Insert before cursor</span></div>
+<div class="entry" data-search="a insert after cursor"><span class="keys"><kbd>a</kbd></span><span class="desc">Insert after cursor</span></div>
+<div class="entry" data-search="o o open line below / above"><span class="keys"><kbd>o</kbd><kbd>O</kbd></span><span class="desc">Open line below / above</span></div>
+<div class="entry" data-search="v visual (character) ★"><span class="keys"><kbd>v</kbd></span><span class="desc">Visual (character) ★</span></div>
+<div class="entry" data-search="v visual line ★"><span class="keys"><kbd>V</kbd></span><span class="desc">Visual line ★</span></div>
+<div class="entry" data-search="h j k l move left/down/up/right"><span class="keys"><kbd>h</kbd><kbd>j</kbd><kbd>k</kbd><kbd>l</kbd></span><span class="desc">Move left/down/up/right</span></div>
+<div class="entry" data-search="w e b word next/end/previous"><span class="keys"><kbd>w</kbd><kbd>e</kbd><kbd>b</kbd></span><span class="desc">Word next/end/previous</span></div>
+<div class="entry" data-search="0 $ ^ line start / end / non-blank"><span class="keys"><kbd>0</kbd><kbd>$</kbd><kbd>^</kbd></span><span class="desc">Line start / end / non-blank</span></div>
+<div class="entry" data-search="gg g top / bottom of input"><span class="keys"><kbd>gg</kbd><kbd>G</kbd></span><span class="desc">Top / bottom of input</span></div>
+<div class="entry" data-search="x dd d del char / line / to end"><span class="keys"><kbd>x</kbd><kbd>dd</kbd><kbd>D</kbd></span><span class="desc">Del char / line / to end</span></div>
+<div class="entry" data-search="cc c change line / to end"><span class="keys"><kbd>cc</kbd><kbd>C</kbd></span><span class="desc">Change line / to end</span></div>
+<div class="entry" data-search="yy y yank line"><span class="keys"><kbd>yy</kbd><kbd>Y</kbd></span><span class="desc">Yank line</span></div>
+<div class="entry" data-search="p p paste after / before"><span class="keys"><kbd>p</kbd><kbd>P</kbd></span><span class="desc">Paste after / before</span></div>
+<div class="entry" data-search="u . undo / repeat"><span class="keys"><kbd>u</kbd><kbd>.</kbd></span><span class="desc">Undo / repeat</span></div>
+<div class="entry" data-search="&gt;&gt; &lt;&lt; indent / dedent"><span class="keys"><kbd>&gt;&gt;</kbd><kbd>&lt;&lt;</kbd></span><span class="desc">Indent / dedent</span></div>
+</section>
+</div>
+
+    <div class="callout callout-warn">
+      <h4>⚠ macOS Option-as-Meta Setup</h4>
+      <p><kbd>Alt+B</kbd>, <kbd>Alt+F</kbd>, <kbd>Alt+Y</kbd>, <kbd>Alt+M</kbd>, <kbd>Alt+P</kbd>, <kbd>Alt+T</kbd> need Option configured as Meta:</p>
+      <ul>
+        <li><strong>iTerm2:</strong> Profiles → Keys → Left Option = "Esc+"</li>
+        <li><strong>Terminal.app:</strong> Profiles → Keyboard → check "Use Option as Meta Key"</li>
+        <li><strong>VS Code:</strong> set <code>"terminal.integrated.macOptionIsMeta": true</code></li>
+      </ul>
+    </div>
+    
+
+    <div class="callout callout-tips">
+      <h3>Beyond the Cheat Sheet — Tips to Save Tokens and Work Smarter</h3>
+      <p class="callout-sub">Four habits that separate heavy spenders from efficient operators</p>
+      <div class="grid-2">
+        <div>
+          <p><strong>1. Know where your tokens actually go.</strong> Every turn sends the full conversation, every active tool schema, every loaded <code>CLAUDE.md</code>, and the system prompt. Run <code>/context</code> regularly to see the breakdown as a grid — you will often find memory bloat, oversized tool results, or a stale conversation dominating the budget. Check <code>/usage</code> after expensive operations to see what you actually paid for. The fastest wins come from finding the single biggest offender rather than micro-optimising everywhere.</p>
+          <p><strong>2. Plan before you spend.</strong> Exploratory back-and-forth is the most common source of waste. Enter plan mode (<kbd>Shift+Tab</kbd> to cycle or <code>/plan</code>) for anything non-trivial — Claude researches and proposes an approach in one pass, and you approve before any editing begins. Use <code>/compact focus on &lt;topic&gt;</code> proactively rather than waiting for auto-compact at 95%. Put durable facts in <code>CLAUDE.md</code> so they survive compaction.</p>
+        </div>
+        <div>
+          <p><strong>3. Match the model and effort to the task.</strong> Opus 4.8 at <code>xhigh</code> effort is extraordinary for complex agentic coding, but routine edits, formatting, and lookups run fine on Sonnet 5 (the default, with 1M-token context) at <code>medium</code>. <code>/effort low</code> is often enough for "rename this variable everywhere" work. Subscription users get a 1-hour prompt cache TTL automatically; API-key users opt in with <code>ENABLE_PROMPT_CACHING_1H=1</code>. Avoid switching models mid-conversation — the next turn re-reads the full history uncached.</p>
+          <p><strong>4. Delegate — do not clutter.</strong> Spawn the <strong>Explore</strong> subagent (read-only; inherits the session model, capped at Opus) for codebase navigation instead of doing it in main context. Subagents now run in the <strong>background by default</strong> — you keep working and are notified on completion — can nest up to 5 levels deep, and background agents can auto-commit/push/PR on completion. For deterministic multi-agent orchestration, use <code>/workflows</code>. Use <code>/btw</code> for side questions — it reuses the parent prompt cache and never enters history. Prefer <code>@path/to/file.md</code> over pasting contents. For parallel work, launch separate <code>--worktree</code> sessions. If you re-explain the same workflow a third time, codify it as a skill in <code>.claude/skills/</code>.</p>
+        </div>
+      </div>
+      <h4>Quick Wins</h4>
+      <ul class="grid-2-list">
+        <li><code>--bare</code> for scripted one-shots skips plugins/hooks/skills (faster startup)</li>
+        <li><code>--max-budget-usd N</code> caps any headless run before it runs away</li>
+        <li>Prefer <code>Grep</code>/<code>Glob</code> over <code>Read</code> for discovery — full reads are expensive</li>
+        <li>Collapse bulky MCP results with <code>anthropic/maxResultSizeChars</code></li>
+        <li><code>MAX_THINKING_TOKENS=0</code> when thinking does not help on this task</li>
+        <li><code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code> if not using auto-memory</li>
+        <li>After a long break, prefer <code>/clear</code> over re-caching stale history</li>
+        <li><code>/skills t</code> sorts by token count — prune the heaviest you rarely use</li>
+      </ul>
+    </div>
+    
+</section><section id="cli" class="page">
+<h2>CLI, Configuration & Automation</h2>
+<div class="grid-3">
+<section class="block block-teal" id="cli-commands"><h3> CLI Commands</h3>
+<div class="entry" data-search="claude start interactive session"><code class="cmd cmd-teal">claude</code><span class="desc">Start interactive session</span></div>
+<div class="entry" data-search="claude &quot;query&quot; session with initial prompt"><code class="cmd cmd-teal">claude &quot;query&quot;</code><span class="desc">Session with initial prompt</span></div>
+<div class="entry" data-search="claude -p &quot;query&quot; headless / print mode"><code class="cmd cmd-teal">claude -p &quot;query&quot;</code><span class="desc">Headless / print mode</span></div>
+<div class="entry" data-search="claude -c continue most recent conversation"><code class="cmd cmd-teal">claude -c</code><span class="desc">Continue most recent conversation</span></div>
+<div class="entry" data-search="claude -r &quot;name&quot; resume by name or id"><code class="cmd cmd-teal">claude -r &quot;name&quot;</code><span class="desc">Resume by name or ID</span></div>
+<div class="entry" data-search="claude update update to latest version"><code class="cmd cmd-teal">claude update</code><span class="desc">Update to latest version</span></div>
+<div class="entry new" data-search="claude install [version] install specific / stable"><code class="cmd cmd-teal">claude install [version]</code><span class="desc">Install specific / stable</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude auth login sign in (--console for api)"><code class="cmd cmd-teal">claude auth login</code><span class="desc">Sign in (--console for API)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude auth logout log out of account"><code class="cmd cmd-teal">claude auth logout</code><span class="desc">Log out of account</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude auth status auth status (--text = human)"><code class="cmd cmd-teal">claude auth status</code><span class="desc">Auth status (--text = human)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude agents list configured subagents"><code class="cmd cmd-teal">claude agents</code><span class="desc">List configured subagents</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude setup-token long-lived token for ci"><code class="cmd cmd-teal">claude setup-token</code><span class="desc">Long-lived token for CI</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude remote-control start remote-control server"><code class="cmd cmd-teal">claude remote-control</code><span class="desc">Start remote-control server</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude mcp configure mcp servers"><code class="cmd cmd-teal">claude mcp</code><span class="desc">Configure MCP servers</span></div>
+<div class="entry new" data-search="claude plugin manage plugins"><code class="cmd cmd-teal">claude plugin</code><span class="desc">Manage plugins</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude auto-mode defaults print classifier rules"><code class="cmd cmd-teal">claude auto-mode defaults</code><span class="desc">Print classifier rules</span><span class=badge>new</span></div>
+</section>
+<section class="block block-teal" id="key-cli-flags"><h3> Key CLI Flags</h3>
+<div class="entry" data-search="--model sonnet / opus / full name"><code class="cmd cmd-teal">--model</code><span class="desc">sonnet / opus / full name</span></div>
+<div class="entry" data-search="--permission-mode default / acceptedits / plan / auto★ / bypass"><code class="cmd cmd-teal">--permission-mode</code><span class="desc">default / acceptEdits / plan / auto★ / bypass</span></div>
+<div class="entry" data-search="--effort low / med / high / xhigh★ / max"><code class="cmd cmd-teal">--effort</code><span class="desc">low / med / high / xhigh★ / max</span></div>
+<div class="entry" data-search="--output-format text / json / stream-json"><code class="cmd cmd-teal">--output-format</code><span class="desc">text / json / stream-json</span></div>
+<div class="entry" data-search="--max-turns n limit agentic turns"><code class="cmd cmd-teal">--max-turns N</code><span class="desc">Limit agentic turns</span></div>
+<div class="entry" data-search="--max-budget-usd n cost cap per session"><code class="cmd cmd-teal">--max-budget-usd N</code><span class="desc">Cost cap per session</span></div>
+<div class="entry new" data-search="--worktree / -w isolated git worktree"><code class="cmd cmd-teal">--worktree / -w</code><span class="desc">Isolated git worktree</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--tmux create tmux pane for worktree"><code class="cmd cmd-teal">--tmux</code><span class="desc">Create tmux pane for worktree</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--bare faster startup — skip plugins/hooks"><code class="cmd cmd-teal">--bare</code><span class="desc">Faster startup — skip plugins/hooks</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--agent &lt;name&gt; specify agent for session"><code class="cmd cmd-teal">--agent &lt;name&gt;</code><span class="desc">Specify agent for session</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--agents {json} define agents dynamically"><code class="cmd cmd-teal">--agents {JSON}</code><span class="desc">Define agents dynamically</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--from-pr n resume pr-linked sessions"><code class="cmd cmd-teal">--from-pr N</code><span class="desc">Resume PR-linked sessions</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--fork-session new id when resuming"><code class="cmd cmd-teal">--fork-session</code><span class="desc">New ID when resuming</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--name / -n &quot;x&quot; set session display name"><code class="cmd cmd-teal">--name / -n &quot;x&quot;</code><span class="desc">Set session display name</span><span class=badge>new</span></div>
+<div class="entry" data-search="--remote &quot;task&quot; create web session"><code class="cmd cmd-teal">--remote &quot;task&quot;</code><span class="desc">Create web session</span></div>
+<div class="entry" data-search="--remote-control / --rc enable remote control"><code class="cmd cmd-teal">--remote-control / --rc</code><span class="desc">Enable Remote Control</span></div>
+<div class="entry new" data-search="--teleport pull web → local terminal"><code class="cmd cmd-teal">--teleport</code><span class="desc">Pull web → local terminal</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--mcp-config &lt;file&gt; load mcp from json"><code class="cmd cmd-teal">--mcp-config &lt;file&gt;</code><span class="desc">Load MCP from JSON</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--strict-mcp-config only use --mcp-config"><code class="cmd cmd-teal">--strict-mcp-config</code><span class="desc">Only use --mcp-config</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--settings &lt;file&gt; load extra settings"><code class="cmd cmd-teal">--settings &lt;file&gt;</code><span class="desc">Load extra settings</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--plugin-dir &lt;path&gt; load plugins from directory"><code class="cmd cmd-teal">--plugin-dir &lt;path&gt;</code><span class="desc">Load plugins from directory</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--json-schema {schema} validated json output"><code class="cmd cmd-teal">--json-schema {schema}</code><span class="desc">Validated JSON output</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--forward-subagent-text subagent text and thinking in stream-json"><code class="cmd cmd-teal">--forward-subagent-text</code><span class="desc">Subagent text + thinking in stream-json</span><span class=badge>new</span></div>
+<div class="entry new" data-search="--safe-mode start with all customizations disabled"><code class="cmd cmd-teal">--safe-mode</code><span class="desc">Start with all customizations disabled</span><span class=badge>new</span></div>
+<div class="entry" data-search="--system-prompt replace system prompt"><code class="cmd cmd-teal">--system-prompt</code><span class="desc">Replace system prompt</span></div>
+<div class="entry" data-search="--append-system-prompt append to system prompt"><code class="cmd cmd-teal">--append-system-prompt</code><span class="desc">Append to system prompt</span></div>
+<div class="entry" data-search="--allowedtools tools auto-allowed"><code class="cmd cmd-teal">--allowedTools</code><span class="desc">Tools auto-allowed</span></div>
+<div class="entry" data-search="--disallowedtools tools removed from context"><code class="cmd cmd-teal">--disallowedTools</code><span class="desc">Tools removed from context</span></div>
+<div class="entry" data-search="--tools restrict built-in tools"><code class="cmd cmd-teal">--tools</code><span class="desc">Restrict built-in tools</span></div>
+<div class="entry" data-search="--dangerously-skip-permissions bypass all permission checks"><code class="cmd cmd-teal">--dangerously-skip-permissions</code><span class="desc">Bypass ALL permission checks</span></div>
+<div class="entry new" data-search="--debug [categories] debug w/ category filter"><code class="cmd cmd-teal">--debug [categories]</code><span class="desc">Debug w/ category filter</span><span class=badge>new</span></div>
+<div class="entry" data-search="--verbose full turn-by-turn logs"><code class="cmd cmd-teal">--verbose</code><span class="desc">Full turn-by-turn logs</span></div>
+<div class="entry" data-search="--version / -v show version"><code class="cmd cmd-teal">--version / -v</code><span class="desc">Show version</span></div>
+</section>
+<section class="block block-red" id="permission-modes"><h3> Permission Modes</h3>
+<div class="entry" data-search="default manual prompt on risky actions — shown as manual in ui"><code class="cmd cmd-red">default</code><span class="desc">Prompt on risky actions — labeled &ldquo;Manual&rdquo; in UI</span></div>
+<div class="entry" data-search="acceptedits auto-allow edits; prompt on bash"><code class="cmd cmd-red">acceptEdits</code><span class="desc">Auto-allow edits; prompt on Bash</span></div>
+<div class="entry" data-search="plan read-only research / planning"><code class="cmd cmd-red">plan</code><span class="desc">Read-only research / planning</span></div>
+<div class="entry new" data-search="auto classifier allows safe, denies risky — bedrock/vertex/foundry no opt-in"><code class="cmd cmd-red">auto</code><span class="desc">Classifier allows safe / denies risky (Bedrock/Vertex/Foundry: no opt-in)</span><span class=badge>new</span></div>
+<div class="entry" data-search="dontask deny silently, no prompt"><code class="cmd cmd-red">dontAsk</code><span class="desc">Deny silently, no prompt</span></div>
+<div class="entry" data-search="bypasspermissions skip all checks (dangerous)"><code class="cmd cmd-red">bypassPermissions</code><span class="desc">Skip ALL checks (dangerous)</span></div>
+<h4>Permission Rule Syntax</h4>
+<ul class="rules">
+<li><code>Bash(git *) — any git subcommand</code></li>
+<li><code>Bash(git log *) — specific subcommand</code></li>
+<li><code>Edit(src/**/*.ts) — glob file writes</code></li>
+<li><code>Read(/~/*.env) — read-only paths</code></li>
+<li><code>mcp__&lt;server&gt; — MCP tools by server</code></li>
+<li><code>mcp__&lt;server&gt;__&lt;tool&gt; — specific tool</code></li>
+</ul>
+</section>
+</div>
+<div class="grid-2">
+<section class="block block-orange" id="config-files"><h3> Config Files</h3>
+<div class="entry" data-search="~/.claude/settings.json user (global)"><code class="cmd cmd-orange">~/.claude/settings.json</code><span class="desc">User (global)</span></div>
+<div class="entry" data-search=".claude/settings.json project (shared via git)"><code class="cmd cmd-orange">.claude/settings.json</code><span class="desc">Project (shared via git)</span></div>
+<div class="entry" data-search=".claude/settings.local.json local (gitignored)"><code class="cmd cmd-orange">.claude/settings.local.json</code><span class="desc">Local (gitignored)</span></div>
+<div class="entry" data-search="managed-settings.json admin-deployed (read-only)"><code class="cmd cmd-orange">managed-settings.json</code><span class="desc">Admin-deployed (read-only)</span></div>
+<div class="entry" data-search="~/.claude.json oauth &amp; mcp state"><code class="cmd cmd-orange">~/.claude.json</code><span class="desc">OAuth &amp; MCP state</span></div>
+<div class="entry new" data-search="~/.claude/themes/ custom themes"><code class="cmd cmd-orange">~/.claude/themes/</code><span class="desc">Custom themes</span><span class=badge>new</span></div>
+<div class="entry" data-search="~/.claude/keybindings.json custom keybindings"><code class="cmd cmd-orange">~/.claude/keybindings.json</code><span class="desc">Custom keybindings</span></div>
+<div class="entry" data-search="~/.claude/claude.md global personal memory"><code class="cmd cmd-orange">~/.claude/CLAUDE.md</code><span class="desc">Global personal memory</span></div>
+<div class="entry" data-search="claude.md (project root) project memory (survives compact)"><code class="cmd cmd-orange">CLAUDE.md (project root)</code><span class="desc">Project memory (survives compact)</span></div>
+<div class="entry" data-search=".claude/rules/*.md rule fragments loaded by path"><code class="cmd cmd-orange">.claude/rules/*.md</code><span class="desc">Rule fragments loaded by path</span></div>
+</section>
+<section class="block block-orange" id="settings-keys"><h3> New Settings Keys</h3>
+<div class="entry new" data-search="fallbackmodel up to three fallback models"><code class="cmd cmd-orange">fallbackModel</code><span class="desc">Up to three fallback models</span><span class=badge>new</span></div>
+<div class="entry new" data-search="disablebundledskills turn off bundled skills"><code class="cmd cmd-orange">disableBundledSkills</code><span class="desc">Turn off bundled skills</span><span class=badge>new</span></div>
+<div class="entry new" data-search="wheelscrollaccelerationenabled mouse-wheel accel toggle"><code class="cmd cmd-orange">wheelScrollAccelerationEnabled</code><span class="desc">Mouse-wheel acceleration toggle</span><span class=badge>new</span></div>
+<div class="entry new" data-search="tool(param:value) permission rule matching tool input params"><code class="cmd cmd-orange">Tool(param:value)</code><span class="desc">Permission rule by tool input param</span><span class=badge>new</span></div>
+</section>
+<section class="block block-red" id="hook-events"><h3> Hook Events</h3>
+<div class="entry" data-search="sessionstart session begins or resumes"><code class="cmd cmd-red">SessionStart</code><span class="desc">Session begins or resumes</span></div>
+<div class="entry" data-search="sessionend session terminates"><code class="cmd cmd-red">SessionEnd</code><span class="desc">Session terminates</span></div>
+<div class="entry new" data-search="postsession after session ends — self-hosted runners"><code class="cmd cmd-red">PostSession</code><span class="desc">After session ends — self-hosted runners</span><span class=badge>new</span></div>
+<div class="entry" data-search="userpromptsubmit before claude processes prompt"><code class="cmd cmd-red">UserPromptSubmit</code><span class="desc">Before Claude processes prompt</span></div>
+<div class="entry new" data-search="userpromptexpansion before user command → prompt"><code class="cmd cmd-red">UserPromptExpansion</code><span class="desc">Before user command → prompt</span><span class=badge>new</span></div>
+<div class="entry" data-search="pretooluse before tool call (can block)"><code class="cmd cmd-red">PreToolUse</code><span class="desc">Before tool call (can block)</span></div>
+<div class="entry" data-search="posttooluse after tool call succeeds"><code class="cmd cmd-red">PostToolUse</code><span class="desc">After tool call succeeds</span></div>
+<div class="entry new" data-search="posttoolusefailure after tool call fails"><code class="cmd cmd-red">PostToolUseFailure</code><span class="desc">After tool call fails</span><span class=badge>new</span></div>
+<div class="entry new" data-search="posttoolbatch after parallel batch resolves"><code class="cmd cmd-red">PostToolBatch</code><span class="desc">After parallel batch resolves</span><span class=badge>new</span></div>
+<div class="entry" data-search="permissionrequest permission dialog appears"><code class="cmd cmd-red">PermissionRequest</code><span class="desc">Permission dialog appears</span></div>
+<div class="entry new" data-search="permissiondenied auto-mode denial (can retry)"><code class="cmd cmd-red">PermissionDenied</code><span class="desc">Auto-mode denial (can retry)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="subagentstart subagent spawned"><code class="cmd cmd-red">SubagentStart</code><span class="desc">Subagent spawned</span><span class=badge>new</span></div>
+<div class="entry" data-search="subagentstop subagent finishes — can return additionalcontext"><code class="cmd cmd-red">SubagentStop</code><span class="desc">Subagent finishes — can return additionalContext</span></div>
+<div class="entry new" data-search="taskcreated via taskcreate"><code class="cmd cmd-red">TaskCreated</code><span class="desc">Via TaskCreate</span><span class=badge>new</span></div>
+<div class="entry new" data-search="taskcompleted task marked complete"><code class="cmd cmd-red">TaskCompleted</code><span class="desc">Task marked complete</span><span class=badge>new</span></div>
+<div class="entry" data-search="stop claude finishes responding — can return additionalcontext"><code class="cmd cmd-red">Stop</code><span class="desc">Claude finishes — can return additionalContext</span></div>
+<div class="entry new" data-search="stopfailure turn ended on api error"><code class="cmd cmd-red">StopFailure</code><span class="desc">Turn ended on API error</span><span class=badge>new</span></div>
+<div class="entry new" data-search="precompact before context compaction"><code class="cmd cmd-red">PreCompact</code><span class="desc">Before context compaction</span><span class=badge>new</span></div>
+<div class="entry new" data-search="postcompact after compaction completes"><code class="cmd cmd-red">PostCompact</code><span class="desc">After compaction completes</span><span class=badge>new</span></div>
+<div class="entry new" data-search="elicitation mcp requests input mid-call"><code class="cmd cmd-red">Elicitation</code><span class="desc">MCP requests input mid-call</span><span class=badge>new</span></div>
+<div class="entry new" data-search="elicitationresult after user responds to mcp"><code class="cmd cmd-red">ElicitationResult</code><span class="desc">After user responds to MCP</span><span class=badge>new</span></div>
+<div class="entry" data-search="notification claude sends notification"><code class="cmd cmd-red">Notification</code><span class="desc">Claude sends notification</span></div>
+<div class="entry new" data-search="cwdchanged working directory changes"><code class="cmd cmd-red">CwdChanged</code><span class="desc">Working directory changes</span><span class=badge>new</span></div>
+<div class="entry new" data-search="filechanged watched file changes on disk"><code class="cmd cmd-red">FileChanged</code><span class="desc">Watched file changes on disk</span><span class=badge>new</span></div>
+<div class="entry new" data-search="configchange config file changes"><code class="cmd cmd-red">ConfigChange</code><span class="desc">Config file changes</span><span class=badge>new</span></div>
+<div class="entry new" data-search="instructionsloaded claude.md / rules loaded"><code class="cmd cmd-red">InstructionsLoaded</code><span class="desc">CLAUDE.md / rules loaded</span><span class=badge>new</span></div>
+<div class="entry new" data-search="worktreecreate/remove worktree lifecycle"><code class="cmd cmd-red">WorktreeCreate/Remove</code><span class="desc">Worktree lifecycle</span><span class=badge>new</span></div>
+<div class="entry new" data-search="teammateidle agent-teams teammate idle"><code class="cmd cmd-red">TeammateIdle</code><span class="desc">Agent-teams teammate idle</span><span class=badge>new</span></div>
+<h4>Hook Types</h4>
+<div class="entry" data-search="command run a shell command"><code class="cmd cmd-red">command</code><span class="desc">Run a shell command</span></div>
+<div class="entry" data-search="http post event json to a url"><code class="cmd cmd-red">http</code><span class="desc">POST event JSON to a URL</span></div>
+<div class="entry new" data-search="mcp_tool call an mcp server tool"><code class="cmd cmd-red">mcp_tool</code><span class="desc">Call an MCP server tool</span><span class=badge>new</span></div>
+<div class="entry" data-search="prompt evaluate with the llm"><code class="cmd cmd-red">prompt</code><span class="desc">Evaluate with the LLM</span></div>
+<div class="entry" data-search="agent run an agentic verifier"><code class="cmd cmd-red">agent</code><span class="desc">Run an agentic verifier</span></div>
+</section>
+</div>
+<div class="grid-3">
+<section class="block block-orange" id="env-vars-—-authentication"><h3> Env Vars — Authentication</h3>
+<div class="entry" data-search="anthropic_api_key api key (overrides subscription)"><code class="cmd cmd-orange">ANTHROPIC_API_KEY</code><span class="desc">API key (overrides subscription)</span></div>
+<div class="entry" data-search="claude_code_oauth_token long-lived oauth token for ci"><code class="cmd cmd-orange">CLAUDE_CODE_OAUTH_TOKEN</code><span class="desc">Long-lived OAuth token for CI</span></div>
+<div class="entry" data-search="anthropic_auth_token custom authorization header"><code class="cmd cmd-orange">ANTHROPIC_AUTH_TOKEN</code><span class="desc">Custom Authorization header</span></div>
+<div class="entry" data-search="anthropic_base_url proxy / gateway endpoint"><code class="cmd cmd-orange">ANTHROPIC_BASE_URL</code><span class="desc">Proxy / gateway endpoint</span></div>
+<div class="entry" data-search="anthropic_custom_headers custom request headers"><code class="cmd cmd-orange">ANTHROPIC_CUSTOM_HEADERS</code><span class="desc">Custom request headers</span></div>
+</section>
+<section class="block block-orange" id="env-vars-—-providers"><h3> Env Vars — Providers</h3>
+<div class="entry" data-search="claude_code_use_bedrock use aws bedrock"><code class="cmd cmd-orange">CLAUDE_CODE_USE_BEDROCK</code><span class="desc">Use AWS Bedrock</span></div>
+<div class="entry" data-search="claude_code_use_vertex use google vertex ai"><code class="cmd cmd-orange">CLAUDE_CODE_USE_VERTEX</code><span class="desc">Use Google Vertex AI</span></div>
+<div class="entry new" data-search="claude_code_use_foundry use microsoft foundry"><code class="cmd cmd-orange">CLAUDE_CODE_USE_FOUNDRY</code><span class="desc">Use Microsoft Foundry</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_use_mantle use bedrock mantle endpoint"><code class="cmd cmd-orange">CLAUDE_CODE_USE_MANTLE</code><span class="desc">Use Bedrock Mantle endpoint</span><span class=badge>new</span></div>
+<div class="entry" data-search="aws_bearer_token_bedrock bedrock api key"><code class="cmd cmd-orange">AWS_BEARER_TOKEN_BEDROCK</code><span class="desc">Bedrock API key</span></div>
+<div class="entry" data-search="http_proxy / https_proxy proxy configuration"><code class="cmd cmd-orange">HTTP_PROXY / HTTPS_PROXY</code><span class="desc">Proxy configuration</span></div>
+<div class="entry" data-search="no_proxy bypass proxy for domains/ips"><code class="cmd cmd-orange">NO_PROXY</code><span class="desc">Bypass proxy for domains/IPs</span></div>
+</section>
+<section class="block block-orange" id="env-vars-—-behaviour-and-features"><h3> Env Vars — Behaviour &amp; Features</h3>
+<div class="entry" data-search="disable_autoupdater disable auto-updates"><code class="cmd cmd-orange">DISABLE_AUTOUPDATER</code><span class="desc">Disable auto-updates</span></div>
+<div class="entry new" data-search="disable_updates block all updates incl. manual"><code class="cmd cmd-orange">DISABLE_UPDATES</code><span class="desc">Block ALL updates incl. manual</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_no_flicker enable fullscreen rendering"><code class="cmd cmd-orange">CLAUDE_CODE_NO_FLICKER</code><span class="desc">Enable fullscreen rendering</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_disable_mouse disable mouse tracking (fullscreen)"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_MOUSE</code><span class="desc">Disable mouse tracking (fullscreen)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_disable_mouse_clicks disable mouse click handling"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_MOUSE_CLICKS</code><span class="desc">Disable mouse click handling</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_disable_alternate_screen inline (no fullscreen buffer)"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_ALTERNATE_SCREEN</code><span class="desc">Inline — no fullscreen buffer</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_effort_level set effort level globally"><code class="cmd cmd-orange">CLAUDE_CODE_EFFORT_LEVEL</code><span class="desc">Set effort level globally</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_simple set by --bare"><code class="cmd cmd-orange">CLAUDE_CODE_SIMPLE</code><span class="desc">Set by --bare</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude_code_disable_background_tasks disable bg tasks + ctrl+b"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_BACKGROUND_TASKS</code><span class="desc">Disable bg tasks + Ctrl+B</span></div>
+<div class="entry new" data-search="claude_code_disable_cron disable /loop + scheduled tasks"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_CRON</code><span class="desc">Disable /loop + scheduled tasks</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_enable_auto_mode opt into auto mode (bedrock/vertex/foundry)"><code class="cmd cmd-orange">CLAUDE_CODE_ENABLE_AUTO_MODE</code><span class="desc">Opt into auto mode (older Bedrock/Vertex/Foundry)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_experimental_agent_teams enable agent teams (=1)"><code class="cmd cmd-orange">CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code><span class="desc">Enable agent teams — set to 1</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_disable_1m_context block 1m context models"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_1M_CONTEXT</code><span class="desc">Block 1M context models</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude_code_disable_terminal_title stop setting terminal title"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_TERMINAL_TITLE</code><span class="desc">Stop setting terminal title</span></div>
+<div class="entry new" data-search="claude_code_disable_thinking force-disable extended thinking"><code class="cmd cmd-orange">CLAUDE_CODE_DISABLE_THINKING</code><span class="desc">Force-disable extended thinking</span><span class=badge>new</span></div>
+<div class="entry" data-search="max_thinking_tokens thinking budget (0 = disable)"><code class="cmd cmd-orange">MAX_THINKING_TOKENS</code><span class="desc">Thinking budget (0 = disable)</span></div>
+<div class="entry" data-search="max_mcp_output_tokens mcp tool response cap"><code class="cmd cmd-orange">MAX_MCP_OUTPUT_TOKENS</code><span class="desc">MCP tool response cap</span></div>
+<div class="entry" data-search="claude_code_max_output_tokens output token limit"><code class="cmd cmd-orange">CLAUDE_CODE_MAX_OUTPUT_TOKENS</code><span class="desc">Output token limit</span></div>
+<div class="entry" data-search="bash_default_timeout_ms bash command timeout"><code class="cmd cmd-orange">BASH_DEFAULT_TIMEOUT_MS</code><span class="desc">Bash command timeout</span></div>
+<div class="entry" data-search="bash_max_timeout_ms max bash timeout"><code class="cmd cmd-orange">BASH_MAX_TIMEOUT_MS</code><span class="desc">Max bash timeout</span></div>
+<div class="entry" data-search="api_timeout_ms api timeout (default 10min)"><code class="cmd cmd-orange">API_TIMEOUT_MS</code><span class="desc">API timeout (default 10min)</span></div>
+<div class="entry new" data-search="claude_autocompact_pct_override compact threshold % (default 95)"><code class="cmd cmd-orange">CLAUDE_AUTOCOMPACT_PCT_OVERRIDE</code><span class="desc">Compact threshold % (default 95)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="enable_prompt_caching_1h request 1-hour cache ttl"><code class="cmd cmd-orange">ENABLE_PROMPT_CACHING_1H</code><span class="desc">Request 1-hour cache TTL</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude_config_dir override config directory"><code class="cmd cmd-orange">CLAUDE_CONFIG_DIR</code><span class="desc">Override config directory</span></div>
+<div class="entry new" data-search="claude_code_subprocess_env_scrub scrub secrets from subprocesses"><code class="cmd cmd-orange">CLAUDE_CODE_SUBPROCESS_ENV_SCRUB</code><span class="desc">Scrub secrets from subprocesses</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_retry_watchdog raise retry count for errors"><code class="cmd cmd-orange">CLAUDE_CODE_RETRY_WATCHDOG</code><span class="desc">Raise retry count for stalled turns</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude_code_max_retries api retry count (cap 15)"><code class="cmd cmd-orange">CLAUDE_CODE_MAX_RETRIES</code><span class="desc">API retry count (cap 15)</span></div>
+<div class="entry new" data-search="claude_code_forward_subagent_text subagent text in stream-json"><code class="cmd cmd-orange">CLAUDE_CODE_FORWARD_SUBAGENT_TEXT</code><span class="desc">Subagent text in stream-json output</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_safe_mode start with customizations disabled"><code class="cmd cmd-orange">CLAUDE_CODE_SAFE_MODE</code><span class="desc">Start with customizations disabled</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_code_process_wrapper corporate launcher wrapper"><code class="cmd cmd-orange">CLAUDE_CODE_PROCESS_WRAPPER</code><span class="desc">Corporate launcher wrapper</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude_client_presence_file client presence marker file"><code class="cmd cmd-orange">CLAUDE_CLIENT_PRESENCE_FILE</code><span class="desc">Client presence marker file</span><span class=badge>new</span></div>
+<div class="entry" data-search="claude_env_file sourced before each bash command"><code class="cmd cmd-orange">CLAUDE_ENV_FILE</code><span class="desc">Sourced before each Bash command</span></div>
+<div class="entry new" data-search="claude_code_tmpdir override temp directory"><code class="cmd cmd-orange">CLAUDE_CODE_TMPDIR</code><span class="desc">Override temp directory</span><span class=badge>new</span></div>
+</section>
+</div>
+</section><section id="plugins" class="page">
+<h2>Plugins, Skills & Agents</h2>
+<div class="grid-3">
+<section class="block block-green" id="code-intelligence-(lsp)"><h3>🧠 Code Intelligence (LSP)</h3>
+<p class="muted">Real-time diagnostics + go-to-def after each edit. Install binary FIRST, then plugin.</p>
+
+        <div class="entry lsp-entry" data-search="typescript-lsp TS / JavaScript">
+          <code class="cmd cmd-green">typescript-lsp</code>
+          <span class="desc">TS / JavaScript</span>
+          <div class="lsp-binary">Binary: <code>npm i -g typescript-language-server typescript</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="pyright-lsp Python">
+          <code class="cmd cmd-green">pyright-lsp</code>
+          <span class="desc">Python</span>
+          <div class="lsp-binary">Binary: <code>pip install pyright</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="rust-analyzer-lsp Rust">
+          <code class="cmd cmd-green">rust-analyzer-lsp</code>
+          <span class="desc">Rust</span>
+          <div class="lsp-binary">Binary: <code>rustup component add rust-analyzer</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="gopls-lsp Go">
+          <code class="cmd cmd-green">gopls-lsp</code>
+          <span class="desc">Go</span>
+          <div class="lsp-binary">Binary: <code>go install golang.org/x/tools/gopls@latest</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="clangd-lsp C / C++">
+          <code class="cmd cmd-green">clangd-lsp</code>
+          <span class="desc">C / C++</span>
+          <div class="lsp-binary">Binary: <code>brew install llvm</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="csharp-lsp C#">
+          <code class="cmd cmd-green">csharp-lsp</code>
+          <span class="desc">C#</span>
+          <div class="lsp-binary">Binary: <code>dotnet tool install -g csharp-ls</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="jdtls-lsp Java">
+          <code class="cmd cmd-green">jdtls-lsp</code>
+          <span class="desc">Java</span>
+          <div class="lsp-binary">Binary: <code>brew install jdtls</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="kotlin-lsp Kotlin">
+          <code class="cmd cmd-green">kotlin-lsp</code>
+          <span class="desc">Kotlin</span>
+          <div class="lsp-binary">Binary: <code>kotlin-language-server release</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="swift-lsp Swift">
+          <code class="cmd cmd-green">swift-lsp</code>
+          <span class="desc">Swift</span>
+          <div class="lsp-binary">Binary: <code>Bundled with Xcode</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="lua-lsp Lua">
+          <code class="cmd cmd-green">lua-lsp</code>
+          <span class="desc">Lua</span>
+          <div class="lsp-binary">Binary: <code>brew install lua-language-server</code></div>
+        </div>
+        
+
+        <div class="entry lsp-entry" data-search="php-lsp PHP">
+          <code class="cmd cmd-green">php-lsp</code>
+          <span class="desc">PHP</span>
+          <div class="lsp-binary">Binary: <code>npm i -g intelephense</code></div>
+        </div>
+        
+</section>
+<section class="block block-purple" id="official-plugins"><h3>🔌 Official Plugins</h3>
+<p class="muted">Marketplace: <code>claude-plugins-official</code><br>Browse: <a href="https://claude.com/plugins" target="_blank">claude.com/plugins</a></p>
+<h4>Source Control</h4>
+<div class="entry" data-search="github prs, issues, repos, actions"><code class="cmd cmd-teal">github</code><span class="desc">PRs, issues, repos, Actions</span></div>
+<div class="entry" data-search="gitlab mrs, issues, pipelines, repos"><code class="cmd cmd-teal">gitlab</code><span class="desc">MRs, issues, pipelines, repos</span></div>
+<h4>Project Management</h4>
+<div class="entry" data-search="atlassian jira tickets + confluence docs"><code class="cmd cmd-teal">atlassian</code><span class="desc">Jira tickets + Confluence docs</span></div>
+<div class="entry" data-search="asana tasks, projects via asana mcp"><code class="cmd cmd-teal">asana</code><span class="desc">Tasks, projects via Asana MCP</span></div>
+<div class="entry" data-search="linear issues, cycles via linear mcp"><code class="cmd cmd-teal">linear</code><span class="desc">Issues, cycles via Linear MCP</span></div>
+<div class="entry" data-search="notion pages, databases, search"><code class="cmd cmd-teal">notion</code><span class="desc">Pages, databases, search</span></div>
+<h4>Design</h4>
+<div class="entry" data-search="figma files, components, variables, designs"><code class="cmd cmd-teal">figma</code><span class="desc">Files, components, variables, designs</span></div>
+<h4>Infrastructure</h4>
+<div class="entry" data-search="vercel deploy, inspect vercel projects"><code class="cmd cmd-teal">vercel</code><span class="desc">Deploy, inspect Vercel projects</span></div>
+<div class="entry" data-search="firebase firestore, auth, storage, hosting"><code class="cmd cmd-teal">firebase</code><span class="desc">Firestore, Auth, Storage, Hosting</span></div>
+<div class="entry" data-search="supabase postgres, auth, edge functions"><code class="cmd cmd-teal">supabase</code><span class="desc">Postgres, Auth, Edge Functions</span></div>
+<h4>Communication</h4>
+<div class="entry" data-search="slack post messages, read channels"><code class="cmd cmd-teal">slack</code><span class="desc">Post messages, read channels</span></div>
+<div class="entry" data-search="sentry query errors, issues, replays"><code class="cmd cmd-teal">sentry</code><span class="desc">Query errors, issues, replays</span></div>
+<h4>Development Workflow</h4>
+<div class="entry" data-search="commit-commands git commit/push/pr workflows"><code class="cmd cmd-teal">commit-commands</code><span class="desc">Git commit/push/PR workflows</span></div>
+<div class="entry" data-search="pr-review-toolkit specialised pr review agents"><code class="cmd cmd-teal">pr-review-toolkit</code><span class="desc">Specialised PR review agents</span></div>
+<div class="entry" data-search="code-review replaces deprecated /review"><code class="cmd cmd-teal">code-review</code><span class="desc">Replaces deprecated /review</span></div>
+<div class="entry" data-search="agent-sdk-dev build with claude agent sdk"><code class="cmd cmd-teal">agent-sdk-dev</code><span class="desc">Build with Claude Agent SDK</span></div>
+<div class="entry" data-search="plugin-dev create &amp; debug your own plugins"><code class="cmd cmd-teal">plugin-dev</code><span class="desc">Create &amp; debug your own plugins</span></div>
+<h4>Output Styles</h4>
+<div class="entry" data-search="explanatory-output-style educational insights"><code class="cmd cmd-teal">explanatory-output-style</code><span class="desc">Educational insights</span></div>
+<div class="entry" data-search="learning-output-style interactive learning mode"><code class="cmd cmd-teal">learning-output-style</code><span class="desc">Interactive learning mode</span></div>
+</section>
+<section class="block block-teal" id="plugin-management"><h3>⚙ Plugin Management</h3>
+<h4>Quick Install</h4>
+
+    <pre class="install-block"><code>/plugin install github@claude-plugins-official
+/plugin install typescript-lsp@claude-plugins-official
+/plugin install commit-commands@claude-plugins-official</code></pre>
+    
+<h4>CLI Commands</h4>
+<div class="entry" data-search="claude plugin install &lt;n&gt; install from marketplace"><code class="cmd cmd-teal">claude plugin install &lt;n&gt;</code><span class="desc">Install from marketplace</span></div>
+<div class="entry" data-search="claude plugin uninstall &lt;n&gt; remove (--keep-data optional)"><code class="cmd cmd-teal">claude plugin uninstall &lt;n&gt;</code><span class="desc">Remove (--keep-data optional)</span></div>
+<div class="entry" data-search="claude plugin enable &lt;n&gt; re-enable disabled plugin"><code class="cmd cmd-teal">claude plugin enable &lt;n&gt;</code><span class="desc">Re-enable disabled plugin</span></div>
+<div class="entry" data-search="claude plugin disable &lt;n&gt; disable without uninstalling"><code class="cmd cmd-teal">claude plugin disable &lt;n&gt;</code><span class="desc">Disable without uninstalling</span></div>
+<div class="entry" data-search="claude plugin update &lt;n&gt; update to latest"><code class="cmd cmd-teal">claude plugin update &lt;n&gt;</code><span class="desc">Update to latest</span></div>
+<div class="entry" data-search="claude plugin list list installed (--json)"><code class="cmd cmd-teal">claude plugin list</code><span class="desc">List installed (--json)</span></div>
+<div class="entry" data-search="claude plugin tag create release git tag"><code class="cmd cmd-teal">claude plugin tag</code><span class="desc">Create release git tag</span></div>
+<div class="entry" data-search="claude plugin validate check schemas"><code class="cmd cmd-teal">claude plugin validate</code><span class="desc">Check schemas</span></div>
+<h4>Plugin Path Variables</h4>
+<div class="entry" data-search="${claude_plugin_root} install dir (changes on update)"><code class="cmd cmd-orange">${CLAUDE_PLUGIN_ROOT}</code><span class="desc">Install dir (changes on update)</span></div>
+<div class="entry" data-search="${claude_plugin_data} persistent data — survives updates"><code class="cmd cmd-orange">${CLAUDE_PLUGIN_DATA}</code><span class="desc">Persistent data — survives updates</span></div>
+<div class="entry" data-search="${user_config.key} user-supplied config value"><code class="cmd cmd-orange">${user_config.KEY}</code><span class="desc">User-supplied config value</span></div>
+</section>
+</div></section>
+    <section id="obsidian" class="page">
+      <h2>Use Case: Building an Excellent Obsidian Vault</h2>
+
+      <div class="callout callout-purple">
+        <h3>Treat your vault as a repo — Claude Code does the rest</h3>
+        <p>An Obsidian vault is just a folder of Markdown files — which makes it an <strong>ideal Claude Code project</strong>. Point Claude at your vault, add a <code>CLAUDE.md</code> at the root describing your conventions, codify repeated note operations as <strong>skills in <code>.claude/skills/</code></strong>, and use <strong>plan mode</strong> before any bulk change. Version-control the vault with git so you can diff, branch, and roll back entire restructures.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="block block-green">
+          <h3>📂 Setup &amp; Structure</h3>
+          <h4>Initial Setup (one-time)</h4>
+          <pre><code>cd ~/MyVault
+git init &amp;&amp; git add .
+claude
+/init                # Claude drafts CLAUDE.md
+mkdir .claude/skills</code></pre>
+
+          <h4>PARA Structure</h4>
+          <pre><code>Vault/
+├ 1-Projects/    active, deadline-driven
+├ 2-Areas/       ongoing responsibilities
+├ 3-Resources/   reference material
+├ 4-Archive/     completed / inactive
+├ Slipbox/       atomic permanent notes
+├ Daily/         daily notes
+├ Templates/     note templates
+├ _attachments/  images, PDFs
+└ CLAUDE.md      vault conventions</code></pre>
+
+          <h4>Zettelkasten Structure (alt.)</h4>
+          <pre><code>Vault/
+├ Inbox/         fleeting notes
+├ Literature/    source-based notes
+├ Permanent/     atomic ideas
+├ MOCs/          Maps of Content
+└ CLAUDE.md</code></pre>
+
+          <h4>Example CLAUDE.md (vault root)</h4>
+          <pre><code># Vault Conventions
+
+## Note types &amp; folders
+- Daily: `Daily/YYYY-MM-DD.md`
+- Permanent: `Slipbox/` — atomic ideas
+- Literature: `Literature/` — source notes
+- MOC: `MOCs/` — topic indexes
+
+## Frontmatter (required on all notes)
+---
+type: [daily|permanent|lit|moc]
+created: YYYY-MM-DD
+tags: [topic1, topic2]
+source: &lt;url or citation&gt;
+---
+
+## Linking
+- Use [[wikilinks]], not markdown links
+- Every permanent note links to ≥1 other
+- MOCs use bulleted [[links]]
+
+## Tag hierarchy
+- #area/work, #area/personal
+- #topic/ml, #topic/writing
+- #status/draft, #status/reviewed</code></pre>
+        </div>
+
+        <div class="block block-orange">
+          <h3>📝 Templates &amp; Conventions</h3>
+          <p class="muted"><code>{{date:...}}</code> syntax requires the <strong>Templater</strong> plugin; the core Templates plugin uses <code>{{date}}</code> without format.</p>
+
+          <h4>Daily Note Template</h4>
+          <pre><code>---
+type: daily
+created: {{date:YYYY-MM-DD}}
+tags: [daily]
+---
+# {{date:dddd, MMMM D YYYY}}
+
+## 🎯 Focus
+- 
+
+## 📝 Notes
+- 
+
+## 🔗 Links
+- [[Yesterday]] ← [[Today]] → [[Tomorrow]]
+
+## 💡 Ideas captured
+- </code></pre>
+
+          <h4>Permanent Note Template</h4>
+          <pre><code>---
+type: permanent
+created: {{date:YYYY-MM-DD}}
+tags: []
+links_to: []
+---
+# {{title}}
+
+&lt;!-- ONE idea, in your own words --&gt;
+
+## Why it matters
+
+## Related
+- [[...]]
+
+## Source
+- [[Literature/...]]</code></pre>
+
+          <h4>Literature Note Template</h4>
+          <pre><code>---
+type: lit
+author: 
+year: 
+url: 
+tags: []
+---
+# {{title}}
+
+## Summary (one paragraph)
+
+## Key ideas
+- 
+
+## Quotes
+&gt; 
+
+## Permanent notes extracted
+- [[Slipbox/...]]</code></pre>
+        </div>
+
+        <div class="block block-red">
+          <h3>⚡ Bulk Ops &amp; Custom Skills</h3>
+
+          <h4>Useful Prompts (use <code>/plan</code> first!)</h4>
+          <ul class="prompts">
+            <li>Add missing frontmatter to all notes, infer type from folder</li>
+            <li>Find orphan notes (zero backlinks) in <code>/Slipbox</code> and list them</li>
+            <li>Generate <code>MOCs/Machine-Learning.md</code> linking every <code>#topic/ml</code> note</li>
+            <li>Find duplicate or near-duplicate notes; suggest merges in a report</li>
+            <li>Extract permanent notes from last month's daily notes into <code>/Slipbox</code></li>
+            <li>Rename all files to kebab-case, update every <code>[[wikilink]]</code> referencing them</li>
+            <li>Convert markdown links to <code>[[wikilinks]]</code> where the target is in-vault</li>
+            <li>Audit tag usage; propose a consolidated hierarchy</li>
+            <li>Find notes with broken <code>[[wikilinks]]</code> and list targets</li>
+            <li>Migrate this Notion export to vault using our conventions</li>
+          </ul>
+
+          <h4>Custom Skills to Build</h4>
+          <p class="muted">Suggested patterns for <code>.claude/skills/&lt;n&gt;/SKILL.md</code> — write each yourself; names are illustrative.</p>
+          <div class="entry"><code class="cmd cmd-purple">/daily</code><span class="desc">Open today's daily note; create if absent</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/weekly-review</code><span class="desc">Review week: extract insights → /Slipbox</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/moc &lt;topic&gt;</code><span class="desc">Build Map of Content for #topic/*</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/orphans</code><span class="desc">List notes with no in/out links</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/frontmatter-fix</code><span class="desc">Add/repair frontmatter across vault</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/link-suggest</code><span class="desc">Suggest links for current note</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/atomicize</code><span class="desc">Split multi-idea note into atomic notes</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/lit &lt;url&gt;</code><span class="desc">Fetch article → draft literature note</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/tag-audit</code><span class="desc">Report tag usage + hierarchy warnings</span></div>
+          <div class="entry"><code class="cmd cmd-purple">/inbox-process</code><span class="desc">Triage Inbox/ notes by type</span></div>
+
+          <h4>Safe-Ops Workflow</h4>
+          <ol>
+            <li>git commit before any bulk change</li>
+            <li>Enter <code>/plan</code> mode — review the approach</li>
+            <li>Preview with <code>/diff</code> after each turn</li>
+            <li>Major restructures → use <code>--worktree</code></li>
+            <li>Commit working state; iterate in small steps</li>
+            <li>Ask <code>/btw</code> for meta questions mid-task</li>
+          </ol>
+
+          <div class="callout callout-warn">
+            <h4>★ Expert Tips</h4>
+            <ul>
+              <li>Keep <code>CLAUDE.md</code> short &amp; imperative</li>
+              <li>Store templates in <code>/Templates</code> — Claude reads them like any other note</li>
+              <li>Add <code>.obsidian/workspace*.json</code> to <code>.gitignore</code></li>
+              <li>Use <code>acceptEdits</code> mode for trusted ops, <code>default</code> for destructive ones</li>
+              <li>Daily note links should form a chain</li>
+              <li>Run <code>/tag-audit</code> monthly, not per-session</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+</main>
+
+<footer>
+  <p>Compiled by <span class="author">Douglas Mun</span> · v2.0 · July 16 2026 · CLI v2.1.211</p>
+  <p>Source: <a href="https://code.claude.com/docs" target="_blank">code.claude.com/docs</a> · Verify critical workflows in your own environment before relying on them.</p>
+  <p style="margin-top:0.6rem;font-size:0.75rem;">Free to share, free to print, free to mark up.</p>
+</footer>
+
+<script>
+// ── Search filter ──────────────────────────────────
+const searchInput = document.getElementById('search');
+const allEntries = document.querySelectorAll('[data-search]');
+const allBlocks = document.querySelectorAll('.block');
+
+function filter() {
+  const q = searchInput.value.trim().toLowerCase();
+  if (!q) {
+    allEntries.forEach(e => e.classList.remove('hidden'));
+    allBlocks.forEach(b => b.classList.remove('empty'));
+    return;
+  }
+  allEntries.forEach(e => {
+    const txt = e.getAttribute('data-search') || '';
+    e.classList.toggle('hidden', !txt.includes(q));
+  });
+  // Hide blocks where all entries are hidden
+  allBlocks.forEach(b => {
+    const entries = b.querySelectorAll('[data-search]');
+    if (entries.length === 0) { b.classList.remove('empty'); return; }
+    const anyVisible = Array.from(entries).some(e => !e.classList.contains('hidden'));
+    b.classList.toggle('empty', !anyVisible);
+  });
+}
+searchInput.addEventListener('input', filter);
+
+// "/" focuses search
+document.addEventListener('keydown', e => {
+  if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+    e.preventDefault();
+    searchInput.focus();
+  }
+  if (e.key === 'Escape' && document.activeElement === searchInput) {
+    searchInput.value = '';
+    filter();
+    searchInput.blur();
+  }
+});
+
+// ── Theme toggle ──────────────────────────────────
+const themeBtn = document.getElementById('theme-toggle');
+const root = document.documentElement;
+
+// Init from localStorage or system pref
+const saved = localStorage.getItem('cc-theme');
+if (saved) {
+  root.setAttribute('data-theme', saved);
+} else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  root.setAttribute('data-theme', 'dark');
+}
+
+themeBtn.addEventListener('click', () => {
+  const cur = root.getAttribute('data-theme');
+  const next = cur === 'dark' ? 'light' : 'dark';
+  root.setAttribute('data-theme', next);
+  localStorage.setItem('cc-theme', next);
+});
+</script>
+
+</body>
+</html>
