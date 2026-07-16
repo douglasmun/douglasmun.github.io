@@ -260,7 +260,7 @@ body.hi-contrast{--bg:#000;--bg2:#000;--bg3:#0a0a0a;--surface:#111;--surface2:#1
 </head>
 <body>
 <nav id="sidebar">
-  <div class="sidebar-header"><div class="sidebar-logo">// Claude Code + Cowork AI Course</div><div class="sidebar-title">Unaware → Curious → Fluent → Native</div><div class="sidebar-sub">Self-paced · 24 modules · 3 labs · Vetted May 2026</div><div class="a11y-bar"><button onclick="toggleHiContrast()" title="Toggle high contrast">⬤</button><button onclick="window.print()" title="Print">⎙</button><span class="kbd-hint-inline">⌨</span></div></div>
+  <div class="sidebar-header"><div class="sidebar-logo">// Claude Code + Cowork AI Course</div><div class="sidebar-title">Unaware → Curious → Fluent → Native</div><div class="sidebar-sub">Self-paced · 22 modules · 3 labs · Vetted Jul 2026</div><div class="a11y-bar"><button onclick="toggleHiContrast()" title="Toggle high contrast">⬤</button><button onclick="window.print()" title="Print">⎙</button><span class="kbd-hint-inline">⌨</span></div></div>
   <div class="progress-bar-wrap"><div class="progress-label"><span>Progress</span><span id="progress-pct">0%</span></div><div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div><button id="copy-progress-btn" onclick="exportProgress()" style="margin-top:8px;width:100%;padding:5px 10px;border:1px solid var(--border);background:transparent;color:var(--text3);font-family:'JetBrains Mono',monospace;font-size:9px;border-radius:4px;cursor:pointer;letter-spacing:.5px;transition:all .2s" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text3)'">⎘ Copy Progress</button></div>
   <div class="search-wrap"><input class="search-input" id="search-input" type="text" placeholder="Search modules..." oninput="searchModules(this.value)"></div>
   <div class="community-wrap">
@@ -404,8 +404,8 @@ git status
 
 <!-- HOME -->
 <div class="page active" id="p-home">
-  <div class="hero"><div class="hero-eyebrow">Self-Paced · 24 Modules · 3 Labs · Vetted against live product May 2026</div><h1>Claude Code + Cowork: From <span>Unaware to Native</span></h1><p class="hero-desc">Master the agent loop that powers both Claude Code (for developers) and Claude Cowork (for everyone). Same architecture, same mental model, two surfaces.</p>
-    <div class="hero-stats"><div class="stat"><span class="stat-num">4</span><span class="stat-label">Levels</span></div><div class="stat"><span class="stat-num">24</span><span class="stat-label">Modules</span></div><div class="stat"><span class="stat-num">3</span><span class="stat-label">Labs</span></div><div class="stat"><span class="stat-num">~90m</span><span class="stat-label">Reading</span></div><div class="stat"><span class="stat-num">~30h</span><span class="stat-label">Lab Work</span></div></div>
+  <div class="hero"><div class="hero-eyebrow">Self-Paced · 22 Modules · 3 Labs · Vetted against live product (CLI v2.1.211) Jul 2026</div><h1>Claude Code + Cowork: From <span>Unaware to Native</span></h1><p class="hero-desc">Master the agent loop that powers both Claude Code (for developers) and Claude Cowork (for everyone). Same architecture, same mental model, two surfaces.</p>
+    <div class="hero-stats"><div class="stat"><span class="stat-num">5</span><span class="stat-label">Levels</span></div><div class="stat"><span class="stat-num">22</span><span class="stat-label">Modules</span></div><div class="stat"><span class="stat-num">3</span><span class="stat-label">Labs</span></div><div class="stat"><span class="stat-num">~90m</span><span class="stat-label">Core Reading</span></div><div class="stat"><span class="stat-num">~7h</span><span class="stat-label">Full Reading</span></div><div class="stat"><span class="stat-num">~30h</span><span class="stat-label">Lab Work</span></div></div>
     <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text3);line-height:1.8;margin-top:20px;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:rgba(0,0,0,.2);display:inline-block">Last verified: 2026-05-11<br>Claude Code: ≥1.0  |  Node: ≥20  |  VS Code: any<br>Feature states may change — run <code style="font-size:10px;color:var(--text2)">claude doctor</code> to confirm your install.</div>
     <div class="community-hero" onclick="window.open('https://github.com/douglasmun/claude-code-course-starter/discussions','_blank')">
   <div class="ch-icon">💬</div>
@@ -434,7 +434,7 @@ git status
 
     <div class="divider"></div>
     <h3>Two Tracks, One Journey</h3>
-    <div class="card"><div class="card-title">🎬 Reading Modules (24 modules · ~90 min total)</div><p>Short (2–6 min) hands-on walkthroughs of Claude Code and Cowork features. Commands, shortcuts, demos. Each module has one learning objective. Cowork parallels are threaded throughout via ⚡ callout boxes — you learn both surfaces without switching context.</p></div>
+    <div class="card"><div class="card-title">🎬 Reading Modules (22 modules · ~90 min core path, ~7h full)</div><p>Short (2–6 min) hands-on walkthroughs of Claude Code and Cowork features. Commands, shortcuts, demos. Each module has one learning objective. Cowork parallels are threaded throughout via ⚡ callout boxes — you learn both surfaces without switching context.</p></div>
     <div class="card"><div class="card-title">📘 Foundation Labs (3 labs · ~30 hrs total)</div><p>Deep-dive labs from the Intelligence-to-Physical Systems self-study guide. Build AI systems from scratch (RAG pipelines, multi-agent orchestration, sandboxed agent runtimes) to understand the theory behind what Claude Code and Cowork automate. Each lab produces a portfolio deliverable and includes a 3-tier assessment rubric.</p></div>
 
     <div class="divider"></div>
@@ -442,7 +442,7 @@ git status
     <div class="card"><div class="card-title">For the Reading Modules</div><p>A computer (macOS, Linux, or Windows with WSL). A paid Claude account (Pro, Max, Team, or Enterprise). Basic familiarity with a terminal. No coding experience required for Level 1 — the first four modules are conceptual.</p></div>
     <div class="card"><div class="card-title">For the Foundation Labs</div><p>Python 3.11+. Comfort with pip, virtual environments, and basic scripting. Docker installed for Lab C. The labs are independent — you can skip any or do them in any order, though the recommended sequence is A → B → C.</p></div>
 
-    <div class="note-box"><strong>Version & Plan Requirements:</strong> This course targets <strong>Claude Code v2.1.84+</strong> (April 2026). Some features require specific plan tiers: 1M-token context (Max/Team/Enterprise), private plugin marketplaces (Enterprise), Cowork Routines (Pro/Max, research preview). Features marked with ★ PREVIEW may change. Run <code>claude --version</code> to verify your install. Run <code>claude update</code> to get the latest.</div>
+    <div class="note-box"><strong>Version & Plan Requirements:</strong> This course is verified against <strong>Claude Code v2.1.211</strong> (July 2026) and targets <strong>v2.1.84+</strong> as a floor. Some features require specific plan tiers: 1M-token context (Max/Team/Enterprise), private plugin marketplaces (Enterprise), Cowork Routines (Pro/Max, research preview), agent teams (experimental, opt-in). Features marked with ★ PREVIEW may change. Run <code>claude --version</code> to verify your install. Run <code>claude update</code> to get the latest. Pair this course with the companion <strong>Cheat Sheet v2.0</strong> for a one-page reference to every command below.</div>
 
     <div class="divider"></div>
     <h3>Pacing Guide</h3>
@@ -450,7 +450,7 @@ git status
 
     <div class="divider"></div>
     <h3>Course Project: Build a CLI Task Manager</h3>
-    <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--accent)">One project, built across modules</div><p>The best way to learn is to build something real. This course threads a single project through key modules — a CLI task manager app. You'll scaffold it in Module 05, add CLAUDE.md in Module 10, create a /deploy-check skill in Module 11, add a test hook in Module 15, build a security-reviewer agent in Module 17, and package everything as a plugin in Module 21. By the capstone, you have a working reference implementation demonstrating every level.</p>
+    <div class="card" style="border-color:rgba(0,212,255,.3)"><div class="card-title" style="color:var(--accent)">One project, built across modules</div><p>The best way to learn is to build something real. This course threads a single project through key modules — a CLI task manager app. You'll scaffold it in Module 05, add CLAUDE.md in Module 10, create an /add-feature skill in Module 11, add a test hook in Module 15, build a security-reviewer agent in Module 17, and package everything as a plugin in Module 21. By the capstone, you have a working reference implementation demonstrating every level.</p>
     <p style="margin-top:8px"><strong style="color:var(--white)">You choose the stack.</strong> TypeScript + Node, Python + Click, Go + Cobra, Rust + Clap — whatever you're comfortable with. The project is a vehicle for learning Claude Code features, not a software engineering exercise. If you don't have a preference, use TypeScript:</p>
     <div class="code-block" style="margin:8px 0">mkdir task-cli && cd task-cli
 npm init -y && npm i commander chalk
@@ -744,7 +744,7 @@ Example writing sample:
   <div class="divider"></div>
   <h3>The Three Unlocks</h3>
   <div class="card"><div class="card-title">1. Plan Mode — Visible Reasoning</div><p>Makes the agent's <em>Reason</em> step explicit. You see the approach before any code is touched. Read-only exploration → approved plan → supervised execution. This is what makes delegation feel safe — you're not blindly trusting the agent, you're reviewing its thinking. In Cowork: the equivalent is instructing Claude to show its plan and ask questions before executing.</p></div>
-  <div class="card"><div class="card-title">2. Subagents — Parallel Nested Loops</div><p>Delegate independent pieces of a task to isolated agents that each run their own perceive → reason → act → observe cycle. Your main context stays clean. In Code: Explore (read-only, Haiku), Plan (analytical, Sonnet), General-purpose (full tools). In Cowork: sub-agents process 10 documents in 5 minutes instead of 50 minutes sequentially, then synthesize the results.</p></div>
+  <div class="card"><div class="card-title">2. Subagents — Parallel Nested Loops</div><p>Delegate independent pieces of a task to isolated agents that each run their own perceive → reason → act → observe cycle. Your main context stays clean. In Code: Explore (read-only; inherits the session model, capped at Opus), Plan (analytical), General-purpose (full tools). In Cowork: sub-agents process 10 documents in 5 minutes instead of 50 minutes sequentially, then synthesize the results.</p></div>
   <div class="card"><div class="card-title">3. Skills, Hooks, & Plugins — Externalized Expertise</div><p>Turn tribal knowledge into shareable, reproducible workflows. Skills are slash commands. Hooks are guardrails. Plugins bundle everything into one-command installs. In Code: your team's code review process becomes <code>/pr-review</code>. In Cowork: domain plugins turn Claude from a generalist into a specialist for sales, legal, finance, or any function. New hires get the full toolkit on day one.</p></div>
 
   <div class="cowork-box"><strong>Cowork impact story:</strong> One user ran 45,000 rows of quarterly revenue data through the Data Analysis plugin. Within eight minutes, Claude identified a pricing anomaly costing $14,000/month that their data team had missed for two quarters. Another user automated their weekly 5-client status update workflow: one command (<code>/client-updates</code>) pulls from Notion, writes personalized updates, and stages them in Gmail drafts.</div>
@@ -869,6 +869,16 @@ claude
   <div class="card"><div class="card-title"><code>/branch</code> / <code>/rewind</code> — Conversation management</div><p><code>/branch [name]</code> forks the conversation — try an approach without losing the main thread. <code>/rewind</code> reverts to a previous checkpoint. Use when you want to explore two approaches and compare results.</p></div>
   <div class="card"><div class="card-title"><code>/recap</code> — Session summary</div><p>Shows a recap of the current session's context — what was discussed, what decisions were made, what files were changed. Useful when resuming after a break.</p></div>
 
+  <div class="card"><div class="card-title">New display, config & usage commands <span class="tag tag-new" style="font-size:8px">★ 2026</span></div>
+    <div class="topic-list">
+      <div class="topic-item"><code>/usage</code> — plan limits + live rate status in one view (<code>/stats</code> and <code>/cost</code> now open its tabs); <code>/usage-credits</code> requests more from your admin</div>
+      <div class="topic-item"><code>/tui [fullscreen]</code> — flicker-free fullscreen rendering; <code>/focus</code> toggles a distraction-free focus view</div>
+      <div class="topic-item"><code>/statusline</code> — configure a shell-style status line; <code>/theme</code> now supports custom themes in <code>~/.claude/themes/</code></div>
+      <div class="topic-item"><code>/cd &lt;path&gt;</code> — change the session working directory without restarting (<code>/add-dir</code> still adds an extra one)</div>
+      <div class="topic-item"><code>/powerup</code> — interactive tutorials + demos, the fastest way to discover what's new after an update</div>
+    </div>
+  </div>
+
   <div class="divider"></div>
   <h3>Context Rot — Why AI Gets Worse the Longer You Chat</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">As your conversation grows, older context gets compressed or dropped entirely. Claude's behavior drifts from your original instructions. This is <em>context rot</em> — the agent equivalent of memory loss. It affects both Claude Code and Cowork sessions. Understanding it is essential for reliable results.</p>
@@ -907,7 +917,7 @@ claude
   <h3>Model Selection</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Claude Code defaults to the best model for your plan tier. You can override per-session:</p>
   <div class="code-block"><span class="c"># Use a specific model</span>
-claude --model claude-sonnet-4-6
+claude --model claude-sonnet-5
 
 <span class="c"># Check current model</span>
 /config</div>
@@ -920,6 +930,7 @@ claude --model claude-sonnet-4-6
 /effort medium   <span class="c"># default — routine development</span>
 /effort high     <span class="c"># complex debugging, architecture decisions</span>
 /effort xhigh    <span class="c"># deep agentic reasoning on Opus — hardest problems</span>
+/effort max      <span class="c"># ceiling — reserve for the single hardest verify/design pass</span>
 /effort auto     <span class="c"># Claude picks based on task complexity</span></div>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-top:8px"><code>/effort low</code> is often enough for "rename this variable everywhere" work. <code>/effort xhigh</code> on Opus is extraordinary for complex agentic coding but burns tokens fast. Match effort to the actual difficulty of the task.</p>
 
@@ -960,14 +971,14 @@ claude --model claude-sonnet-4-6
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Things will go wrong. Here's what to do when they do:</p>
   <div class="card"><div class="card-title">Claude loops on the same error</div><p>It's stuck in an Act → Observe → Act cycle that isn't converging. Press <code>Esc</code> to interrupt. Give explicit direction: <code>"Stop trying that approach. Instead, try X."</code> If that fails, <code>/clear</code> and restate the goal with more constraints.</p></div>
   <div class="card"><div class="card-title">Output quality collapses mid-session</div><p>This is context rot in action. Claude stops following CLAUDE.md rules, repeats mistakes, or produces generic output. Run <code>/compact</code> immediately. If quality doesn't recover, start a fresh session — use <code>/resume</code> on the old one to check what was accomplished, then open a new session for the remaining work.</p></div>
-  <div class="card"><div class="card-title">A subagent gets stuck or hangs</div><p>Check the <code>/agents</code> Running tab. If the agent is looping, <code>Ctrl+F</code> kills all background agents. Re-launch with a more constrained prompt or a lower <code>maxTurns</code> to prevent infinite loops.</p></div>
+  <div class="card"><div class="card-title">A subagent gets stuck or hangs</div><p>Check the <code>/agents</code> Running tab. If the agent is looping, <code>Ctrl+X Ctrl+K</code> (press twice within 3s) kills all background agents. Re-launch with a more constrained prompt or a lower <code>maxTurns</code> to prevent infinite loops.</p></div>
   <div class="card"><div class="card-title">Costs spike unexpectedly</div><p>Check <code>/cost</code> immediately. Common causes: running Opus on trivial tasks, not compacting long sessions, re-reading the entire codebase repeatedly. Switch to Sonnet or Haiku, compact, and scope your prompts tighter.</p></div>
   <div class="card"><div class="card-title">A hook breaks the workflow</div><p>A PreToolUse hook that exits non-zero blocks every tool call. If you can't fix it in-session, edit <code>.claude/settings.json</code> directly to remove the broken hook, then restart Claude.</p></div>
 
   <div class="divider"></div>
   <h3>Cost Management Strategies</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Agentic workflows consume significantly more than chat. Here's how to stay efficient:</p>
-  <div class="card"><div class="card-title">Use Haiku subagents for exploration</div><p>The Explore agent runs on Haiku by default — ~10x cheaper than Opus. Use <code>context: fork</code> + <code>agent: Explore</code> for any read-only investigation before committing to an Opus task.</p></div>
+  <div class="card"><div class="card-title">Use Explore subagents for read-only work</div><p>The Explore agent is read-only and inherits your session model (capped at Opus) — isolating exploration in its own context keeps your main session clean and cheap. Use <code>context: fork</code> + <code>agent: Explore</code> for any read-only investigation before committing to an edit task.</p></div>
   <div class="card"><div class="card-title">Use opusplan for refactoring</div><p>Opus plans the approach (deep reasoning), Sonnet executes the edits (fast, cheap). You get Opus-quality architecture decisions at Sonnet-level execution costs.</p></div>
   <div class="card"><div class="card-title">Compact proactively</div><p>Don't wait for context rot — a bloated context means you're paying for redundant tokens on every turn. Compact early, especially before starting a new phase of work within the same session.</p></div>
   <div class="card"><div class="card-title">Use @file references instead of re-reading</div><p>Instead of asking Claude to "read all files in src/", point it at specific files: <code>@src/auth/login.ts</code>. Narrower perception = fewer tokens = lower cost.</p></div>
@@ -1047,7 +1058,7 @@ claude --model claude-sonnet-4-6
   <div class="divider"></div>
   <h3>Auto Mode — Intelligent Autonomous Operation</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">For experienced users who want faster flow without giving up all safety:</p>
-  <div class="card"><div class="card-title"><code>claude --auto</code> or <code>config set autoMode true</code></div><p>Auto mode uses an AI classifier to approve routine, low-risk actions (file reads, grep, listing directories) automatically while still prompting you for high-risk actions (file writes, shell commands, git operations). It's the sweet spot between full manual approval and no approval at all — you get faster flow on safe operations without losing oversight on dangerous ones.</p></div>
+  <div class="card"><div class="card-title"><code>claude --permission-mode auto</code></div><p>Auto mode uses an AI classifier to approve routine, low-risk actions (file reads, grep, listing directories) automatically while still prompting you for high-risk actions (file writes, shell commands, git operations). It's the sweet spot between full manual approval and no approval at all — you get faster flow on safe operations without losing oversight on dangerous ones.</p></div>
   <div class="highlight-box"><p><strong style="color:var(--white)">When to use auto mode:</strong> Daily development on projects you know well, where you trust the codebase and have hooks configured as guardrails. Pair with a PostToolUse hook that runs tests after edits — auto mode handles the routine approvals, hooks catch the mistakes.<br><br><strong style="color:var(--white)">When NOT to use auto mode:</strong> Unfamiliar codebases, production-critical changes, anything involving secrets or credentials, or when working without hooks configured. In these cases, Default or Plan mode gives you the oversight you need.</p></div>
 
   <h3>When to Use Plan Mode</h3>
@@ -1471,13 +1482,13 @@ Check $ARGUMENTS is ready for deployment:
   <h3>Pattern 3: Forked Skill (auto-subagent)</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Add <code>context: fork</code> and <code>agent:</code> to frontmatter. The skill runs in an isolated subagent — your main context stays clean. Results are summarized back. This is the most powerful pattern for exploration and research tasks.</p>
 
-  <div class="highlight-box"><p><strong style="color:var(--white)">context: fork vs agent: — what each field does.</strong> They are independent.<br><br><code>context: fork</code> controls <em>isolation</em>: the skill runs in a fresh subagent context that cannot read or pollute your main session. The subagent reports back a summary when it finishes. Use it whenever the task involves broad exploration or could accumulate a lot of irrelevant context.<br><br><code>agent:</code> controls <em>which subagent runs it</em>: <code>Explore</code> is read-only and runs on Haiku (fast, cheap — use for codebase mapping and search), <code>Plan</code> is analytical and cannot edit files (use for architecture review), <code>general-purpose</code> has full tools (default if you omit the field). You can also name a custom agent defined in <code>.claude/agents/</code>.<br><br>You can use <code>agent: Explore</code> <em>without</em> <code>context: fork</code> (the task runs in your current session but uses Haiku), and <code>context: fork</code> <em>without</em> <code>agent:</code> (forks a general-purpose subagent). The combination — fork + Explore — is the sweet spot for read-heavy research tasks: isolated context, fast model, cheap.</p></div>
+  <div class="highlight-box"><p><strong style="color:var(--white)">context: fork vs agent: — what each field does.</strong> They are independent.<br><br><code>context: fork</code> controls <em>isolation</em>: the skill runs in a fresh subagent context that cannot read or pollute your main session. The subagent reports back a summary when it finishes. Use it whenever the task involves broad exploration or could accumulate a lot of irrelevant context.<br><br><code>agent:</code> controls <em>which subagent runs it</em>: <code>Explore</code> is read-only and inherits your session model, capped at Opus (use for codebase mapping and search), <code>Plan</code> is analytical and cannot edit files (use for architecture review), <code>general-purpose</code> has full tools (default if you omit the field). You can also name a custom agent defined in <code>.claude/agents/</code>.<br><br>You can use <code>agent: Explore</code> <em>without</em> <code>context: fork</code> (the task runs in your current session), and <code>context: fork</code> <em>without</em> <code>agent:</code> (forks a general-purpose subagent). The combination — fork + Explore — is the sweet spot for read-heavy research tasks: isolated context, read-only, cheap to run.</p></div>
   <div class="code-block"><span class="c"># .claude/skills/deep-research/SKILL.md</span>
 ---
 name: deep-research
 description: Research a topic thoroughly across the codebase
 context: fork
-agent: Explore    <span class="c"># built-in read-only agent (fast, Haiku)</span>
+agent: Explore    <span class="c"># built-in read-only agent (inherits session model, capped at Opus)</span>
 ---
 Research $ARGUMENTS thoroughly:
 1. Find all relevant files using Glob and Grep
@@ -1526,7 +1537,7 @@ Research $ARGUMENTS thoroughly:
   <div class="card"><div class="card-title"><span class="ext-tag ext-harness">🎛</span> Agent Loop Connection</div><p>Subagents are <em>nested agent loops</em>. Each runs its own perceive → reason → act → observe cycle in isolated context, then returns a summary to the parent loop. This is the primary defense against context rot — complex sub-tasks get fresh context instead of polluting your main session.</p></div>
 
   <h3>Three Built-in Agents</h3>
-  <div class="card"><div class="card-title">Explore — Perceive only</div><p>Read-only, runs on Haiku (fast, cheap). Maps your codebase, finds references, traces call chains, answers structural questions. Cannot edit files. Best for: "Where is X used?", "How does Y work?", codebase mapping before a refactor. Use via skills with <code>context: fork</code> + <code>agent: Explore</code>, or ask Claude to "use the Explore agent."</p></div>
+  <div class="card"><div class="card-title">Explore — Perceive only</div><p>Read-only; inherits the session model, capped at Opus. Maps your codebase, finds references, traces call chains, answers structural questions. Cannot edit files. Best for: "Where is X used?", "How does Y work?", codebase mapping before a refactor. Use via skills with <code>context: fork</code> + <code>agent: Explore</code>, or ask Claude to "use the Explore agent."</p></div>
   <div class="card"><div class="card-title">Plan — Perceive + Reason</div><p>Gathers context deeply, synthesizes, and returns a recommended approach. Analytical, not executable. Best for: designing a multi-file change, evaluating tradeoffs, creating a migration plan. Claude uses this automatically in plan mode.</p></div>
   <div class="card"><div class="card-title">General-purpose — Full loop</div><p>Has all tools — read, edit, run commands, write files. Runs a complete agent loop in isolation and reports back. Best for: independent sub-tasks ("add tests for module X while I work on module Y"), documentation generation, multi-perspective analysis.</p></div>
 
@@ -1897,6 +1908,7 @@ date "+Today is %A, %B %d, %Y"</div>
   <div class="topic-list">
     <div class="topic-item"><code>PreToolUse</code> — before any tool runs</div>
     <div class="topic-item"><code>UserPromptSubmit</code> — when you send a prompt</div>
+    <div class="topic-item"><code>UserPromptExpansion</code> — before a slash command expands to a prompt <span class="tag tag-new" style="font-size:7px">★</span></div>
     <div class="topic-item"><code>WorktreeCreate</code> — worktree being created</div>
     <div class="topic-item"><code>PermissionRequest</code> — permission dialog shown</div>
     <div class="topic-item"><code>Elicitation</code> — MCP requests input</div>
@@ -1904,14 +1916,15 @@ date "+Today is %A, %B %d, %Y"</div>
   </div>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin:8px 0">Events that are observe-only (cannot block):</p>
   <div class="topic-list">
-    <div class="topic-item"><code>PostToolUse</code> — after any tool runs</div>
-    <div class="topic-item"><code>Stop</code> — Claude finishes a response</div>
-    <div class="topic-item"><code>SessionStart</code> / <code>InstructionsLoaded</code></div>
+    <div class="topic-item"><code>PostToolUse</code> / <code>PostToolUseFailure</code> — after a tool succeeds / fails <span class="tag tag-new" style="font-size:7px">★</span></div>
+    <div class="topic-item"><code>PostToolBatch</code> — after a parallel tool batch resolves <span class="tag tag-new" style="font-size:7px">★</span></div>
+    <div class="topic-item"><code>SubagentStart</code> / <code>SubagentStop</code> — subagent spawned / finished (can return <code>additionalContext</code>) <span class="tag tag-new" style="font-size:7px">★</span></div>
+    <div class="topic-item"><code>Stop</code> / <code>StopFailure</code> — Claude finishes / turn ended on API error</div>
+    <div class="topic-item"><code>SessionStart</code> / <code>SessionEnd</code> / <code>PostSession</code> / <code>InstructionsLoaded</code></div>
     <div class="topic-item"><code>PreCompact</code> / <code>PostCompact</code></div>
     <div class="topic-item"><code>FileChanged</code> / <code>CwdChanged</code></div>
     <div class="topic-item"><code>TaskCreated</code> / <code>TaskCompleted</code></div>
-    <div class="topic-item"><code>TeammateIdle</code> / <code>StopFailure</code></div>
-    <div class="topic-item"><code>PermissionDenied</code> / <code>WorktreeRemove</code></div>
+    <div class="topic-item"><code>TeammateIdle</code> / <code>PermissionDenied</code> (auto-mode denial — can retry) / <code>WorktreeRemove</code></div>
   </div>
   <p style="font-size:12px;color:var(--text3);margin-top:8px">Environment variables available in hooks: <code>CLAUDE_FILE_PATH</code>, <code>CLAUDE_TOOL_NAME</code>, <code>CLAUDE_TOOL_INPUT</code>, <code>CLAUDE_SESSION_ID</code>, <code>CLAUDE_PROJECT_DIR</code>.</p>
 
@@ -2021,9 +2034,9 @@ date "+Today is %A, %B %d, %Y"</div>
 <!-- L4: AGENT TEAMS -->
 <div class="page" id="p-4-1"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 17</div><div class="phase-badge b-4">● Custom Agent Teams</div>
-  <div class="time-est">⏱ 25 min + hands-on</div>
-  <h2 class="page-title">Custom Subagents & Agent Teams</h2>
-  <p class="page-subtitle">Design specialized agents with persistent memory, permission boundaries, and model selection. Chain them into multi-phase pipelines. Up to 10 in parallel.</p>
+  <div class="time-est">⏱ 30 min + hands-on</div>
+  <h2 class="page-title">Custom Subagents, Workflows & Agent Teams</h2>
+  <p class="page-subtitle">Design specialized agents with persistent memory and permission boundaries. Chain them into pipelines, orchestrate them deterministically with <code>/workflows</code>, or run them as a background team.</p>
 
   <div class="card"><div class="card-title"><span class="tag tag-obj">Objective</span></div><p>Create a custom subagent with YAML frontmatter, build a multi-phase pipeline (Explore → Plan → Execute), and configure persistent agent memory.</p></div>
 
@@ -2076,7 +2089,7 @@ After review:
     <div class="flow-node" style="border-color:rgba(0,212,255,.3)">
       <div class="f-icon">👁</div>
       <div class="f-name" style="color:var(--lv2)">Explore</div>
-      <div class="f-model">Haiku · read-only</div>
+      <div class="f-model">session model · read-only</div>
       <div class="f-desc">Maps territory<br>Finds files, traces calls</div>
     </div>
     <div class="flow-arrow-big" style="color:var(--accent)">→</div>
@@ -2101,14 +2114,59 @@ After review:
       <div class="f-desc">Accept, reject,<br>or iterate</div>
     </div>
   </div>
-  <div class="card"><div class="card-title">Phase 1: Explore agent (Haiku, read-only)</div><p>Maps the territory. Reads files, traces call chains, identifies scope. Returns a codebase summary. Fast and cheap.</p></div>
+  <div class="card"><div class="card-title">Phase 1: Explore agent (read-only)</div><p>Maps the territory. Reads files, traces call chains, identifies scope. Returns a codebase summary. Runs in isolated context so the main session stays clean.</p></div>
   <div class="card"><div class="card-title">Phase 2: Plan agent (Sonnet/Opus, analytical)</div><p>Takes the Explore summary. Designs the approach, identifies risks, proposes a step-by-step plan. You review and approve.</p></div>
   <div class="card"><div class="card-title">Phase 3: Execute agent (Sonnet, full tools)</div><p>Takes the approved plan. Implements changes, runs tests, iterates on failures. You review the final diff.</p></div>
 
   <h3>Agent Memory</h3>
   <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Agents with <code>memory: user</code> maintain a MEMORY.md in <code>~/.claude/agent-memory/&lt;agent-name&gt;/</code>. This persists across sessions — the security-reviewer remembers past findings, the doc-writer remembers your style preferences. This is Layer 3 memory (per-agent), distinct from CLAUDE.md (Layer 1, you write) and .claude/memory/ (Layer 2, auto-managed).</p>
 
-  <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands</span></div><p><code>/agents</code> (Library + Running tabs) · agents discoverable via <code>context: fork</code> + <code>agent: &lt;name&gt;</code> in skills</p></div>
+  <div class="divider"></div>
+  <h3>/workflows — Deterministic Multi-Agent Orchestration <span class="tag tag-new" style="font-size:8px">★ NEW 2026</span></h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">The Explore → Plan → Execute pipeline above is <em>model-driven</em> — Claude decides when to spawn each agent. Sometimes you want the opposite: <strong>deterministic</strong> control flow — loops, conditionals, fan-out — that runs the same way every time. That's <code>/workflows</code>. You write a short JavaScript script that orchestrates subagents; the harness runs it, streaming live progress you can watch with <code>/workflows</code>.</p>
+  <div class="card"><div class="card-title"><span class="ext-tag ext-harness">🎛</span> When to reach for it</div><p>Use <code>/workflows</code> when the <em>shape</em> of the work is known even if the contents aren't: review every changed file across N dimensions, migrate every call site, research a question from M angles then verify each claim. It shines at three things a single agent can't do well — <strong>be comprehensive</strong> (decompose and cover in parallel), <strong>be confident</strong> (independent verifiers refute each finding before it survives), and <strong>take on scale</strong> one context window can't hold.</p></div>
+  <div class="code-block"><span class="c">// A review workflow: fan out by dimension, then adversarially verify each finding</span>
+<span class="k">export const</span> meta = {
+  name: <span class="s">'review-changes'</span>,
+  description: <span class="s">'Review the diff across dimensions, verify each finding'</span>,
+  phases: [{ title: <span class="s">'Review'</span> }, { title: <span class="s">'Verify'</span> }],
+}
+<span class="k">const</span> DIMENSIONS = [
+  { key: <span class="s">'bugs'</span>,  prompt: <span class="s">'Find correctness bugs in the diff.'</span> },
+  { key: <span class="s">'perf'</span>,  prompt: <span class="s">'Find performance regressions in the diff.'</span> },
+  { key: <span class="s">'sec'</span>,   prompt: <span class="s">'Find security issues in the diff.'</span> },
+]
+<span class="c">// pipeline() = each item flows through both stages with NO barrier between them:</span>
+<span class="c">// 'bugs' findings verify while 'perf' is still being reviewed. No wasted wall-clock.</span>
+<span class="k">const</span> results = <span class="k">await</span> pipeline(
+  DIMENSIONS,
+  d =&gt; agent(d.prompt, { phase: <span class="s">'Review'</span>, schema: FINDINGS }),
+  review =&gt; parallel(review.findings.map(f =&gt; () =&gt;
+    agent(<span class="s">`Try to REFUTE this finding: ${f.title}`</span>, { phase: <span class="s">'Verify'</span>, schema: VERDICT })
+      .then(v =&gt; ({ ...f, verdict: v })))))
+<span class="k">return</span> results.flat().filter(f =&gt; f.verdict?.isReal)</div>
+  <div class="topic-list">
+    <div class="topic-item"><code>agent(prompt, opts)</code> — spawn one subagent; pass a JSON <code>schema</code> to get validated structured output back instead of raw text</div>
+    <div class="topic-item"><code>pipeline(items, stage1, stage2…)</code> — the default; each item runs all stages independently, no barrier (fastest wall-clock)</div>
+    <div class="topic-item"><code>parallel(thunks)</code> — a barrier: use only when the next stage genuinely needs <em>all</em> prior results at once (dedup, early-exit)</div>
+    <div class="topic-item"><code>phase()</code> / <code>log()</code> — group and narrate progress in the <code>/workflows</code> live view</div>
+  </div>
+  <div class="highlight-box"><p><strong style="color:var(--white)">Cost discipline:</strong> a workflow can spawn dozens of agents. Only launch one when the task is genuinely fan-out-shaped — and scale to the ask: "find any bugs" wants a few finders and single-vote verify; "thoroughly audit this" wants a larger finder pool, 3–5 vote adversarial verification, and a synthesis stage. The <strong>adversarial verify</strong> pattern (spawn N skeptics per finding, each prompted to refute; kill anything a majority refutes) is what keeps plausible-but-wrong findings from surviving.</p></div>
+  <div class="card"><div class="card-title">/workflows vs. /batch vs. custom agents</div><p><code>/batch</code> applies <em>one</em> transformation across many files (worktree-isolated). <code>/workflows</code> runs <em>arbitrary staged control flow</em> over any work-list — multiple stages, verification, loops-until-dry. Custom agents (above) are model-driven and conversational. Rule of thumb: reach for <code>/workflows</code> when you can describe the orchestration as a flowchart before you know the data.</p></div>
+
+  <div class="divider"></div>
+  <h3>Agent Teams <span class="tag tag-new" style="font-size:8px">★ EXPERIMENTAL 2026</span></h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Subagents now run in the <strong>background by default</strong> — you keep working and get notified on completion — can <strong>nest up to 5 levels deep</strong>, and background agents can auto-commit / push / open a PR when they finish. <em>Agent teams</em> take this further: multiple named teammates that run concurrently and message each other. It's opt-in behind an environment flag:</p>
+  <div class="code-block"><span class="c"># Enable experimental agent teams for the session</span>
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
+claude
+
+<span class="c"># Inside the session, spawn named teammates that stay addressable while running.</span>
+<span class="c"># New hook events fire around their lifecycle: SubagentStart, SubagentStop,</span>
+<span class="c"># TeammateIdle — wire these in .claude/settings.json to coordinate or log.</span></div>
+  <div class="note-box" style="border-color:rgba(255,77,109,.3)"><strong>Experimental — expect change:</strong> Agent teams are behind an opt-in flag and the surface may shift between releases. Teach it as "here's where the platform is heading," not as a stable capstone requirement. The stable, production-ready path for coordinated multi-agent work today is <code>/workflows</code>.</div>
+
+  <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>/workflows</code> · <code>/agents</code> (Library + Running tabs) · agents discoverable via <code>context: fork</code> + <code>agent: &lt;name&gt;</code> in skills · <code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1</code></p></div>
 
   <div class="note-box"><strong>Checkpoint:</strong> Your repo has at least one custom agent in .claude/agents/ with persistent memory. You've chained an Explore → Plan → Execute pipeline on a real task.</div>
   <button class="complete-btn" onclick="markComplete('p-4-1',this)">☐ &nbsp;Mark Complete</button>
@@ -2253,8 +2311,8 @@ DENIED_CMDS  = [<span class="s">"rm -rf"</span>, <span class="s">"curl | bash"</
 <div class="page" id="p-4-2"><div class="content-wrap">
   <div class="section-eyebrow ey-4">Level 4 · Native · Module 18</div><div class="phase-badge b-4">● Background, Scheduling & Voice</div>
   <div class="time-est">⏱ 15 min</div>
-  <h2 class="page-title">Background Agents, Scheduling & Voice</h2>
-  <p class="page-subtitle">Schedule Claude to do work while you sleep. Talk to it hands-free. Both Code and Cowork now have scheduling — in different forms.</p>
+  <h2 class="page-title">Background Agents, Scheduling, Remote & Voice</h2>
+  <p class="page-subtitle">Schedule Claude to do work while you sleep, hand tasks to cloud sessions and teleport them back, sandbox risky runs, and talk to it hands-free.</p>
 
   <div class="card"><div class="card-title"><span class="tag tag-obj">Objective</span></div><p>Set up a <code>/loop</code> scheduled task, use <code>/voice</code> for hands-free input, and understand Cowork's Scheduled Tasks, Routines, and Dispatch.</p></div>
 
@@ -2269,8 +2327,8 @@ DENIED_CMDS  = [<span class="s">"rm -rf"</span>, <span class="s">"curl | bash"</
 <span class="c"># Push-to-talk voice input (hold spacebar)</span>
 /voice
 
-<span class="c"># Kill all background agents</span>
-Ctrl+F</div>
+<span class="c"># Kill all background agents (press twice within 3s)</span>
+Ctrl+X Ctrl+K</div>
 
   <h3>When to Use Which</h3>
   <div class="card"><div class="card-title"><code>/loop</code> — ephemeral, in-session</div><p>Lives only as long as your terminal is open. Best for: monitoring during active work sessions (watch CI while you code), periodic checks during a long refactor (re-run tests every 30 min), development-time automation (check for new issues while coding). Stops when you close the session.</p></div>
@@ -2295,14 +2353,30 @@ Ctrl+F</div>
 
   <h3>Managing Background Work</h3>
   <div class="card"><div class="card-title"><code>Ctrl+B</code> — Send to background</div><p>Background a running task so you can keep typing. The agent continues working and reports back when done.</p></div>
-  <div class="card"><div class="card-title"><code>Ctrl+F</code> — Kill all background agents</div><p>Emergency stop for all background and scheduled tasks. Use when a /loop is misbehaving or an agent is stuck.</p></div>
+  <div class="card"><div class="card-title"><code>Ctrl+X Ctrl+K</code> — Kill all background agents</div><p>Emergency stop for all background and scheduled tasks — press the chord <strong>twice within 3 seconds</strong> to confirm. Use when a /loop is misbehaving or an agent is stuck. (The old single <code>Ctrl+F</code> binding was removed; <code>Ctrl+T</code> toggles the task list, <code>/tasks</code> lists background work.)</p></div>
+
+  <div class="divider"></div>
+  <h3>Remote Sessions & Sandbox <span class="tag tag-new" style="font-size:8px">★ NEW 2026</span></h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">Work no longer has to start and finish in the same terminal. You can hand a task to a cloud session and pull it back down when you're ready to steer:</p>
+  <div class="code-block"><span class="c"># Kick off a cloud (web) session from the terminal — runs even if you close the laptop</span>
+claude --remote <span class="s">"Audit every route handler for missing auth checks and open a PR"</span>
+
+<span class="c"># Later, pull that web session INTO your local terminal to take over interactively</span>
+/teleport            <span class="c"># alias: /tp — the web session's history + state lands locally</span>
+
+<span class="c"># Set the default environment cloud sessions launch into (image, secrets, setup)</span>
+/remote-env
+
+<span class="c"># Run the current session with tool execution sandboxed (OS-level isolation)</span>
+/sandbox             <span class="c"># toggle on/off — safer default for untrusted repos or aggressive autonomy</span></div>
+  <div class="card"><div class="card-title">When each fits</div><p><code>--remote</code> + <code>/teleport</code> is the terminal counterpart to Cowork's <strong>Dispatch</strong>: start work anywhere, finish it anywhere. <code>/remote-env</code> is where you pin the cloud image and secrets so remote runs are reproducible. <code>/sandbox</code> is a safety dial — turn it on when you're letting Claude run more autonomously (auto mode, long <code>/loop</code>s) against code you don't fully trust, so tool calls execute inside an isolated boundary rather than directly on your machine.</p></div>
 
   <div class="cowork-box"><strong>Cowork scheduling is more advanced:</strong>
     <br>• <strong>Scheduled Tasks</strong> — run on a timer while your desktop is open. If your machine is off during a scheduled run, the task is skipped but shows in task history and auto-runs when you reopen the app.
     <br>• <strong>Routines</strong> <span style="font-size:9px;color:var(--cap)">★ PREVIEW</span> — cloud-hosted automation that runs even when your laptop is closed. The agent equivalent of cron — your machine doesn't need to be on.
     <br>• <strong>Dispatch</strong> — text a task from your phone → Cowork runs the full workflow on your desktop → you return to finished files. Requires desktop app running and computer awake. Your phone becomes a remote trigger.</div>
 
-  <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>/loop</code> · <code>/voice</code> · <code>Ctrl+B</code> (background) · <code>Ctrl+F</code> (kill all)</p></div>
+  <div class="card"><div class="card-title"><span class="tag tag-cmd">Commands Introduced</span></div><p><code>/loop</code> · <code>/schedule</code> · <code>/voice</code> · <code>--remote</code> · <code>/teleport</code> · <code>/remote-env</code> · <code>/sandbox</code> · <code>Ctrl+B</code> (background) · <code>Ctrl+X Ctrl+K</code> (kill all)</p></div>
 
   <div class="note-box"><strong>Checkpoint:</strong> You have a /loop agent doing periodic work (PR review, monitoring, or security scans). You've used /voice to dictate a complex prompt.</div>
   <button class="complete-btn" onclick="markComplete('p-4-2',this)">☐ &nbsp;Mark Complete</button>
@@ -2415,7 +2489,8 @@ jobs:
   <div class="card"><div class="card-title"><code>/install-slack-app</code> — Claude in Slack</div><p>Installs the Claude Slack app via OAuth. Once connected, team members can interact with Claude directly in Slack channels — ask questions about the codebase, trigger reviews, or run skills from chat.</p></div>
 
   <h3>Advanced Headless Skills</h3>
-  <div class="card"><div class="card-title"><code>/ultrareview [PR#]</code> — Parallel multi-agent PR review <span class="tag tag-new" style="font-size:8px">★ PREVIEW</span></div><p>Spawns multiple review agents in parallel — security, performance, architecture, test coverage — each analyzing the PR from a different angle. Results are synthesized into a single comprehensive review. More thorough than <code>/install-github-app</code> but runs on-demand rather than automatically.</p></div>
+  <div class="card"><div class="card-title"><code>/code-review ultra [PR#]</code> — Cloud multi-agent PR review <span class="tag tag-new" style="font-size:8px">★ 2026</span></div><p>Spawns multiple review agents in the cloud — security, performance, architecture, test coverage — each analyzing the diff from a different angle, then synthesizes one comprehensive review. With no argument it bundles the current local branch (no GitHub remote needed); pass a PR number to review a GitHub PR. More thorough than <code>/install-github-app</code> but runs on-demand. It is user-triggered and billed — the agent cannot launch it for you.<br><span style="font-size:11px;color:var(--text3)"><strong>Renamed in 2026:</strong> <code>/ultrareview</code> is now a <em>deprecated alias</em> — use <code>/code-review ultra</code>. Lower tiers of the same skill run locally: <code>/code-review</code> (low/medium/high effort) reviews the current diff without the cloud fan-out.</span></p></div>
+  <div class="card"><div class="card-title"><code>/autofix-pr [prompt]</code> — Web agent auto-fix <span class="tag tag-new" style="font-size:8px">★ 2026</span></div><p>Dispatches a web agent that reads a PR's failing CI and reviewer comments, then pushes fixes back to the branch. Pairs with the always-on reviewer: the App finds problems, <code>/autofix-pr</code> resolves the mechanical ones so humans review only what needs judgment.</p></div>
   <div class="card"><div class="card-title"><code>/security-review</code> — Vulnerability scan</div><p>Scans the current branch diff for security vulnerabilities. More focused than the <code>security-guidance</code> plugin — specifically targets the changed code and maps findings to OWASP categories with severity ratings.</p></div>
 
   <h3>Key Headless Flags</h3>
@@ -2611,6 +2686,14 @@ Flag any assumptions you made about what counts as "last week".</div>
 
   <h3>The Onboarding Test</h3>
   <div class="highlight-box"><p><strong style="color:var(--white)">The ultimate test of a Native-level team:</strong> A new engineer clones the repo, runs <code>claude</code>, and ships a feature on day one — without reading a wiki. A new marketing hire opens Cowork, installs the team plugin, and produces a campaign brief matching the brand voice — without a style meeting. The team's expertise lives in the harness, not in people's heads.</p></div>
+
+  <div class="divider"></div>
+  <h3>Commands That Bootstrap the Harness <span class="tag tag-new" style="font-size:8px">★ NEW 2026</span></h3>
+  <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:12px">You don't have to build the five layers by hand. Three 2026 commands generate the artifacts from what your team already does:</p>
+  <div class="card"><div class="card-title"><code>/team-onboarding</code> — Replayable guide from your history</div><p>Reads your last ~30 days of session history and produces a step-by-step onboarding guide a new teammate can replay — the real commands, skills, and workflows your team actually uses, not an idealized wiki. This is the fastest way to turn "the onboarding test" from an aspiration into a checked-in artifact.</p></div>
+  <div class="card"><div class="card-title"><code>/less-permission-prompts</code> — Propose an allowlist from transcripts</div><p>Scans your transcripts for the read-only Bash and MCP calls you approve over and over, then proposes a prioritized allowlist for <code>.claude/settings.json</code>. Fewer interruptions for the whole team, without hand-writing permission rules. Review the proposal before committing — it only suggests; you approve.</p></div>
+  <div class="card"><div class="card-title"><code>/recap</code> — Session context recap</div><p>Summarizes where the current session stands — decisions made, files touched, open threads. Pair it with <code>/team-onboarding</code> when handing work between teammates, or use it after a long break instead of re-reading stale history.</p></div>
+  <div class="note-box"><strong>Governance note:</strong> The allowlist <code>/less-permission-prompts</code> proposes goes in project settings and ships to everyone via git. Treat it like any security config — review the diff, keep write/destructive commands out of the allowlist, and lean on hooks (<code>PreToolUse</code>) for anything that needs a hard block rather than a silent allow.</div>
 
   <div class="divider"></div>
   <h3>Case Study: How Team Acme Set This Up</h3>
@@ -2810,10 +2893,10 @@ Flag any assumptions you made about what counts as "last week".</div>
     <tr data-surface="cli"><td><code>/resume</code> · <code>/recap</code></td><td>Session recovery + summary</td><td>Context files</td></tr>
     <tr data-surface="cli"><td><code>/btw &lt;q&gt;</code></td><td>Side question (zero context cost)</td><td>—</td></tr>
     <tr data-surface="cli"><td><code>/branch</code> · <code>/rewind</code></td><td>Fork / revert conversation</td><td>—</td></tr>
-    <tr data-surface="cli"><td><code>/effort</code></td><td>low / med / high / xhigh / auto</td><td>—</td></tr>
+    <tr data-surface="cli"><td><code>/effort</code></td><td>low / med / high / xhigh / max / auto</td><td>—</td></tr>
     <tr data-surface="ide"><td><code>Shift+Tab</code></td><td>Cycle modes</td><td>"Ask before starting"</td></tr>
     <tr data-surface="cli"><td><code>--model / opusplan</code></td><td>Model selection</td><td>—</td></tr>
-    <tr data-surface="cli"><td><code>--auto</code></td><td>AI-classified auto-approve</td><td>—</td></tr>
+    <tr data-surface="cli"><td><code>--permission-mode auto</code></td><td>AI-classified auto-approve</td><td>—</td></tr>
     <tr data-surface="ide"><td><code>Cmd+Esc</code></td><td>VS Code launch</td><td>—</td></tr>
     <tr data-surface="ide"><td><code>Esc</code></td><td>Interrupt</td><td>—</td></tr>
   </tbody></table></div>
@@ -2833,18 +2916,22 @@ Flag any assumptions you made about what counts as "last week".</div>
     <tr data-surface="cli ci"><td><code>claude -p</code></td><td>Headless one-shot</td><td>—</td></tr>
     <tr data-surface="ci"><td><code>/install-github-app</code></td><td>Always-on PR review bot</td><td>—</td></tr>
     <tr data-surface="cli"><td><code>WebSearch / WebFetch</code></td><td>Built-in web tools</td><td>Claude in Chrome</td></tr>
-    <tr data-surface="ide"><td><code>Ctrl+O</code></td><td>Verbose thinking</td><td>—</td></tr>
+    <tr data-surface="ide"><td><code>Ctrl+O</code></td><td>Toggle transcript viewer</td><td>—</td></tr>
   </tbody></table></div>
 
   <h3>Advanced — Native (Level 4)</h3>
   <div class="table-wrap"><table><thead><tr><th>Command</th><th>Purpose</th><th>Cowork</th></tr></thead><tbody>
     <tr data-surface="cli"><td><code>/loop</code> · <code>/schedule</code></td><td>In-session + persistent scheduling</td><td>Scheduled Tasks / Routines</td></tr>
-    <tr data-surface="cli"><td><code>/ultrareview</code></td><td>Parallel multi-agent PR review</td><td>—</td></tr>
+    <tr data-surface="cli ci"><td><code>/code-review ultra</code></td><td>Cloud multi-agent PR review (<code>/ultrareview</code> deprecated alias)</td><td>—</td></tr>
+    <tr data-surface="ci"><td><code>/autofix-pr</code></td><td>Web agent fixes PR CI + comments</td><td>—</td></tr>
     <tr data-surface="cli"><td><code>/security-review</code></td><td>Vulnerability scan on diff</td><td>—</td></tr>
+    <tr data-surface="cli"><td><code>/workflows</code></td><td>Deterministic multi-agent orchestration</td><td>Auto-parallel sub-agents</td></tr>
+    <tr data-surface="cli"><td><code>/teleport</code> · <code>--remote</code></td><td>Pull web session → local terminal</td><td>Dispatch</td></tr>
+    <tr data-surface="cli"><td><code>/sandbox</code></td><td>Toggle sandboxed execution</td><td>—</td></tr>
     <tr data-surface="cli"><td><code>/voice</code></td><td>Push-to-talk</td><td>—</td></tr>
     <tr data-surface="cli"><td><code>/batch</code></td><td>Parallel execution</td><td>Auto-parallel sub-agents</td></tr>
     <tr data-surface="cli"><td><code>claude -w &lt;branch&gt;</code></td><td>Git worktree</td><td>Projects</td></tr>
-    <tr data-surface="cli"><td><code>Ctrl+F</code></td><td>Kill bg agents</td><td>—</td></tr>
+    <tr data-surface="cli"><td><code>Ctrl+X Ctrl+K</code></td><td>Kill bg agents (2× in 3s)</td><td>—</td></tr>
     <tr data-surface="cli ci"><td><code>--max-budget-usd N</code></td><td>Cost cap per session</td><td>—</td></tr>
     <tr data-surface="ci"><td><code>--max-turns N</code></td><td>Turn limit (CI safety)</td><td>—</td></tr>
     <tr data-surface="ci"><td><code>--bare</code></td><td>Skip plugins/hooks (fast startup)</td><td>—</td></tr>
@@ -2887,10 +2974,17 @@ Flag any assumptions you made about what counts as "last week".</div>
       <tr data-surface="cli"><td>1M token context window</td><td>M06</td><td>v2.1+</td><td>Max / Team / Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
       <tr data-surface="cli"><td>Private plugin marketplaces</td><td>M13</td><td>v2.1+</td><td>Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
       <tr data-surface="cli"><td><code>opusplan</code> hybrid mode</td><td>M06</td><td>v2.1.84+</td><td>Max / Enterprise</td><td><span class="v-status v-stable">Stable</span></td></tr>
-      <tr data-surface="cli"><td>Auto mode (<code>claude --auto</code>)</td><td>M06</td><td>v2.1.84+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Auto mode (<code>claude --permission-mode auto</code>)</td><td>M06</td><td>v2.1.84+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
       <tr data-surface="cli"><td>LSP plugin (type-aware editing)</td><td>M13</td><td>v2.1+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
       <tr data-surface="cli"><td>Background scheduling (<code>/schedule</code>)</td><td>M18</td><td>v2.1.84+</td><td>Pro / Max</td><td><span class="v-status v-stable">Stable</span></td></tr>
       <tr data-surface="cli"><td>Voice control (<code>/voice</code>)</td><td>M18</td><td>v2.1.84+</td><td>Max</td><td><span class="v-status v-preview">Preview</span></td></tr>
+      <tr data-surface="cli"><td>Deterministic orchestration (<code>/workflows</code>)</td><td>M17</td><td>v2.1.160+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli ci"><td>Cloud multi-agent review (<code>/code-review ultra</code>)</td><td>M21</td><td>v2.1.160+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="ci"><td>Web auto-fix (<code>/autofix-pr</code>)</td><td>M21</td><td>v2.1.160+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Remote sessions + teleport (<code>--remote</code> / <code>/teleport</code>)</td><td>M18</td><td>v2.1.160+</td><td>Pro / Max</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Sandboxed execution (<code>/sandbox</code>)</td><td>M18</td><td>v2.1.160+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Team bootstrap (<code>/team-onboarding</code>, <code>/less-permission-prompts</code>)</td><td>M22</td><td>v2.1.160+</td><td>Any paid</td><td><span class="v-status v-stable">Stable</span></td></tr>
+      <tr data-surface="cli"><td>Agent teams (<code>CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS</code>)</td><td>M17</td><td>v2.1.198+</td><td>Any paid</td><td><span class="v-status v-preview">Preview</span></td></tr>
       <tr data-surface="cli"><td>Cowork Routines (cloud-hosted)</td><td>M18</td><td>—</td><td>Pro / Max</td><td><span class="v-status v-preview">Preview</span></td></tr>
       <tr data-surface="cli"><td>Computer Use (screen control)</td><td>M03</td><td>—</td><td>Max / Enterprise</td><td><span class="v-status v-preview">Preview</span></td></tr>
     </tbody>
@@ -2906,6 +3000,7 @@ Flag any assumptions you made about what counts as "last week".</div>
       <tr><td><code>v1.3</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Full content expansion. 7 diagrams. All Levels 0–4 elaborated.</td></tr>
       <tr><td><code>v1.4</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>Time estimates. Scored capstone rubric. Glossary. FAQ. Try-it exercises.</td></tr>
       <tr><td><code>v1.5</code></td><td>May 2026</td><td>Claude Code v2.1.84</td><td>CCI backlog (20 items): track split, skill templates, hook schema, offline fallbacks, export progress, print mode, high contrast, command filters, transcript, lab skeletons, reference capstone branch.</td></tr>
+      <tr><td><code>v2.0</code></td><td>Jul 2026</td><td>Claude Code v2.1.211</td><td>Synced to Cheat Sheet v2.0. Added <code>/workflows</code> (deterministic orchestration) + agent teams to M17, remote/teleport/sandbox to M18, <code>/team-onboarding</code> + <code>/less-permission-prompts</code> to M22. Renamed <code>/ultrareview</code>→<code>/code-review ultra</code>, added <code>/autofix-pr</code>. New hook events (PostToolBatch, SubagentStart/Stop, PostToolUseFailure, UserPromptExpansion). Display/config commands (<code>/usage</code>, <code>/tui</code>, <code>/focus</code>, <code>/statusline</code>, <code>/cd</code>). Fixed kill-bg-agents shortcut to <code>Ctrl+X Ctrl+K</code>. Added <code>/effort max</code>. Corrected hero stats: 22 modules (was 24), reading ~90m core / ~7h full.</td></tr>
     </tbody>
   </table></div>
 
@@ -3006,7 +3101,7 @@ Flag any assumptions you made about what counts as "last week".</div>
         <div class="cert-label">has completed the self-paced course</div>
         <div class="cert-details">
           Claude Code + Cowork: From Unaware to Native<br>
-          24 modules · 3 foundation labs · Capstone project<br>
+          22 modules · 3 foundation labs · Capstone project<br>
           Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>
           Both surfaces: Claude Code (developers) + Cowork (knowledge workers)
         </div>
@@ -3040,11 +3135,11 @@ Flag any assumptions you made about what counts as "last week".</div>
     <div class="glossary-item"><div class="glossary-term">$ARGUMENTS</div><div class="glossary-def">Variable in skill body that captures parameters from the slash command. <code>/deploy staging</code> passes "staging" as $ARGUMENTS.</div></div>
     <div class="glossary-item"><div class="glossary-term">MCP</div><div class="glossary-def">Model Context Protocol. Open standard for connecting AI agents to external tools. Used by both Claude Code (MCP servers) and Cowork (connectors). Authentication via OAuth or API keys.</div></div>
     <div class="glossary-item"><div class="glossary-term">Hook</div><div class="glossary-def">A shell command (or HTTP call, MCP tool, LLM prompt, or agent) that fires at a specific lifecycle event. Unlike LLM behavior, hooks are deterministic — they always run.</div></div>
-    <div class="glossary-item"><div class="glossary-term">Subagent</div><div class="glossary-def">A nested agent loop running in isolated context. Built-in: Explore (read-only, Haiku), Plan (analytical), General-purpose (full tools). Custom: defined in .claude/agents/.</div></div>
+    <div class="glossary-item"><div class="glossary-term">Subagent</div><div class="glossary-def">A nested agent loop running in isolated context. Built-in: Explore (read-only; inherits session model, capped at Opus), Plan (analytical), General-purpose (full tools). Custom: defined in .claude/agents/.</div></div>
     <div class="glossary-item"><div class="glossary-term">Plugin</div><div class="glossary-def">A package bundling skills, agents, hooks, and MCP configs into a single installable unit. Distributed via marketplaces (GitHub repos). Same format for Code and Cowork.</div></div>
     <div class="glossary-item"><div class="glossary-term">LSP Plugin</div><div class="glossary-def">Language Server Protocol integration giving Claude real-time type errors and go-to-definition as it edits. Available for 11 languages. Highest-impact plugin category.</div></div>
     <div class="glossary-item"><div class="glossary-term">opusplan</div><div class="glossary-def">Hybrid mode: Opus plans the approach (deep reasoning), Sonnet executes the edits (fast, cheap). Best cost-quality tradeoff for complex refactoring.</div></div>
-    <div class="glossary-item"><div class="glossary-term">Auto Mode</div><div class="glossary-def"><code>claude --auto</code>. AI classifier approves routine actions (reads, grep) automatically while prompting for high-risk actions (writes, shell commands). The smart middle ground.</div></div>
+    <div class="glossary-item"><div class="glossary-term">Auto Mode</div><div class="glossary-def"><code>claude --permission-mode auto</code>. AI classifier approves routine actions (reads, grep) automatically while prompting for high-risk actions (writes, shell commands). The smart middle ground.</div></div>
     <div class="glossary-item"><div class="glossary-term">Dispatch</div><div class="glossary-def">Cowork feature. Text a task from your phone → Cowork runs the workflow on your desktop → you return to finished files. Requires desktop app running.</div></div>
     <div class="glossary-item"><div class="glossary-term">Routines</div><div class="glossary-def">Cloud-hosted Cowork automation that runs even when your laptop is closed. Distinct from desktop-bound Scheduled Tasks. Research preview.</div></div>
     <div class="glossary-item"><div class="glossary-term">Computer Use</div><div class="glossary-def">Cowork's screen control. Claude can open apps, navigate browsers, run tools. Uses connectors first, browser second, screen control as last resort.</div></div>
@@ -3084,6 +3179,8 @@ Flag any assumptions you made about what counts as "last week".</div>
       <tr><td><code>v1.2</code></td><td>May 2026</td><td>Cheat sheet cross-reference: 18 items added (/btw, /effort, /context, --max-budget-usd, LSP plugins, permission rule syntax, /diff, token-saving tips, /schedule, /ultrareview, /security-review, /install-slack-app, /branch, /rewind, .claude/rules/*.md, hook types, ENABLE_PROMPT_CACHING_1H, /recap). Auto mode (claude --auto). WebSearch/WebFetch tools. /install-github-app. Image input as general capability. Troubleshooting &amp; recovery. Cost management strategies.</td></tr>
       <tr><td><code>v1.3</code></td><td>May 2026</td><td>Full course content expanded: all Levels 0–4, labs elaborated with phases/code/stacks/rubrics. 7 visual diagrams (journey map, model×effort matrix, memory layers stack, hook timeline, agent pipeline, architecture stack, maturity bars). Companion cheat sheet linked.</td></tr>
       <tr><td><code>v1.4</code></td><td>May 2026</td><td>22 try-it exercises, prev/next navigation, time estimates, scored capstone rubric (0/1/2 scoring, pass thresholds). Glossary (20 terms), FAQ (8 questions), What's Next (5 paths). Module search. Code copy buttons. Print stylesheet. Version/plan tier notes. Research preview flags. Lab failure conditions. Author attribution. This changelog.</td></tr>
+      <tr><td><code>v1.5</code></td><td>May 2026</td><td>CCI backlog (20 items): track split, skill templates, hook schema, offline fallbacks, export progress, print mode, high contrast, command filters, transcript, lab skeletons, reference capstone branch.</td></tr>
+      <tr><td><code>v2.0</code></td><td>Jul 2026</td><td>Synced to Cheat Sheet v2.0 / CLI v2.1.211. New advanced topics: <code>/workflows</code> deterministic orchestration + agent teams (M17), remote sessions / <code>/teleport</code> / <code>/sandbox</code> (M18), <code>/team-onboarding</code> + <code>/less-permission-prompts</code> (M22). Corrections: <code>/ultrareview</code>→<code>/code-review ultra</code>, kill-bg-agents is <code>Ctrl+X Ctrl+K</code>, <code>/effort max</code>, hero stats fixed to 22 modules + ~90m core/~7h full reading. Added <code>/autofix-pr</code>, new hook events, and display/config commands (<code>/usage</code>, <code>/tui</code>, <code>/focus</code>, <code>/statusline</code>, <code>/cd</code>).</td></tr>
     </tbody>
   </table></div>
 
@@ -3092,7 +3189,7 @@ Flag any assumptions you made about what counts as "last week".</div>
 
 </main>
 <button id="mobile-toggle" onclick="toggleSidebar()">☰</button>
-<footer style="position:fixed;bottom:0;right:0;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px;z-index:50;background:var(--bg);border-top:1px solid var(--border);border-left:1px solid var(--border);border-radius:8px 0 0 0">Claude Code + Cowork Course v1.0 · May 2026 · by Douglas Mun · Requires Claude Code v2.1.84+</footer>
+<footer style="position:fixed;bottom:0;right:0;padding:6px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text3);letter-spacing:.5px;z-index:50;background:var(--bg);border-top:1px solid var(--border);border-left:1px solid var(--border);border-radius:8px 0 0 0">Claude Code + Cowork Course v2.0 · Jul 2026 · by Douglas Mun · Verified against Claude Code v2.1.211</footer>
 <script>
 const completed=new Set();const total=32;
 const groupPages={'g-onramp':['p-onramp'],g0:['p-home'],g1:['p-1-1','p-1-2','p-1-3','p-1-4'],g2:['p-2-1','p-2-2','p-2-3','p-2-4','p-2-5'],g3:['p-3-1','p-lab-a','p-3-2','p-3-3','p-lab-b','p-3-4','p-3-5','p-3-6','p-3-7'],g4:['p-4-1','p-lab-c','p-4-2','p-4-3','p-4-4','p-4-5','p-4-6'],g5:['p-capstone','p-commands','p-versions','p-glossary','p-rubric']};
@@ -3135,7 +3232,7 @@ const pageMeta = {
   'p-3-5':    {time:'5 min',  title:'MCP & Connectors'},
   'p-3-6':    {time:'6 min',  title:'Hooks & Safety Defaults'},
   'p-3-7':    {time:'4 min',  title:'Debugging Patterns'},
-  'p-4-1':    {time:'6 min',  title:'Custom Agent Teams'},
+  'p-4-1':    {time:'30 min', title:'Custom Subagents, Workflows & Agent Teams'},
   'p-lab-c':  {time:'8–12 hrs',title:'Lab: LLM Security & Deploy'},
   'p-4-2':    {time:'5 min',  title:'Scheduling & Voice'},
   'p-4-3':    {time:'4 min',  title:'Worktrees & Batch'},
@@ -3180,7 +3277,7 @@ const projectMilestones = {
   'p-3-1': '<div class="pm-title">Project Milestone 2 — Add Memory</div>Run <code>claude init</code> in task-cli. Edit the generated CLAUDE.md: add your stack, commands (<code>npm test</code>, <code>npm start</code>), and conventions. Create <code>.claudeignore</code> to exclude node_modules.',
   'p-3-2': '<div class="pm-title">Project Milestone 3 — Create a Skill</div>Create <code>.claude/skills/add-feature/SKILL.md</code> with <code>$ARGUMENTS</code>: <code>/add-feature "priority field"</code> should plan the feature, implement it, and run tests. Test it.',
   'p-3-6': '<div class="pm-title">Project Milestone 4 — Add Hooks</div>Add two hooks to task-cli: PostToolUse → auto-format with prettier after edits, PreToolUse → block any <code>rm -rf</code> command. Verify both fire on your next edit.',
-  'p-4-1': '<div class="pm-title">Project Milestone 5 — Add an Agent</div>Create <code>.claude/agents/test-reviewer.md</code> for task-cli. It should review test coverage after any code change, with <code>memory: user</code> so it remembers past reviews.',
+  'p-4-1': '<div class="pm-title">Project Milestone 5 — Add an Agent &amp; a Workflow</div>Create <code>.claude/agents/test-reviewer.md</code> for task-cli with <code>memory: user</code> so it remembers past reviews. Then, for the deterministic path, <code>git checkout main</code> and run the ready-made <code>.claude/workflows/review-changes.js</code>: make a small edit to <code>src/commands/done.ts</code>, then <code>/workflows review-changes</code> to fan out a review across correctness, tests, and architecture — each finding is adversarially verified by independent skeptics before it survives. Compare it to the model-driven <code>/review-suite</code> skill in the same repo.',
   'p-4-5': '<div class="pm-title">Project Milestone 6 — Package as Plugin</div>Bundle task-cli\'s skills, agents, and hooks into a plugin with <code>plugin.json</code>. Install it in a fresh directory with <code>/plugin install</code>. Verify everything works on a clean machine.',
 };
 
@@ -3346,7 +3443,7 @@ var quizData = {
       {q:'What is context rot?', opts:['A bug in Claude Code','Quality degradation as conversations grow and older context is compressed','Slow internet connection','A model limitation'], ans:1},
       {q:'Which command shows a colored grid of where your context budget goes?', opts:['/cost','/compact','/context','/status'], ans:2},
       {q:'What does /btw do?', opts:['Creates a branch','Asks a side question at zero context cost','Switches to a different model','Backgrounds a task'], ans:1},
-      {q:'In auto mode (claude --auto), what happens with high-risk actions?', opts:['They are blocked entirely','They run without any prompt','An AI classifier still prompts you for approval','They are logged but allowed'], ans:2},
+      {q:'In auto mode (claude --permission-mode auto), what happens with high-risk actions?', opts:['They are blocked entirely','They run without any prompt','An AI classifier still prompts you for approval','They are logged but allowed'], ans:2},
       {q:'What is the most effective cost control mechanism for headless CI runs?', opts:['/cost','/compact','--max-budget-usd N','--bare'], ans:2}
     ]
   },
@@ -3363,7 +3460,7 @@ var quizData = {
   'p-4-6': {
     title: 'Level 4 Knowledge Check',
     questions: [
-      {q:'What is the Explore → Plan → Execute pipeline?', opts:['A CI/CD workflow','Chaining specialized subagents: Haiku maps, Sonnet/Opus plans, Sonnet implements','A Cowork feature','A plugin installation sequence'], ans:1},
+      {q:'What is the Explore → Plan → Execute pipeline?', opts:['A CI/CD workflow','Chaining specialized subagents: Explore maps, Plan designs the approach, general-purpose implements','A Cowork feature','A plugin installation sequence'], ans:1},
       {q:'What does /install-github-app provide that claude -p in CI does not?', opts:['Faster execution','Always-on persistent PR review bot vs. one-shot task','Access to more models','Better error handling'], ans:1},
       {q:'What is the minimum capstone score to pass?', opts:['10/18 Code + 1/4 Cowork','14/18 Code + 2/4 Cowork','18/18 Code + 4/4 Cowork','No minimum — any submission passes'], ans:1},
       {q:'In the Team OS model, what is the "onboarding test"?', opts:['A written exam','A new team member is productive on day one using the externalized harness','A code review by seniors','Completing all course modules'], ans:1}
@@ -3495,7 +3592,7 @@ function openCertModal(){
   document.getElementById('cert-modal-overlay').classList.add('open');
 }
 function closeCertModal(){document.getElementById('cert-modal-overlay').classList.remove('open')}
-function printCertModal(){const c=document.getElementById('cert-modal-content');const w=window.open('','_blank','width=720,height=600');w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Certificate of Completion</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fff;padding:40px}.cert-border{border:3px double #0066cc;border-radius:8px;padding:40px 48px;text-align:center;max-width:640px;width:100%}.cert-logo{font-family:monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#0066cc;margin-bottom:6px}.cert-title{font-size:26px;font-weight:800;color:#111;margin-bottom:4px}.cert-sub{font-size:13px;color:#555;margin-bottom:24px}.cert-name{font-size:22px;font-weight:700;border-bottom:2px solid #111;display:inline-block;min-width:250px;padding:4px 16px;margin-bottom:8px;color:#111}.cert-label{font-size:11px;color:#666;margin-bottom:20px}.cert-details{font-size:12px;color:#444;line-height:1.8}.cert-date{font-family:monospace;font-size:11px;color:#666;margin-top:14px}@media print{body{padding:20px}}</style></head><body><div class="cert-border"><div class="cert-logo">Anthropic · Claude Code + Cowork</div><div class="cert-title">Certificate of Completion</div><div class="cert-sub">Unaware → Curious → Fluent → Native</div><div class="cert-name">'+c.querySelector('.cert-name').textContent+'</div><div class="cert-label">has completed the self-paced course</div><div class="cert-details">Claude Code + Cowork: From Unaware to Native<br>24 modules · 3 foundation labs · Capstone project<br>Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>Both surfaces: Claude Code (developers) + Cowork (knowledge workers)</div><div class="cert-date">'+c.querySelector('.cert-date').textContent+'</div></div></body></html>');w.document.close();w.focus();setTimeout(()=>{w.print();w.close()},400)}
+function printCertModal(){const c=document.getElementById('cert-modal-content');const w=window.open('','_blank','width=720,height=600');w.document.write('<!DOCTYPE html><html><head><meta charset="utf-8"><title>Certificate of Completion</title><style>*{margin:0;padding:0;box-sizing:border-box}body{font-family:sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;background:#fff;padding:40px}.cert-border{border:3px double #0066cc;border-radius:8px;padding:40px 48px;text-align:center;max-width:640px;width:100%}.cert-logo{font-family:monospace;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:#0066cc;margin-bottom:6px}.cert-title{font-size:26px;font-weight:800;color:#111;margin-bottom:4px}.cert-sub{font-size:13px;color:#555;margin-bottom:24px}.cert-name{font-size:22px;font-weight:700;border-bottom:2px solid #111;display:inline-block;min-width:250px;padding:4px 16px;margin-bottom:8px;color:#111}.cert-label{font-size:11px;color:#666;margin-bottom:20px}.cert-details{font-size:12px;color:#444;line-height:1.8}.cert-date{font-family:monospace;font-size:11px;color:#666;margin-top:14px}@media print{body{padding:20px}}</style></head><body><div class="cert-border"><div class="cert-logo">Anthropic · Claude Code + Cowork</div><div class="cert-title">Certificate of Completion</div><div class="cert-sub">Unaware → Curious → Fluent → Native</div><div class="cert-name">'+c.querySelector('.cert-name').textContent+'</div><div class="cert-label">has completed the self-paced course</div><div class="cert-details">Claude Code + Cowork: From Unaware to Native<br>22 modules · 3 foundation labs · Capstone project<br>Agent loop · Externalization framework · Skills · Hooks · Subagents · Plugins · MCP<br>Both surfaces: Claude Code (developers) + Cowork (knowledge workers)</div><div class="cert-date">'+c.querySelector('.cert-date').textContent+'</div></div></body></html>');w.document.close();w.focus();setTimeout(()=>{w.print();w.close()},400)}
 (function(){if(localStorage.getItem('hiContrast')==='true')document.body.classList.add('hi-contrast')})();
 </script>
 </body>
