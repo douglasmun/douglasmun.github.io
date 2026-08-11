@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="1660" viewBox="0 0 1080 1660">
+  <defs>
+    <marker id="arrDown" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1,1 L5,9 L9,1" fill="none" stroke="#3E7CB1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrUp" viewBox="0 0 10 10" refX="5" refY="8" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M1,1 L5,9 L9,1" fill="none" stroke="#D8722C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </marker>
+    <marker id="arrLoop" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M1,1 L9,5 L1,9 z" fill="#C97A10"/>
+    </marker>
+  </defs>
+
+  <!-- ======================= background ======================= -->
+  <rect width="1080" height="1660" fill="#EEF3F8"/>
+
+  <!-- ======================= header ======================= -->
+  <text x="540" y="60" text-anchor="middle" font-family="DejaVu Serif" font-size="34" font-weight="bold" fill="#1B2A41">How an AI Answers You</text>
+  <text x="540" y="94" text-anchor="middle" font-family="DejaVu Sans" font-size="15.5" fill="#52627E">A layer-by-layer tour of what happens between pressing Enter and seeing a reply</text>
+  <line x1="450" y1="114" x2="630" y2="114" stroke="#C9A25C" stroke-width="2"/>
+
+  <!-- ======================= journey rails ======================= -->
+  <!-- left: the question travels down -->
+  <rect x="42" y="126" width="116" height="30" rx="15" fill="#FFFFFF" stroke="#3E7CB1" stroke-width="1.5"/>
+  <text x="100" y="145" text-anchor="middle" font-family="DejaVu Sans" font-size="12" font-weight="bold" fill="#3E7CB1">Your question</text>
+  <line x1="100" y1="162" x2="100" y2="1470" stroke="#3E7CB1" stroke-width="2" stroke-dasharray="4 6" marker-end="url(#arrDown)"/>
+  <text transform="translate(84,820) rotate(-90)" text-anchor="middle" font-family="DejaVu Sans" font-size="12" fill="#5B7BA0">your words travel down through every layer</text>
+
+  <!-- right: the answer streams up -->
+  <rect x="948" y="126" width="114" height="30" rx="15" fill="#FFFFFF" stroke="#D8722C" stroke-width="1.5"/>
+  <text x="1005" y="145" text-anchor="middle" font-family="DejaVu Sans" font-size="12" font-weight="bold" fill="#C06018">The answer</text>
+  <line x1="1005" y1="1470" x2="1005" y2="164" stroke="#D8722C" stroke-width="2" stroke-dasharray="4 6" marker-end="url(#arrUp)"/>
+  <text transform="translate(1024,820) rotate(90)" text-anchor="middle" font-family="DejaVu Sans" font-size="12" fill="#C07A30">the answer streams back up, token by token</text>
+
+  <!-- bottom turnaround -->
+  <path d="M100,1472 Q540,1534 1005,1472" fill="none" stroke="#8896AC" stroke-width="2" stroke-dasharray="4 6"/>
+  <text x="540" y="1522" text-anchor="middle" font-family="DejaVu Sans" font-size="11.5" font-style="italic" fill="#6A7A94">the turnaround happens in the basement</text>
+
+  <!-- ======================= ZONE 1 · ABOVE THE ENGINE ======================= -->
+  <rect x="150" y="170" width="780" height="316" rx="14" fill="#E3EDF7" stroke="#C7D9EC" stroke-width="1.5"/>
+  <text x="172" y="198" font-family="DejaVu Sans" font-size="14" font-weight="bold" letter-spacing="2" fill="#2E6494">ABOVE THE ENGINE<tspan font-weight="normal" letter-spacing="0" fill="#44506B">  —  the world around your conversation</tspan></text>
+
+  <!-- card 1 -->
+  <rect x="190" y="214" width="700" height="70" rx="10" fill="#FFFFFF" stroke="#D4E1EF"/>
+  <rect x="190" y="216" width="5" height="66" rx="2" fill="#3E7CB1"/>
+  <circle cx="190" cy="249" r="13" fill="#3E7CB1"/>
+  <text x="190" y="254" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">1</text>
+  <text x="218" y="239" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The app you see</text>
+  <text x="218" y="259" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">The chat window, voice assistant, or coding tool where you type.</text>
+  <text x="218" y="276" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#3E7CB1">≈ the front counter where you place your order</text>
+
+  <!-- card 2 -->
+  <rect x="190" y="294" width="700" height="70" rx="10" fill="#FFFFFF" stroke="#D4E1EF"/>
+  <rect x="190" y="296" width="5" height="66" rx="2" fill="#3E7CB1"/>
+  <circle cx="190" cy="329" r="13" fill="#3E7CB1"/>
+  <text x="190" y="334" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">2</text>
+  <text x="218" y="319" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The server</text>
+  <text x="218" y="339" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">Checks who you are, queues requests, and batches many users together.</text>
+  <text x="218" y="356" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#3E7CB1">≈ a restaurant host — strangers’ orders are often cooked in one batch</text>
+
+  <!-- card 3 -->
+  <rect x="190" y="374" width="700" height="96" rx="10" fill="#FFFFFF" stroke="#D4E1EF"/>
+  <rect x="190" y="376" width="5" height="92" rx="2" fill="#3E7CB1"/>
+  <circle cx="190" cy="422" r="13" fill="#3E7CB1"/>
+  <text x="190" y="427" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">3</text>
+  <text x="218" y="399" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The session</text>
+  <text x="218" y="418" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">Keeps the conversation going: your chat history, plus hidden house</text>
+  <text x="218" y="434" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">rules (the “system prompt”) — all resent with every new message.</text>
+  <text x="218" y="452" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#3E7CB1">≈ the waiter’s notepad — the model itself remembers nothing between turns</text>
+
+  <!-- chevron 1→2 -->
+  <path d="M532,497 L540,505 L548,497" fill="none" stroke="#8896AC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ======================= ZONE 2 · THE ENGINE ======================= -->
+  <rect x="150" y="516" width="780" height="624" rx="14" fill="#FBF1DC" stroke="#EBD9B4" stroke-width="1.5"/>
+  <text x="172" y="544" font-family="DejaVu Sans" font-size="14" font-weight="bold" letter-spacing="2" fill="#A5680C">THE ENGINE<tspan font-weight="normal" letter-spacing="0" fill="#44506B">  —  how one single answer gets made (a “generate” call)</tspan></text>
+
+  <!-- card 4 · tokenizer -->
+  <rect x="190" y="560" width="700" height="104" rx="10" fill="#FFFFFF" stroke="#EBD9B4"/>
+  <rect x="190" y="562" width="5" height="100" rx="2" fill="#C97A10"/>
+  <circle cx="190" cy="612" r="13" fill="#C97A10"/>
+  <text x="190" y="617" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">4</text>
+  <text x="866" y="582" text-anchor="end" font-family="DejaVu Sans" font-size="10" letter-spacing="2" fill="#B08420">PREPARE</text>
+  <text x="218" y="585" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The tokenizer — chop language into pieces</text>
+  <text x="218" y="605" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">Models don’t read words; they read numbered pieces called tokens.</text>
+  <g font-family="DejaVu Sans Mono" font-size="12" fill="#7A4E08">
+    <rect x="218" y="617" width="36" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="236" y="632" text-anchor="middle">How</text>
+    <rect x="259" y="617" width="29" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="273.5" y="632" text-anchor="middle">do</text>
+    <rect x="293" y="617" width="29" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="307.5" y="632" text-anchor="middle">AI</text>
+    <rect x="327" y="617" width="21" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="337.5" y="632" text-anchor="middle">s</text>
+    <rect x="353" y="617" width="50" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="378" y="632" text-anchor="middle">think</text>
+    <rect x="408" y="617" width="21" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="418.5" y="632" text-anchor="middle">?</text>
+    <text x="440" y="632" fill="#8896AC">→</text>
+    <text x="460" y="632" fill="#44506B">2437 · 656 · 15837 · 82 · 1781 · 30</text>
+  </g>
+  <text x="218" y="656" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#A5680C">≈ cutting a sentence into puzzle pieces, then numbering each piece</text>
+
+  <!-- card 5 · load -->
+  <rect x="190" y="674" width="700" height="96" rx="10" fill="#FFFFFF" stroke="#EBD9B4"/>
+  <rect x="190" y="676" width="5" height="92" rx="2" fill="#C97A10"/>
+  <circle cx="190" cy="722" r="13" fill="#C97A10"/>
+  <text x="190" y="727" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">5</text>
+  <text x="866" y="696" text-anchor="end" font-family="DejaVu Sans" font-size="10" letter-spacing="2" fill="#B08420">LOAD</text>
+  <text x="218" y="699" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">Load the model — billions of numbers wake up</text>
+  <text x="218" y="718" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">The model’s knowledge is just weights: billions of learned numbers</text>
+  <text x="218" y="734" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">copied from disk into memory. Done once — then it stays warm.</text>
+  <text x="218" y="752" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#A5680C">≈ moving the whole library into the room before the first question</text>
+
+  <!-- card 6 · prefill -->
+  <rect x="190" y="780" width="700" height="96" rx="10" fill="#FFFFFF" stroke="#EBD9B4"/>
+  <rect x="190" y="782" width="5" height="92" rx="2" fill="#C97A10"/>
+  <circle cx="190" cy="828" r="13" fill="#C97A10"/>
+  <text x="190" y="833" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">6</text>
+  <text x="866" y="802" text-anchor="end" font-family="DejaVu Sans" font-size="10" letter-spacing="2" fill="#B08420">THINK</text>
+  <text x="218" y="805" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">Prefill — read the whole question in one gulp</text>
+  <text x="218" y="824" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">The model sweeps over your entire prompt in one parallel pass and</text>
+  <text x="218" y="840" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">takes notes on every token — a scratchpad called the KV cache.</text>
+  <text x="218" y="858" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#A5680C">≈ reading the full question once and jotting notes, so you never reread it</text>
+
+  <!-- card 7 · decode loop -->
+  <rect x="190" y="886" width="700" height="134" rx="10" fill="#FFFFFF" stroke="#EBD9B4"/>
+  <rect x="190" y="888" width="5" height="130" rx="2" fill="#C97A10"/>
+  <circle cx="190" cy="953" r="13" fill="#C97A10"/>
+  <text x="190" y="958" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">7</text>
+  <text x="866" y="908" text-anchor="end" font-family="DejaVu Sans" font-size="10" letter-spacing="2" fill="#B08420">THINK</text>
+  <text x="218" y="911" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The decode loop — write one token at a time</text>
+  <text x="218" y="931" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">Predict the next token, roll weighted dice to pick one (that’s the sampler —</text>
+  <text x="218" y="947" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">“temperature” makes the dice wilder), then feed it straight back in. Repeat.</text>
+  <g font-family="DejaVu Sans Mono" font-size="12" fill="#7A4E08">
+    <rect x="218" y="960" width="38" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="237" y="975" text-anchor="middle">The</text>
+    <rect x="262" y="960" width="38" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="281" y="975" text-anchor="middle">cat</text>
+    <rect x="306" y="960" width="38" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="325" y="975" text-anchor="middle">sat</text>
+    <rect x="350" y="960" width="31" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="365.5" y="975" text-anchor="middle">on</text>
+    <rect x="387" y="960" width="38" height="22" rx="5" fill="#FBEDD2" stroke="#E4C98F"/><text x="406" y="975" text-anchor="middle">the</text>
+    <rect x="431" y="960" width="26" height="22" rx="5" fill="#FFFFFF" stroke="#E4C98F" stroke-dasharray="3 3"/><text x="444" y="975" text-anchor="middle" fill="#C97A10">?</text>
+  </g>
+  <path d="M 800 946 a 22 22 0 1 1 -15 6" fill="none" stroke="#C97A10" stroke-width="2.5" marker-end="url(#arrLoop)"/>
+  <text x="800" y="1000" text-anchor="middle" font-family="DejaVu Sans" font-size="10.5" fill="#A5680C">feed it back in</text>
+  <text x="218" y="1004" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#A5680C">≈ writing a story one word at a time, never seeing the ending in advance</text>
+
+  <!-- card 8 · detokenizer -->
+  <rect x="190" y="1030" width="700" height="96" rx="10" fill="#FFFFFF" stroke="#EBD9B4"/>
+  <rect x="190" y="1032" width="5" height="92" rx="2" fill="#C97A10"/>
+  <circle cx="190" cy="1078" r="13" fill="#C97A10"/>
+  <text x="190" y="1083" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#FFFFFF">8</text>
+  <text x="866" y="1052" text-anchor="end" font-family="DejaVu Sans" font-size="10" letter-spacing="2" fill="#B08420">SPEAK</text>
+  <text x="218" y="1055" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#1B2A41">The detokenizer — turn pieces back into words</text>
+  <text x="218" y="1074" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">Tokens are glued back into text and streamed to your screen as they’re</text>
+  <text x="218" y="1090" font-family="DejaVu Sans" font-size="13.5" fill="#44506B">made — that’s why answers appear word by word. A stop token ends it.</text>
+  <text x="218" y="1108" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#A5680C">≈ reassembling the puzzle pieces into sentences, live</text>
+
+  <!-- chevron 2→3 -->
+  <path d="M532,1151 L540,1159 L548,1151" fill="none" stroke="#8896AC" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- ======================= ZONE 3 · THE BASEMENT ======================= -->
+  <rect x="150" y="1168" width="780" height="290" rx="14" fill="#22304A"/>
+  <text x="172" y="1196" font-family="DejaVu Sans" font-size="14" font-weight="bold" letter-spacing="2" fill="#9FC4EA">THE BASEMENT<tspan font-weight="normal" letter-spacing="0" fill="#B9C7DE">  —  where the math physically happens</tspan></text>
+
+  <!-- card 9 -->
+  <rect x="190" y="1212" width="700" height="70" rx="10" fill="#2E3F5C" stroke="#3D5175"/>
+  <rect x="190" y="1214" width="5" height="66" rx="2" fill="#7FB4E8"/>
+  <circle cx="190" cy="1247" r="13" fill="#7FB4E8"/>
+  <text x="190" y="1252" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#1B2A41">9</text>
+  <text x="218" y="1237" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#EDF3FB">Math kernels — the same trick, billions of times</text>
+  <text x="218" y="1257" font-family="DejaVu Sans" font-size="13.5" fill="#C4D2E6">Nearly all of it is one operation: multiplying huge grids of numbers.</text>
+  <text x="218" y="1274" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#9FC4EA">≈ a factory that only stamps one part — unbelievably fast at it</text>
+
+  <!-- card 10 -->
+  <rect x="190" y="1292" width="700" height="70" rx="10" fill="#2E3F5C" stroke="#3D5175"/>
+  <rect x="190" y="1294" width="5" height="66" rx="2" fill="#7FB4E8"/>
+  <circle cx="190" cy="1327" r="13" fill="#7FB4E8"/>
+  <text x="190" y="1332" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#1B2A41">10</text>
+  <text x="218" y="1317" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#EDF3FB">The GPU — thousands of tiny calculators</text>
+  <text x="218" y="1337" font-family="DejaVu Sans" font-size="13.5" fill="#C4D2E6">Each one is simple, but they all work at once. Perfect for grid math.</text>
+  <text x="218" y="1354" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#9FC4EA">≈ 10,000 clerks each adding one cell of a giant spreadsheet, together</text>
+
+  <!-- card 11 -->
+  <rect x="190" y="1372" width="700" height="70" rx="10" fill="#2E3F5C" stroke="#3D5175"/>
+  <rect x="190" y="1374" width="5" height="66" rx="2" fill="#7FB4E8"/>
+  <circle cx="190" cy="1407" r="13" fill="#7FB4E8"/>
+  <text x="190" y="1412" text-anchor="middle" font-family="DejaVu Sans" font-size="13" font-weight="bold" fill="#1B2A41">11</text>
+  <text x="218" y="1397" font-family="DejaVu Sans" font-size="16" font-weight="bold" fill="#EDF3FB">Memory — where the model lives</text>
+  <text x="218" y="1417" font-family="DejaVu Sans" font-size="13.5" fill="#C4D2E6">The weights and the scratchpad must fit in fast memory, or everything crawls.</text>
+  <text x="218" y="1434" font-family="DejaVu Sans" font-size="12.5" font-style="italic" fill="#9FC4EA">≈ desk space — a bigger brain needs a bigger desk</text>
+
+  <!-- ======================= footer ======================= -->
+  <text x="540" y="1572" text-anchor="middle" font-family="DejaVu Serif" font-size="17.5" font-style="italic" fill="#1B2A41">Every answer is a round trip: your words sink down through every layer,</text>
+  <text x="540" y="1598" text-anchor="middle" font-family="DejaVu Serif" font-size="17.5" font-style="italic" fill="#1B2A41">and the reply climbs back up — one token at a time.</text>
+  <text x="540" y="1630" text-anchor="middle" font-family="DejaVu Sans" font-size="11.5" fill="#7A879C">Every chat with an AI crosses all eleven layers, every single time — usually in under a second.</text>
+</svg>
