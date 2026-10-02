@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="A practical reference and tips guide for Claude Code — verified against official docs, v2.1.211.">
+<meta name="description" content="A practical reference and tips guide for Claude Code — verified against official docs, v2.1.287.">
 <meta name="author" content="Douglas Mun">
 <title>Claude Code Cheat Sheet · v2.0 · Compiled by Douglas Mun</title>
 <style>
@@ -516,13 +516,13 @@ footer .author { font-weight: 600; color: var(--c-text); }
     <section id="intro" class="page intro-page">
       <div class="intro-banner">
         <h2>Getting the Most Out of Claude Code</h2>
-        <p class="subtle">A practical guide and reference — verified July 16 2026 against CLI v2.1.211 · Compiled by Douglas Mun</p>
+        <p class="subtle">A practical guide and reference — verified October 3 2026 against CLI v2.1.287 · Compiled by Douglas Mun</p>
 
         <p>Claude Code is an <strong>agentic coding assistant</strong> — it reads your repo, runs commands, edits files, and manages git workflows on its own, within the permission boundaries you set. The gap between casual and expert use is narrow but compounds quickly: the practitioners who get the most out of it <strong>plan before they build</strong>, give Claude <strong>durable project memory</strong>, isolate risky work in <strong>worktrees</strong>, and offload repeated thinking to <strong>skills, plugins, and subagents</strong>.</p>
 
         <p><strong>How to read this guide.</strong> Entries shown in their section colour are stable features. <span class="badge">new</span> entries are new in 2026 (v2.1.160 or later) and may require a current install or specific plan tier. <span class="removed-text">Struck-through entries</span> have been removed or deprecated and should be avoided in scripts. Use the search box at the top to filter all entries instantly.</p>
 
-        <p><strong>The short path from competent to expert.</strong> For anything touching more than a couple of files, start in plan mode (<kbd>Shift+Tab</kbd> cycles permission modes, or type <code>/plan</code>) and let Claude propose a structured approach before editing. Put essential project context in a <code>CLAUDE.md</code> at your repo root — it survives compaction and grounds every turn. Codify repeated workflows as skills in <code>.claude/skills/</code>. Isolate parallel or risky work with <code>--worktree</code>. Ask side questions with <code>/btw</code> to keep the main conversation clean. Raise effort with <code>/effort high</code> or <code>xhigh</code> for hard problems on Opus 4.8. And install an <strong>LSP plugin</strong> for your language so Claude sees type errors in real time as it edits.</p>
+        <p><strong>The short path from competent to expert.</strong> For anything touching more than a couple of files, start in plan mode (<kbd>Shift+Tab</kbd> cycles permission modes, or type <code>/plan</code>) and let Claude propose a structured approach before editing. Put essential project context in a <code>CLAUDE.md</code> at your repo root — it survives compaction and grounds every turn. Codify repeated workflows as skills in <code>.claude/skills/</code>. Isolate parallel or risky work with <code>--worktree</code>. Ask side questions with <code>/btw</code> to keep the main conversation clean. Raise effort with <code>/effort high</code> or <code>xhigh</code> for hard problems on Opus 5.5. And install an <strong>LSP plugin</strong> for your language so Claude sees type errors in real time as it edits.</p>
       </div>
     </section>
     <section id="slash-commands" class="page">
@@ -546,6 +546,7 @@ footer .author { font-weight: 600; color: var(--c-text); }
 <div class="entry" data-search="/model [model] pick/change model; ←→ adjusts effort"><code class="cmd cmd-purple">/model [model]</code><span class="desc">Pick/change model; ←→ adjusts effort</span></div>
 <div class="entry" data-search="/effort [level] low / medium / high / xhigh★ / max / auto"><code class="cmd cmd-purple">/effort [level]</code><span class="desc">low / medium / high / xhigh★ / max / auto</span></div>
 <div class="entry" data-search="/fast [on|off] toggle fast mode"><code class="cmd cmd-purple">/fast [on|off]</code><span class="desc">Toggle fast mode</span></div>
+<div class="entry new" data-search="/advisor [model|off] server-side advisor pairs a stronger model"><code class="cmd cmd-purple">/advisor [model|off]</code><span class="desc">Server-side advisor — pairs a stronger model</span><span class=badge>new</span></div>
 <div class="entry new" data-search="opusplan model mode opus plans, sonnet executes"><code class="cmd cmd-purple">opusplan</code><span class="desc">Model mode: Opus plans, Sonnet executes (<code>/model opusplan</code>)</span><span class=badge>new</span></div>
 </section>
 <section class="block block-purple" id="display-and-config"><h3> Display &amp; Config</h3>
@@ -585,6 +586,7 @@ footer .author { font-weight: 600; color: var(--c-text); }
 <div class="entry" data-search="/debug [desc] debug logging + analysis [skill]"><code class="cmd cmd-purple">/debug [desc]</code><span class="desc">Debug logging + analysis [Skill]</span></div>
 <div class="entry" data-search="/loop [interval] recurring task; self-paces [skill]"><code class="cmd cmd-purple">/loop [interval]</code><span class="desc">Recurring task; self-paces [Skill]</span></div>
 <div class="entry new" data-search="/workflows deterministic multi-agent orchestration"><code class="cmd cmd-purple">/workflows</code><span class="desc">Deterministic multi-agent orchestration</span><span class=badge>new</span></div>
+<div class="entry new" data-search="/effort ultracode [on|off] ultracode toggle workflows at scale"><code class="cmd cmd-purple">/effort ultracode [on|off]</code><span class="desc">Ultracode toggle — workflows at scale</span><span class=badge>new</span></div>
 <div class="entry new" data-search="/schedule [desc] create/run routines"><code class="cmd cmd-purple">/schedule [desc]</code><span class="desc">Create/run routines</span><span class=badge>new</span></div>
 <div class="entry new" data-search="/ultraplan &lt;prompt&gt; cloud plan editor → web ui"><code class="cmd cmd-purple">/ultraplan &lt;prompt&gt;</code><span class="desc">Cloud plan editor → web UI</span><span class=badge>new</span></div>
 <div class="entry new" data-search="/code-review ultra [pr#] cloud multi-agent review (was /ultrareview)"><code class="cmd cmd-purple">/code-review ultra [PR#]</code><span class="desc">Cloud multi-agent review — /ultrareview is deprecated alias</span><span class=badge>new</span></div>
@@ -724,7 +726,7 @@ footer .author { font-weight: 600; color: var(--c-text); }
           <p><strong>2. Plan before you spend.</strong> Exploratory back-and-forth is the most common source of waste. Enter plan mode (<kbd>Shift+Tab</kbd> to cycle or <code>/plan</code>) for anything non-trivial — Claude researches and proposes an approach in one pass, and you approve before any editing begins. Use <code>/compact focus on &lt;topic&gt;</code> proactively rather than waiting for auto-compact at 95%. Put durable facts in <code>CLAUDE.md</code> so they survive compaction.</p>
         </div>
         <div>
-          <p><strong>3. Match the model and effort to the task.</strong> Opus 4.8 at <code>xhigh</code> effort is extraordinary for complex agentic coding, but routine edits, formatting, and lookups run fine on Sonnet 5 (the default, with 1M-token context) at <code>medium</code>. <code>/effort low</code> is often enough for "rename this variable everywhere" work. Subscription users get a 1-hour prompt cache TTL automatically; API-key users opt in with <code>ENABLE_PROMPT_CACHING_1H=1</code>. Avoid switching models mid-conversation — the next turn re-reads the full history uncached.</p>
+          <p><strong>3. Match the model and effort to the task.</strong> Opus 5.5 at <code>xhigh</code> effort is extraordinary for complex agentic coding, but routine edits, formatting, and lookups run fine on Sonnet 5.5 (1M-token context) at <code>medium</code>. <code>/effort low</code> is often enough for "rename this variable everywhere" work. Subscription users get a 1-hour prompt cache TTL automatically; API-key users opt in with <code>ENABLE_PROMPT_CACHING_1H=1</code>. Avoid switching models mid-conversation — the next turn re-reads the full history uncached.</p>
           <p><strong>4. Delegate — do not clutter.</strong> Spawn the <strong>Explore</strong> subagent (read-only; inherits the session model, capped at Opus) for codebase navigation instead of doing it in main context. Subagents now run in the <strong>background by default</strong> — you keep working and are notified on completion — can nest up to 5 levels deep, and background agents can auto-commit/push/PR on completion. For deterministic multi-agent orchestration, use <code>/workflows</code>. Use <code>/btw</code> for side questions — it reuses the parent prompt cache and never enters history. Prefer <code>@path/to/file.md</code> over pasting contents. For parallel work, launch separate <code>--worktree</code> sessions. If you re-explain the same workflow a third time, codify it as a skill in <code>.claude/skills/</code>.</p>
         </div>
       </div>
@@ -738,6 +740,13 @@ footer .author { font-weight: 600; color: var(--c-text); }
         <li><code>CLAUDE_CODE_DISABLE_AUTO_MEMORY=1</code> if not using auto-memory</li>
         <li>After a long break, prefer <code>/clear</code> over re-caching stale history</li>
         <li><code>/skills t</code> sorts by token count — prune the heaviest you rarely use</li>
+      </ul>
+      <h4>Model Guide (Oct 2026)</h4>
+      <ul class="grid-2-list">
+        <li><code>opus</code> → <strong>Opus 5.5</strong> ★ — default model; complex agentic coding</li>
+        <li><code>sonnet</code> → <strong>Sonnet 5.5</strong> ★ — daily coding · 1M-token context</li>
+        <li><code>haiku</code> → <strong>Haiku 4.5</strong> — fast, cheap; light tasks</li>
+        <li><code>fable</code> → <strong>Fable 5.1</strong> ★ — most capable; requires Fable access</li>
       </ul>
     </div>
     
@@ -756,6 +765,8 @@ footer .author { font-weight: 600; color: var(--c-text); }
 <div class="entry new" data-search="claude auth logout log out of account"><code class="cmd cmd-teal">claude auth logout</code><span class="desc">Log out of account</span><span class=badge>new</span></div>
 <div class="entry new" data-search="claude auth status auth status (--text = human)"><code class="cmd cmd-teal">claude auth status</code><span class="desc">Auth status (--text = human)</span><span class=badge>new</span></div>
 <div class="entry new" data-search="claude agents list configured subagents"><code class="cmd cmd-teal">claude agents</code><span class="desc">List configured subagents</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude daemon install run stop background daemon agent view"><code class="cmd cmd-teal">claude daemon install|run|stop</code><span class="desc">Background daemon — agent view</span><span class=badge>new</span></div>
+<div class="entry new" data-search="claude gateway --config g.yaml self-hosted model gateway"><code class="cmd cmd-teal">claude gateway --config g.yaml</code><span class="desc">Self-hosted model gateway</span><span class=badge>new</span></div>
 <div class="entry new" data-search="claude setup-token long-lived token for ci"><code class="cmd cmd-teal">claude setup-token</code><span class="desc">Long-lived token for CI</span><span class=badge>new</span></div>
 <div class="entry new" data-search="claude remote-control start remote-control server"><code class="cmd cmd-teal">claude remote-control</code><span class="desc">Start remote-control server</span><span class=badge>new</span></div>
 <div class="entry" data-search="claude mcp configure mcp servers"><code class="cmd cmd-teal">claude mcp</code><span class="desc">Configure MCP servers</span></div>
@@ -833,6 +844,8 @@ footer .author { font-weight: 600; color: var(--c-text); }
 <div class="entry new" data-search="disablebundledskills turn off bundled skills"><code class="cmd cmd-orange">disableBundledSkills</code><span class="desc">Turn off bundled skills</span><span class=badge>new</span></div>
 <div class="entry new" data-search="wheelscrollaccelerationenabled mouse-wheel accel toggle"><code class="cmd cmd-orange">wheelScrollAccelerationEnabled</code><span class="desc">Mouse-wheel acceleration toggle</span><span class=badge>new</span></div>
 <div class="entry new" data-search="tool(param:value) permission rule matching tool input params"><code class="cmd cmd-orange">Tool(param:value)</code><span class="desc">Permission rule by tool input param</span><span class=badge>new</span></div>
+<div class="entry new" data-search="switchmodelsonflag auto-switch model when flagged"><code class="cmd cmd-orange">switchModelsOnFlag</code><span class="desc">Auto-switch model when flagged</span><span class=badge>new</span></div>
+<div class="entry new" data-search="automode.classifyallshell classify every shell command"><code class="cmd cmd-orange">autoMode.classifyAllShell</code><span class="desc">Classify every shell command</span><span class=badge>new</span></div>
 </section>
 <section class="block block-red" id="hook-events"><h3> Hook Events</h3>
 <div class="entry" data-search="sessionstart session begins or resumes"><code class="cmd cmd-red">SessionStart</code><span class="desc">Session begins or resumes</span></div>
@@ -863,6 +876,11 @@ footer .author { font-weight: 600; color: var(--c-text); }
 <div class="entry new" data-search="instructionsloaded claude.md / rules loaded"><code class="cmd cmd-red">InstructionsLoaded</code><span class="desc">CLAUDE.md / rules loaded</span><span class=badge>new</span></div>
 <div class="entry new" data-search="worktreecreate/remove worktree lifecycle"><code class="cmd cmd-red">WorktreeCreate/Remove</code><span class="desc">Worktree lifecycle</span><span class=badge>new</span></div>
 <div class="entry new" data-search="teammateidle agent-teams teammate idle"><code class="cmd cmd-red">TeammateIdle</code><span class="desc">Agent-teams teammate idle</span><span class=badge>new</span></div>
+<div class="entry new" data-search="setup init / maintenance run"><code class="cmd cmd-red">Setup</code><span class="desc">Init / maintenance run</span><span class=badge>new</span></div>
+<div class="entry new" data-search="premodelswitch before model switch (can block)"><code class="cmd cmd-red">PreModelSwitch</code><span class="desc">Before model switch (can block)</span><span class=badge>new</span></div>
+<div class="entry new" data-search="postmodelswitch after model change"><code class="cmd cmd-red">PostModelSwitch</code><span class="desc">After model change</span><span class=badge>new</span></div>
+<div class="entry new" data-search="directoryadded /add-dir or sdk repo root"><code class="cmd cmd-red">DirectoryAdded</code><span class="desc">/add-dir or SDK repo root</span><span class=badge>new</span></div>
+<div class="entry new" data-search="messagedisplay display-only text replace"><code class="cmd cmd-red">MessageDisplay</code><span class="desc">Display-only text replace</span><span class=badge>new</span></div>
 <h4>Hook Types</h4>
 <div class="entry" data-search="command run a shell command"><code class="cmd cmd-red">command</code><span class="desc">Run a shell command</span></div>
 <div class="entry" data-search="http post event json to a url"><code class="cmd cmd-red">http</code><span class="desc">POST event JSON to a URL</span></div>
@@ -1247,7 +1265,7 @@ tags: []
 </main>
 
 <footer>
-  <p>Compiled by <span class="author">Douglas Mun</span> · v2.0 · July 16 2026 · CLI v2.1.211</p>
+  <p>Compiled by <span class="author">Douglas Mun</span> · v2.0 · October 3 2026 · CLI v2.1.287</p>
   <p>Source: <a href="https://code.claude.com/docs" target="_blank">code.claude.com/docs</a> · Verify critical workflows in your own environment before relying on them.</p>
   <p style="margin-top:0.6rem;font-size:0.75rem;">Free to share, free to print, free to mark up.</p>
 </footer>
